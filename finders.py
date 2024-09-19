@@ -16,7 +16,7 @@ def codigosList():
 def findDataInicial(codigo):
     
     for obj in listVariables:
-        if int(obj.codigoId) == int(codigo):
+        if str(obj.codigoId) == str(codigo):
             return obj.dataInicial
             
 #funcao que acha o AdressType baseado no codigo
@@ -24,7 +24,7 @@ def findAdressType(codigo):
     
     for obj in listVariables:
             
-        if int(obj.codigoId) == int(codigo):
+        if str(obj.codigoId) == str(codigo):
             return obj.APIadress
 
 #funcao que acha a lista com o nome das colunas do df baseado no codigo
@@ -32,20 +32,20 @@ def findColumnNames(codigo):
     
     for obj in listVariables:
             
-        if int(obj.codigoId) == int(codigo):
+        if str(obj.codigoId) == str(codigo):
             return obj.ColumnNames
 
 #funcao que acha o InsertSQL baseado no codigo
 def findCreateSQL(codigo):
     
     for obj in listVariables:
-        if int(obj.codigoId) == int(codigo):
+        if str(obj.codigoId) == str(codigo):
             return obj.codeCreateSQL
       
 #funcao que acha o InsertSQL baseado no codigo
 def findInsertSQL(codigo):
     
     for obj in listVariables:
-        if int(obj.codigoId) == int(codigo):
+        if str(obj.codigoId) == str(codigo):
             return obj.codeInsertSQL
      

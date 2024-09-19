@@ -6,27 +6,7 @@ import json
 import mysql.connector
 from mysql.connector import Error
 from dotenv import load_dotenv
-from finders import findAdressType, findColumnNames, findCreateSQL,findInsertSQL
-
-#trata e processa os df em dataframes adequados para serem inseridos no SQL
-def ProcessTable(codigo, df):
-    
-    #reutiliza o findAdressType para identificar o tipo de df que veio da API
-    AdressType = findAdressType(codigo)
-
-    #define qual função de API vai rodar
-    match AdressType:
-          
-        case "bcb":
-            ColumnNames = findColumnNames(codigo)
-            df = pd.DataFrame(df)
-            df = df.rename(columns=ColumnNames)
-            return df            
-        
-        case default:
-            print(f"❌ [AdressType não encontrado]")
-    
-    0
+from finders import findCreateSQL,findInsertSQL
 
 #create SQLtable especifica referente a um codigo
 def CreateTable(codigo,db_connection):

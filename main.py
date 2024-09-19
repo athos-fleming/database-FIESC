@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 import DBTableConfig
 import ConnectDB
 import APIcall
+import DFTableProcess
 from finders import codigosList
  
 #codigo central que executa toda a atualização e inserção
@@ -39,7 +40,7 @@ def run_data_pipeline():
             df = APIcall.getAPI(codigo)
                         
             #função de processamento de dados par ao df
-            df = DBTableConfig.ProcessTable(codigo,df)
+            df = DFTableProcess.ProcessTable(codigo,df)
             
             #Criar Tabela caso nao tenha
             DBTableConfig.CreateTable(codigo,db_connection)
