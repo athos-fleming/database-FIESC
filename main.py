@@ -37,17 +37,31 @@ def run_data_pipeline():
             codigo = codigo
             
             #busca o df via API
-            df = APIcall.getAPI(codigo)
+            try:
+                df = APIcall.getAPI(codigo)
+            except ValueError as e:
+                print(f"❌ [API CALL ERROR]: '{e}'")
+                        
                         
             #função de processamento de dados par ao df
-            df = DFTableProcess.ProcessTable(codigo,df)
+            try:
+                df = DFTableProcess.ProcessTable(codigo,df)
+            except ValueError as e:
+                print(f"❌ [Table Process CALL ERROR]: '{e}'")
+                
             
             #Criar Tabela caso nao tenha
-            DBTableConfig.CreateTable(codigo,db_connection)
-
+            try:
+                DBTableConfig.CreateTable(codigo,db_connection)
+            except ValueError as e:
+                print(f"❌ [Create Table CALL ERROR]: '{e}'")
+                
+                
             #Inserindo e atualizando os dados na tabela
-            DBTableConfig.InsertIntoTable(codigo,db_connection,df)
-        
+            try:
+                DBTableConfig.InsertIntoTable(codigo,db_connection,df)
+            except ValueError as e:
+                print(f"❌ [Insert Table CALL ERROR]: '{e}'")
         
 
 #comando que roda o código central apenas se puxado do Main
@@ -55,6 +69,7 @@ if __name__ == "__main__":
     run_data_pipeline()
 
 
-
+#fazer um comando que roda o processo de fazer a planilha de agrupamentos, para facilitar exportação para o excel
+#tem que -read as tables, merge por data só as tables mensais, colar la na SQL (e no excel???)
 
 
