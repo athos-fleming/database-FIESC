@@ -69,7 +69,6 @@ if __name__ == "__main__":
     run_data_pipeline()
 
 
-#fazer um comando que roda o processo de fazer a planilha de agrupamentos, para facilitar exportação para o excel
-#tem que -read as tables, merge por data só as tables mensais, colar la na SQL (e no excel???)
+#rodar cada adress type de uma vez, pra mitigar erro do bcb e afins
 
 

@@ -11,6 +11,20 @@ def codigosList():
     codigoListVariables = [obj.codigoId for obj in listVariables]
     
     return codigoListVariables
+
+#funcao que acha a frequencia baseado no codigo
+def findName(codigo):
+    
+    for obj in listVariables:
+        if str(obj.codigoId) == str(codigo):
+            return obj.name
+
+#funcao que acha a frequencia baseado no codigo
+def findFrequencia(codigo):
+    
+    for obj in listVariables:
+        if str(obj.codigoId) == str(codigo):
+            return obj.frequencia
   
 #funcao que acha a dataInicial baseado no codigo
 def findDataInicial(codigo):
