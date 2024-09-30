@@ -17,7 +17,6 @@ listVariables = []
 
 #grupo do ipea, corre bem tranquilo
 
-
 #variavel IPCA - geral - taxa de variação  mensa % a.m.
 listVariables.append(Variables('IPCA_mensal_taxa_variação',"mensal","'PRECOS12_IPCAG12'","01/01/1980","ipea",
                                {"VALDATA": "data","VALVALOR": "valor"},
@@ -76,7 +75,7 @@ listVariables.append(Variables('IPCA_mensal_taxa_núcleo_médias_aparadas_sem_su
     ))
 
 #variavel IPCA - núcleo por exclusão - EX1 - taxa de variação % a.m.
-listVariables.append(Variables('IPCA_mensal_taxa_núcleo_exclusão',"'BM12_IPCAEXCEX212'","mensal","01/01/1992","ipea",
+listVariables.append(Variables('IPCA_mensal_taxa_núcleo_exclusão',"mensal","'BM12_IPCAEXCEX212'","01/01/1992","ipea",
                                {"VALDATA": "data","VALVALOR": "valor"},
     """
     CREATE TABLE IF NOT EXISTS IPCA_mensal_taxa_núcleo_exclusão (
@@ -151,10 +150,7 @@ listVariables.append(Variables('PIB_mensal',"mensal","'BM12_PIB12'","01/01/1990"
     """
     ))
 
-
-
 #grupo do bcb, as vezes da erro de api call
-
 
 #variavel Dívida líquida do governo geral (% PIB) % a.m.
 listVariables.append(Variables('Divida_mensal_publica__liquida_consolidado_PIB',"mensal","4513","01/12/2001","bcb",

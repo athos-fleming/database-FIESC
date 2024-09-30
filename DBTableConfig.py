@@ -17,7 +17,6 @@ def CreateTable(codigo,db_connection):
         cursor = db_connection.cursor()
         cursor.execute(CREATE_TABLE_SQL_QUERY)
         db_connection.commit()
-        print("Table created successfully ✅")
 
     except Error as e:
         print(f"❌ [CREATING TABLE ERROR]: '{e}'")
@@ -35,7 +34,6 @@ def InsertIntoTable(codigo,db_connection,df):
         # Execute the query
         cursor.executemany(INSERT_DATA_SQL_QUERY, data_values_as_tuples)
         db_connection.commit()
-        print("Data inserted or updated successfully ✅")
 
     except ValueError as e:
         print(f"❌ [INSERT TABLE ERROR]: '{e}'")

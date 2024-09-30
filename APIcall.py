@@ -40,8 +40,8 @@ def get_bcb(codigoId,dataInicial):
         serie_bcb = pd.read_json(url)
         df_bcb = pd.DataFrame(serie_bcb)
         
-        print("bcb API request done ✅")
-
+        print("bcb code - {} - API request done".format(codigoId))
+                
     except ValueError as e:
         print(f"❌ [API CALL ERROR]: '{e}'")
 
@@ -57,7 +57,7 @@ def get_ipea(codigoId,dataInicial):
         df_ipea = pd.json_normalize(df_ipea['value'])
         df_ipea = pd.DataFrame(df_ipea)        
         
-        print("ipea API request done ✅")
+        print("ipea code - {} - API request done".format(codigoId))
 
     except ValueError as e:
         print(f"❌ [API CALL ERROR]: '{e}'")

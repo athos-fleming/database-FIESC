@@ -28,7 +28,6 @@ def ProcessTable(codigo, df):
         
         case default:
             print(f"❌ [AdressType não encontrado]")
-    
 
 #processo de tratamento de df vindo do bcb
 def process_bcb(codigo,df):

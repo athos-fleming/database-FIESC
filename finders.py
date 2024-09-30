@@ -5,12 +5,27 @@ from datetime import datetime
 import json
 from Objects import listVariables as listVariables
 
-#função que retorna toda a lista de codigos do listVariables
-def codigosList():
+#fazer com que ela retorne uma lista de codigos dos objetos que satisfazerem certo parametro
+def codigosList(condition,*args, **kwargs):
     
-    codigoListVariables = [obj.codigoId for obj in listVariables]
+    result = kwargs.get('result')
+
+    match condition:
+        
+        case "all":
+            codigoListVariables = [obj.codigoId for obj in listVariables]
+            return codigoListVariables
+        
+        case "APIadress":
+            codigoListVariables = [obj.codigoId for obj in listVariables if obj.APIadress == result]
+            return codigoListVariables
+        
+        case "frequencia":
+            
+            codigoListVariables = [obj.codigoId for obj in listVariables if obj.frequencia == result]
+            return codigoListVariables
+            
     
-    return codigoListVariables
 
 #funcao que acha a frequencia baseado no codigo
 def findName(codigo):
@@ -62,4 +77,3 @@ def findInsertSQL(codigo):
     for obj in listVariables:
         if str(obj.codigoId) == str(codigo):
             return obj.codeInsertSQL
-     
