@@ -9,9 +9,9 @@ from dotenv import load_dotenv
 from finders import findCreateSQL,findInsertSQL
 
 #create SQLtable especifica referente a um codigo
-def CreateTable(codigo,db_connection):
+def CreateTable(listType,codigo,db_connection):
                     
-    CREATE_TABLE_SQL_QUERY = findCreateSQL(codigo)
+    CREATE_TABLE_SQL_QUERY = findCreateSQL(listType,codigo)
     
     try:
         cursor = db_connection.cursor()
@@ -22,13 +22,12 @@ def CreateTable(codigo,db_connection):
         print(f"❌ [CREATING TABLE ERROR]: '{e}'")
     
 #inserindo dados na tabela SQL referente a um codigo
-def InsertIntoTable(codigo,db_connection,df):
+def InsertIntoTable(listType,codigo,db_connection,df):
     
-    cursor = db_connection.cursor()
-
-    INSERT_DATA_SQL_QUERY = findInsertSQL(codigo)
-      
-    try:
+    INSERT_DATA_SQL_QUERY = findInsertSQL(listType,codigo)
+    
+    try:        
+        cursor = db_connection.cursor()
         # Create a list of tuples from the dataframe values
         data_values_as_tuples = [tuple(x) for x in df.to_numpy()]
         # Execute the query

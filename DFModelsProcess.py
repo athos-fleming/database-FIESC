@@ -1,6 +1,7 @@
 import os
 import requests
 import pandas as pd
+import numpy as np
 from datetime import datetime
 import json
 import mysql.connector
@@ -28,6 +29,9 @@ def process_models(db_connection):
       dfTemp = pd.DataFrame(dfTemp)
       dfTemp.columns = ['value', '{}'.format(name)]       
       df = pd.merge(df, dfTemp, on='value',how='outer')
+    
+    df.rename(columns={"value":"data"}, inplace=True)
+    df = df.replace({np.nan: None})
     
     print("models df made ✅")
     

@@ -3,17 +3,26 @@ import requests
 import pandas as pd
 
 class Variables(object):
-    def __init__(self,name,frequencia,codigoId, dataInicial,APIadress,ColumnNames,codeCreateSQL,codeInsertSQL):
+    def __init__(self,name,frequencia,codigo, dataInicial,APIadress,ColumnNames,codeCreateSQL,codeInsertSQL):
         self.name = name
         self.frequencia = frequencia
-        self.codigoId = codigoId
+        self.codigo = codigo
         self.dataInicial = dataInicial
         self.APIadress = APIadress
         self.ColumnNames = ColumnNames
         self.codeCreateSQL = codeCreateSQL
         self.codeInsertSQL = codeInsertSQL
 
+class Models:
+    def __init__(self,name,codigo,frequencia,codeCreateSQL,codeInsertSQL):
+        self.name = name
+        self.codigo = codigo
+        self.frequencia = frequencia
+        self.codeCreateSQL = codeCreateSQL
+        self.codeInsertSQL = codeInsertSQL
+
 listVariables = []
+listModels = []
 
 #grupo do ipea, corre bem tranquilo
 
@@ -132,10 +141,10 @@ listVariables.append(Variables('IPCA_mensal_taxa_preços_livres_serviços',"mens
     ))
 
 #variavel PIB - Mensal % a.m.
-listVariables.append(Variables('PIB_mensal',"mensal","'BM12_PIB12'","01/01/1990","ipea",
+listVariables.append(Variables('PIB_mensal_taxa_variação',"mensal","'BM12_PIB12'","01/01/1990","ipea",
                                {"VALDATA": "data","VALVALOR": "valor"},
     """
-    CREATE TABLE IF NOT EXISTS PIB_mensal (
+    CREATE TABLE IF NOT EXISTS PIB_mensal_taxa_variação (
         `data` VARCHAR(255),
         `valor` FLOAT,
         PRIMARY KEY (`data`)
@@ -143,7 +152,7 @@ listVariables.append(Variables('PIB_mensal',"mensal","'BM12_PIB12'","01/01/1990"
 
     """,
     """
-    INSERT INTO PIB_mensal (`data`,`valor`)
+    INSERT INTO PIB_mensal_taxa_variação (`data`,`valor`)
     Values(%s, %s)
     ON DUPLICATE KEY UPDATE
         `valor` = VALUES(`valor`);
@@ -229,7 +238,53 @@ listVariables.append(Variables('Selic_diaria',"diaria","11","01/01/2000","bcb",
     ))
 
 
+#models estabelecidos
 
+listModels.append(Models("Model_mensal","mensal", "mensal",
+    """
+    CREATE TABLE IF NOT EXISTS Model_mensal (
+        `data` VARCHAR(255),
+        `IPCA_mensal_taxa_variação` float,
+        `IPCA_mensal_taxa_núcleo_médias_aparadas_suavização` float,
+        `IPCA_mensal_taxa_núcleo_médias_aparadas_sem_suavização` float,
+        `IPCA_mensal_taxa_núcleo_exclusão` float,
+        `IPCA_mensal_taxa_núcleo_exclusão_domiciliar` float,
+        `IPCA_mensal_taxa_preços_livres_serviços` float,
+        `PIB_mensal_taxa_variação` float,
+        `Divida_mensal_publica__liquida_consolidado_PIB` float,
+        `Divida_mensal_publica__bruta_PIB` float,
+        `Selic_mensal` float,        
+        PRIMARY KEY (`data`)
+    );
+
+    """,
+    """
+    INSERT INTO Model_mensal (`data`,
+                            `IPCA_mensal_taxa_variação`,
+                            `IPCA_mensal_taxa_núcleo_médias_aparadas_suavização`,
+                            `IPCA_mensal_taxa_núcleo_médias_aparadas_sem_suavização`,
+                            `IPCA_mensal_taxa_núcleo_exclusão`,
+                            `IPCA_mensal_taxa_núcleo_exclusão_domiciliar`,
+                            `PIB_mensal_taxa_variação`,
+                            `IPCA_mensal_taxa_preços_livres_serviços`,
+                            `Divida_mensal_publica__liquida_consolidado_PIB`,
+                            `Divida_mensal_publica__bruta_PIB`,
+                            `Selic_mensal`
+                            )
+    Values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    ON DUPLICATE KEY UPDATE
+        `IPCA_mensal_taxa_variação` = VALUES(`IPCA_mensal_taxa_variação`),
+        `IPCA_mensal_taxa_núcleo_médias_aparadas_suavização` = VALUES(`IPCA_mensal_taxa_núcleo_médias_aparadas_suavização`),
+        `IPCA_mensal_taxa_núcleo_médias_aparadas_sem_suavização` = VALUES(`IPCA_mensal_taxa_núcleo_médias_aparadas_sem_suavização`),
+        `IPCA_mensal_taxa_núcleo_exclusão` = VALUES(`IPCA_mensal_taxa_núcleo_exclusão`),
+        `IPCA_mensal_taxa_núcleo_exclusão_domiciliar` = VALUES(`IPCA_mensal_taxa_núcleo_exclusão_domiciliar`),
+        `IPCA_mensal_taxa_preços_livres_serviços` = VALUES(`IPCA_mensal_taxa_preços_livres_serviços`),
+        `PIB_mensal_taxa_variação` = VALUES(`PIB_mensal_taxa_variação`),
+        `Divida_mensal_publica__liquida_consolidado_PIB` = VALUES(`Divida_mensal_publica__liquida_consolidado_PIB`),
+        `Divida_mensal_publica__bruta_PIB` = VALUES(`Divida_mensal_publica__bruta_PIB`),
+        `Selic_mensal` = VALUES(`Selic_mensal`);
+    """
+    ))
 
 
 

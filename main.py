@@ -1,6 +1,7 @@
 import os
 import requests
 import pandas as pd
+import numpy as np
 from datetime import datetime
 import json
 import mysql.connector
@@ -31,6 +32,7 @@ def update_variables():
         
         
         APIadresses = ["ipea","bcb"]
+        listType = "Variables"
         
         for adress in APIadresses:
             print("Updating {} data".format(adress))
@@ -60,14 +62,14 @@ def update_variables():
                 
                 #Criar Tabela caso nao tenha
                 try:
-                    DBTableConfig.CreateTable(codigo,db_connection)
+                    DBTableConfig.CreateTable(listType,codigo,db_connection)
                 except ValueError as e:
                     print(f"❌ [Create Table CALL ERROR]: '{e}'")
                     
                     
                 #Inserindo e atualizando os dados na tabela
                 try:
-                    DBTableConfig.InsertIntoTable(codigo,db_connection,df)
+                    DBTableConfig.InsertIntoTable(listType,codigo,db_connection,df)
                 except ValueError as e:
                     print(f"❌ [Insert Table CALL ERROR]: '{e}'")
             
@@ -86,20 +88,38 @@ def update_models():
     MYSQL_DATABASE = os.getenv('MYSQL_DB_VARIABLES')
     db_connection = ConnectDB.create_db_connection(HOST,MYSQL_USERNAME,MYSQL_PASSWORD,MYSQL_DATABASE)
 
-    #cria e processa o df do modelo agrupado
-    df = DFModelsProcess.process_models(db_connection)
+    #se a conexão nao der problema, segue o processo de editar df, criar tabela e inserir valores
+    if db_connection is not None:
+        
+        #cria e processa o df do modelo agrupado
+        df = DFModelsProcess.process_models(db_connection)
     
     #muda a base de dados para a model para inserir lá a Table
     MYSQL_DATABASE = os.getenv('MYSQL_DB_MODELS')
     db_connection = ConnectDB.create_db_connection(HOST,MYSQL_USERNAME,MYSQL_PASSWORD,MYSQL_DATABASE)
     
+    #se a conexão nao der problema, segue o processo de editar df, criar tabela e inserir valores
+    if db_connection is not None:
+        
+        print("updating model data")
+        codigo = "mensal"
+        listType = "Models"
+        
+        #Criar Tabela caso nao tenha
+        try:
+            DBTableConfig.CreateTable(listType,codigo,db_connection)
+        except ValueError as e:
+            print(f"❌ [Create Table CALL ERROR]: '{e}'")
+            
+        #Inserindo e atualizando os dados na tabela
+        try:
+            DBTableConfig.InsertIntoTable(listType,codigo,db_connection,df)
+        except ValueError as e:
+            print(f"❌ [Insert Table CALL ERROR]: '{e}'")
+        
+        print("Model {} updated ✅".format(codigo))
     
     
-    
-    
-    
-    #fazer create Table if not exists e Insert
-
 
 
 #comando que roda o código central apenas se puxado do Main
