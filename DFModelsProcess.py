@@ -33,6 +33,6 @@ def process_models(db_connection):
     df.rename(columns={"value":"data"}, inplace=True)
     df = df.replace({np.nan: None})
     
-    print("models df made ✅")
+    print("models df made")
     
     return df

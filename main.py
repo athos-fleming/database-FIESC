@@ -118,8 +118,7 @@ def update_models():
             print(f"❌ [Insert Table CALL ERROR]: '{e}'")
         
         print("Model {} updated ✅".format(codigo))
-    
-    
+
 
 
 #comando que roda o código central apenas se puxado do Main
