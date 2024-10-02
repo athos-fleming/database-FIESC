@@ -6,6 +6,7 @@ from datetime import datetime
 import json
 import mysql.connector
 from mysql.connector import Error
+import sqlalchemy
 from dotenv import load_dotenv
 import DBTableConfig
 import ConnectDB
@@ -26,12 +27,16 @@ def update_variables():
 
     #Conecta na base de dados do SQL
     db_connection = ConnectDB.create_db_connection(HOST,MYSQL_USERNAME,MYSQL_PASSWORD,MYSQL_DATABASE)
+    
+    #cria a conexao com o DB pelo alchemy, gerando um con
+    database_connection = sqlalchemy.create_engine('mysql+mysqlconnector://{0}:{1}@{2}/{3}'.
+                                                   format(MYSQL_USERNAME, MYSQL_PASSWORD,HOST, MYSQL_DATABASE))
 
     #se a conexão nao der problema, segue o processo de editar df, criar tabela e inserir valores
-    if db_connection is not None:
+    if database_connection is not None:
         
         
-        APIadresses = ["ipea","bcb"]
+        APIadresses = ["ipea","sidra","bcb"]
         listType = "Variables"
         
         for adress in APIadresses:
@@ -47,19 +52,15 @@ def update_variables():
                 codigo = codigo
                 
                 #busca o df via API
-                try:
-                    df = APIcall.getAPI(codigo)
-                except ValueError as e:
-                    print(f"❌ [API CALL ERROR]: '{e}'")
-                            
+                df = APIcall.getAPI(codigo)
                             
                 #função de processamento de dados par ao df
-                try:
-                    df = DFTableProcess.ProcessTable(codigo,df)
-                except ValueError as e:
-                    print(f"❌ [Table Process CALL ERROR]: '{e}'")
-                    
+                df = DFTableProcess.ProcessTable(codigo,df)
                 
+                #cria e insere a df como uma Table no DB
+                DBTableConfig.dftoSQL(df,codigo,database_connection)
+                
+                '''
                 #Criar Tabela caso nao tenha
                 try:
                     DBTableConfig.CreateTable(listType,codigo,db_connection)
@@ -72,7 +73,7 @@ def update_variables():
                     DBTableConfig.InsertIntoTable(listType,codigo,db_connection,df)
                 except ValueError as e:
                     print(f"❌ [Insert Table CALL ERROR]: '{e}'")
-            
+                '''
             print("{} updated ✅".format(adress))
 
 #codigo central dos modelos agrupados
@@ -124,6 +125,6 @@ def update_models():
 #comando que roda o código central apenas se puxado do Main
 if __name__ == "__main__":
     update_variables()
-    update_models()
+    #update_models()
 
 

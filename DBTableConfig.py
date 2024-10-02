@@ -6,7 +6,7 @@ import json
 import mysql.connector
 from mysql.connector import Error
 from dotenv import load_dotenv
-from finders import findCreateSQL,findInsertSQL
+from finders import findCreateSQL,findInsertSQL, findName
 
 #create SQLtable especifica referente a um codigo
 def CreateTable(listType,codigo,db_connection):
@@ -37,4 +37,13 @@ def InsertIntoTable(listType,codigo,db_connection,df):
     except ValueError as e:
         print(f"❌ [INSERT TABLE ERROR]: '{e}'")
                   
+
+def dftoSQL(df,codigo,database_connection):
     
+    TableName = findName(codigo)
+    
+    try:
+        df.to_sql(con=database_connection,name=TableName, if_exists='replace', index=False)
+    except ValueError as e:
+        print(f"❌ [Create Table CALL ERROR]: '{e}'")
+                

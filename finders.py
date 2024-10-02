@@ -42,12 +42,12 @@ def findFrequencia(codigo):
         if str(obj.codigo) == str(codigo):
             return obj.frequencia
   
-#funcao que acha a dataInicial baseado no codigo
-def findDataInicial(codigo):
+#funcao que acha os parametross baseado no codigo
+def findParameters(codigo):
     
     for obj in listVariables:
         if str(obj.codigo) == str(codigo):
-            return obj.dataInicial
+            return obj.dictParameters
             
 #funcao que acha o AdressType baseado no codigo
 def findAdressType(codigo):
