@@ -71,17 +71,23 @@ def get_ipea(codigo,parameters):
 #operação de get no sidra do IBGE, informando parametros
 def get_sidra(codigo,parameters):
     
+    codigo_variavel = codigo.split('-')
+    codigo = codigo_variavel[0]
+    variavel = codigo_variavel[1]
+        
     periodos = parameters["periodos"]
-    variaveis = parameters["variaveis"]
     localidade = parameters["localidade"]
     classificacao = parameters["classificacao"]
     
     try:
         url = 'https://servicodados.ibge.gov.br/api/v3/agregados/{}/periodos/{}/variaveis/{}?localidades={}&classificacao={}'.format(
-            codigo,periodos,variaveis,localidade,classificacao)
-
+            codigo,periodos,variavel,localidade,classificacao)
+        
         request = requests.get(url)
         serie_sidra = request.json()
+        
+        print("sidra code - {} variavel {} - API request done".format(codigo,variavel))
+        
     except ValueError as e:
         print(f"❌ [API CALL ERROR]: '{e}'")
   

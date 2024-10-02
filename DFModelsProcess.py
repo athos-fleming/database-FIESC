@@ -15,22 +15,28 @@ def process_models(db_connection):
      
     #chama a lista com todos os codigos incluidos no Objects com a condicao que frenquencia == mensal
     codigoListVariables = codigosList("frequencia",result = "mensal")
-    df = pd.DataFrame(columns=['value'])
+    df = pd.DataFrame(columns=['date'])
         
-    #roda o looping para todos os objetos na lista
+    #roda o looping para todos os objetos na lista mensal
     for codigo in codigoListVariables:               
             
       #info necessaria de cada objeto
       name = findName(codigo)
-        
+      
+      #puxa cada uma das tables e seus valores
       selectSQL = 'SELECT * FROM variables.{}'.format(name)
       mycursor.execute(selectSQL)
       dfTemp = mycursor.fetchall()
       dfTemp = pd.DataFrame(dfTemp)
-      dfTemp.columns = ['value', '{}'.format(name)]       
-      df = pd.merge(df, dfTemp, on='value',how='outer')
+      
+      #renomeia pra nao dar problema
+      dfColumns = list(mycursor.column_names)
+      dfTemp = dfTemp.set_axis(dfColumns, axis=1)
     
-    df.rename(columns={"value":"data"}, inplace=True)
+      #junta todas elas por date
+      df = pd.merge(df, dfTemp, on='date',how='outer')
+    
+    #muda os nan para espaços vazios
     df = df.replace({np.nan: None})
     
     print("models df made")

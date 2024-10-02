@@ -19,6 +19,10 @@ def codigosList(condition,*args, **kwargs):
             codigoListVariables = [obj.codigo for obj in listVariables]
             return codigoListVariables
         
+        case "name":
+            codigoListVariables = [obj.codigo for obj in listVariables if obj.name == result]
+            return codigoListVariables
+        
         case "APIadress":
             codigoListVariables = [obj.codigo for obj in listVariables if obj.APIadress == result]
             return codigoListVariables
@@ -34,6 +38,11 @@ def findName(codigo):
     for obj in listVariables:
         if str(obj.codigo) == str(codigo):
             return obj.name
+        else:
+            for obj in listModels:
+                if str(obj.codigo) == str(codigo):
+                    return obj.name
+
 
 #funcao que acha a frequencia baseado no codigo
 def findFrequencia(codigo):
@@ -64,33 +73,3 @@ def findColumnNames(codigo):
             
         if str(obj.codigo) == str(codigo):
             return obj.ColumnNames
-
-#funcao que acha o InsertSQL baseado no codigo
-def findCreateSQL(listType, codigo):
-    
-    match listType:
-        
-        case "Variables":
-            for obj in listVariables:
-                if str(obj.codigo) == str(codigo):
-                    return obj.codeCreateSQL
-        
-        case "Models":
-            for obj in listModels:
-                if str(obj.codigo) == str(codigo):
-                    return obj.codeCreateSQL       
-      
-#funcao que acha o InsertSQL baseado no codigo
-def findInsertSQL(listType, codigo):
-    
-    match listType:
-        
-        case "Variables":
-            for obj in listVariables:
-                if str(obj.codigo) == str(codigo):
-                    return obj.codeInsertSQL
-        
-        case "Models":
-            for obj in listModels:
-                if str(obj.codigo) == str(codigo):
-                    return obj.codeInsertSQL

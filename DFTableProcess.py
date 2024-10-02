@@ -42,7 +42,7 @@ def process_bcb(codigo,df):
     try:  
         def dataChange(date):
             x = datetime.strptime(date,'%d/%m/%Y')
-            x = x.strftime('%Y-%m-%d')
+            x = x.strftime('%Y-%m')
             return x
         
         dataColumn = df.loc[:,'data']
@@ -67,7 +67,7 @@ def process_ipea(codigo,df):
     try:
         def dataChange(date):
             x = datetime.strptime(date,'%Y-%m-%dT%H:%M:%S%z')
-            x = x.strftime('%Y-%m-%d')
+            x = x.strftime('%Y-%m')
             return x
             
         dataColumn = df.loc[:,'VALDATA']

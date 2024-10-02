@@ -25,9 +25,6 @@ def update_variables():
     MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
     MYSQL_DATABASE = os.getenv('MYSQL_DB_VARIABLES')
 
-    #Conecta na base de dados do SQL
-    db_connection = ConnectDB.create_db_connection(HOST,MYSQL_USERNAME,MYSQL_PASSWORD,MYSQL_DATABASE)
-    
     #cria a conexao com o DB pelo alchemy, gerando um con
     database_connection = sqlalchemy.create_engine('mysql+mysqlconnector://{0}:{1}@{2}/{3}'.
                                                    format(MYSQL_USERNAME, MYSQL_PASSWORD,HOST, MYSQL_DATABASE))
@@ -57,23 +54,10 @@ def update_variables():
                 #função de processamento de dados par ao df
                 df = DFTableProcess.ProcessTable(codigo,df)
                 
+
                 #cria e insere a df como uma Table no DB
                 DBTableConfig.dftoSQL(df,codigo,database_connection)
                 
-                '''
-                #Criar Tabela caso nao tenha
-                try:
-                    DBTableConfig.CreateTable(listType,codigo,db_connection)
-                except ValueError as e:
-                    print(f"❌ [Create Table CALL ERROR]: '{e}'")
-                    
-                    
-                #Inserindo e atualizando os dados na tabela
-                try:
-                    DBTableConfig.InsertIntoTable(listType,codigo,db_connection,df)
-                except ValueError as e:
-                    print(f"❌ [Insert Table CALL ERROR]: '{e}'")
-                '''
             print("{} updated ✅".format(adress))
 
 #codigo central dos modelos agrupados
@@ -95,28 +79,21 @@ def update_models():
         #cria e processa o df do modelo agrupado
         df = DFModelsProcess.process_models(db_connection)
     
-    #muda a base de dados para a model para inserir lá a Table
+    #cria a conexao com o DB pelo alchemy, para a model para inserir lá a Table
     MYSQL_DATABASE = os.getenv('MYSQL_DB_MODELS')
-    db_connection = ConnectDB.create_db_connection(HOST,MYSQL_USERNAME,MYSQL_PASSWORD,MYSQL_DATABASE)
-    
+    database_connection = sqlalchemy.create_engine('mysql+mysqlconnector://{0}:{1}@{2}/{3}'.
+                                                   format(MYSQL_USERNAME, MYSQL_PASSWORD,HOST, MYSQL_DATABASE))
+
     #se a conexão nao der problema, segue o processo de editar df, criar tabela e inserir valores
-    if db_connection is not None:
+    if database_connection is not None:
         
         print("updating model data")
         codigo = "mensal"
-        listType = "Models"
         
-        #Criar Tabela caso nao tenha
-        try:
-            DBTableConfig.CreateTable(listType,codigo,db_connection)
-        except ValueError as e:
-            print(f"❌ [Create Table CALL ERROR]: '{e}'")
-            
-        #Inserindo e atualizando os dados na tabela
-        try:
-            DBTableConfig.InsertIntoTable(listType,codigo,db_connection,df)
-        except ValueError as e:
-            print(f"❌ [Insert Table CALL ERROR]: '{e}'")
+        print(df.head(1))
+        
+        #cria e insere a df como uma Table no DB
+        DBTableConfig.dftoSQL(df,codigo,database_connection)
         
         print("Model {} updated ✅".format(codigo))
 
@@ -124,7 +101,7 @@ def update_models():
 
 #comando que roda o código central apenas se puxado do Main
 if __name__ == "__main__":
-    update_variables()
-    #update_models()
+    #update_variables()
+    update_models()
 
 
