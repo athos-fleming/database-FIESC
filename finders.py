@@ -9,7 +9,7 @@ from Objects import listVariables, listModels
 
 
 #fazer com que ela retorne uma lista de codigos dos objetos que satisfazerem certo parametro
-def FindCodigosList(condition,*args, **kwargs):
+def findCodigosList(condition,*args, **kwargs):
     
     result = kwargs.get('result')
 
@@ -26,6 +26,18 @@ def FindCodigosList(condition,*args, **kwargs):
         case "APIadress":
             codigoListVariables = [obj.codigo for obj in listVariables if obj.APIadress == result]
             return codigoListVariables
+        
+        case "Operadores":
+            
+            OperadoresListVariables = []
+            codigoListVariables = [obj.codigo for obj in listVariables]
+            for codigo in codigoListVariables:
+                Operadores = findOperadores(codigo)
+                for i in Operadores:
+                    if i == result:
+                        OperadoresListVariables.append(codigo)
+                
+            return OperadoresListVariables
         
         case "Series":
             

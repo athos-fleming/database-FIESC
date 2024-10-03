@@ -1,13 +1,16 @@
 import os
 import requests
 import pandas as pd
+pd.set_option("future.no_silent_downcasting", True)
+import numpy as np
 from datetime import datetime
 import json
 import mysql.connector
 from mysql.connector import Error
 from dotenv import load_dotenv
 from datetime import datetime
-from finders import findAPIadress, findColumnNames
+from finders import findAPIadress, findColumnNames,findCodigosList,findName
+import Operations
 
 #trata e processa os df em dataframes adequados para serem inseridos no SQL
 def ProcessTable(codigo, df):
@@ -115,4 +118,83 @@ def process_sidra(codigo,df):
     
     
     return df
+
+def process_models(db_connection,model):
+  
+    mycursor = db_connection.cursor()
+     
+    #chama a lista com todos os codigos incluidos no Objects com a condicao que frenquencia == mensal
+    codigoListVariables = findCodigosList("Series",result = model)
+    df = pd.DataFrame(columns=['date'])
+        
+    #roda o looping para todos os objetos na lista mensal
+    for codigo in codigoListVariables:               
+            
+      #info necessaria de cada objeto
+      name = findName(codigo)
+      
+      #puxa cada uma das tables e seus valores
+      selectSQL = 'SELECT * FROM variables.{}'.format(name)
+      mycursor.execute(selectSQL)
+      dfTemp = mycursor.fetchall()
+      dfTemp = pd.DataFrame(dfTemp)
+      
+      #renomeia pra nao dar problema
+      dfColumns = list(mycursor.column_names)
+      dfTemp = dfTemp.set_axis(dfColumns, axis=1)
+    
+      #junta todas elas por date
+      df = pd.merge(df, dfTemp, on='date',how='outer')
+    
+    #muda os nan para espaços vazios
+    df = df.replace({np.nan: None})
+    
+    print("{} model df made".format(model))
+    
+    return df
+
+
+
+def process_operations(db_connection,codigo,operador):
+    
+    mycursor = db_connection.cursor()
+    
+    #info necessaria de cada objeto
+    name = findName(codigo)
+      
+    #puxa cada uma das tables e seus valores
+    selectSQL = 'SELECT * FROM variables.{}'.format(name)
+    mycursor.execute(selectSQL)
+    dfTemp = mycursor.fetchall()
+    dfTemp = pd.DataFrame(dfTemp)
+    dfTemp = dfTemp.replace("-",np.nan)
+    
+    #print(dfTemp)
+    
+    #renomeia pra nao dar problema
+    dfColumns = list(mycursor.column_names)
+    dfTemp = dfTemp.set_axis(dfColumns, axis=1)
+    
+    from statsmodels.tsa import x13
+    import statsmodels.api as sm
+
+    #define o path da X13-ARIMA-SEATS
+    os.environ['X13PATH'] = "C:/Users/athos.fleming/OneDrive - SERVICO NACIONAL DE APRENDIZAGEM INDUSTRIAL/Documentos/x13as"
+    
+    
+
+    #operação pra seasonal
+    match operador:
+        
+        case "seasonal":
+            df = Operations.seasonal(dfTemp)
+            print("seasonal operation done")
+   
+        
+    
+    return df
+
+
+
+
 
