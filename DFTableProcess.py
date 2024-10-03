@@ -7,13 +7,13 @@ import mysql.connector
 from mysql.connector import Error
 from dotenv import load_dotenv
 from datetime import datetime
-from finders import findAdressType, findColumnNames
+from finders import findAPIadress, findColumnNames
 
 #trata e processa os df em dataframes adequados para serem inseridos no SQL
 def ProcessTable(codigo, df):
     
-    #reutiliza o findAdressType para identificar o tipo de df que veio da API
-    AdressType = findAdressType(codigo)
+    #reutiliza o findAPIadress para identificar o tipo de df que veio da API
+    AdressType = findAPIadress(codigo)
 
     #define qual função de API vai rodar
     match AdressType:
@@ -42,7 +42,7 @@ def process_bcb(codigo,df):
     try:  
         def dataChange(date):
             x = datetime.strptime(date,'%d/%m/%Y')
-            x = x.strftime('%Y-%m')
+            x = x.strftime('%Y-%m-%d')
             return x
         
         dataColumn = df.loc[:,'data']
@@ -67,7 +67,7 @@ def process_ipea(codigo,df):
     try:
         def dataChange(date):
             x = datetime.strptime(date,'%Y-%m-%dT%H:%M:%S%z')
-            x = x.strftime('%Y-%m')
+            x = x.strftime('%Y-%m-%d')
             return x
             
         dataColumn = df.loc[:,'VALDATA']
@@ -102,7 +102,7 @@ def process_sidra(codigo,df):
         #arruma a data para o formato Y-m
         def dataChange(date):
             x = datetime.strptime(date,'%Y%m')
-            x = x.strftime('%Y-%m')
+            x = x.strftime('%Y-%m-01')
             return x
             
         dataColumn = df.loc[:,'date']

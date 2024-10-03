@@ -4,18 +4,18 @@ import pandas as pd
 from datetime import datetime
 import json
 from urllib.request import urlopen
-from finders import findAdressType, findParameters
+from finders import findAPIadress, findAPIparameters
 
 
 
 #operação para definir de qual site vai vir as informações get
 def getAPI(codigo):
     
-    AdressType = findAdressType(codigo)
+    AdressType = findAPIadress(codigo)
     
     #parametros para rodar as funções de API
     codigo = codigo
-    parameters = findParameters(codigo)
+    parameters = findAPIparameters(codigo)
     
     #define qual função de API vai rodar
     match AdressType:

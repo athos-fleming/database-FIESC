@@ -7,14 +7,14 @@ import json
 import mysql.connector
 from mysql.connector import Error
 from dotenv import load_dotenv
-from finders import codigosList,findName
+from finders import FindCodigosList,findName
 
 def process_models(db_connection):
   
     mycursor = db_connection.cursor()
      
     #chama a lista com todos os codigos incluidos no Objects com a condicao que frenquencia == mensal
-    codigoListVariables = codigosList("frequencia",result = "mensal")
+    codigoListVariables = FindCodigosList("Series",result = "mensal")
     df = pd.DataFrame(columns=['date'])
         
     #roda o looping para todos os objetos na lista mensal

@@ -9,7 +9,7 @@ from Objects import listVariables, listModels
 
 
 #fazer com que ela retorne uma lista de codigos dos objetos que satisfazerem certo parametro
-def codigosList(condition,*args, **kwargs):
+def FindCodigosList(condition,*args, **kwargs):
     
     result = kwargs.get('result')
 
@@ -27,10 +27,19 @@ def codigosList(condition,*args, **kwargs):
             codigoListVariables = [obj.codigo for obj in listVariables if obj.APIadress == result]
             return codigoListVariables
         
-        case "frequencia":
+        case "Series":
             
-            codigoListVariables = [obj.codigo for obj in listVariables if obj.frequencia == result]
-            return codigoListVariables
+            SeriesListVariables = []
+            codigoListVariables = [obj.codigo for obj in listVariables]
+            for codigo in codigoListVariables:
+                Series = findSeries(codigo)
+                for i in Series:
+                    if i == result:
+                        SeriesListVariables.append(codigo)
+                
+            return SeriesListVariables
+            
+            return None
 
 #funcao que acha a frequencia baseado no codigo
 def findName(codigo):
@@ -42,30 +51,36 @@ def findName(codigo):
             for obj in listModels:
                 if str(obj.codigo) == str(codigo):
                     return obj.name
-
-
-#funcao que acha a frequencia baseado no codigo
-def findFrequencia(codigo):
+ 
+#funcao que acha os parametros baseado no codigo
+def findAPIparameters(codigo):
     
     for obj in listVariables:
         if str(obj.codigo) == str(codigo):
-            return obj.frequencia
-  
-#funcao que acha os parametross baseado no codigo
-def findParameters(codigo):
-    
-    for obj in listVariables:
-        if str(obj.codigo) == str(codigo):
-            return obj.dictParameters
+            return obj.APIparameters
             
 #funcao que acha o AdressType baseado no codigo
-def findAdressType(codigo):
+def findAPIadress(codigo):
     
     for obj in listVariables:
             
         if str(obj.codigo) == str(codigo):
             return obj.APIadress
 
+#funcao que acha a frequencia baseado no codigo
+def findOperadores(codigo):
+    
+    for obj in listVariables:
+        if str(obj.codigo) == str(codigo):
+            return obj.Operadores
+
+#funcao que acha a frequencia baseado no codigo
+def findSeries(codigo):
+    
+    for obj in listVariables:
+        if str(obj.codigo) == str(codigo):
+            return obj.Series
+ 
 #funcao que acha a lista com o nome das colunas do df baseado no codigo
 def findColumnNames(codigo):
     
