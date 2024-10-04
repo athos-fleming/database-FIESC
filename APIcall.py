@@ -76,8 +76,13 @@ def get_sidra(codigo,parameters):
     localidade = parameters["localidade"]
     classificacao = parameters["classificacao"]
     
+    
     try:
-        url = 'https://servicodados.ibge.gov.br/api/v3/agregados/{}/periodos/{}/variaveis/{}?localidades={}&classificacao={}'.format(
+        if classificacao == "":
+            url = 'https://servicodados.ibge.gov.br/api/v3/agregados/{}/periodos/{}/variaveis/{}?localidades={}'.format(
+            codigo,periodos,variavel,localidade)
+        else:
+            url = 'https://servicodados.ibge.gov.br/api/v3/agregados/{}/periodos/{}/variaveis/{}?localidades={}&classificacao={}'.format(
             codigo,periodos,variavel,localidade,classificacao)
         
         request = requests.get(url)

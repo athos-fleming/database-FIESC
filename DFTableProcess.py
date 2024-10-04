@@ -9,7 +9,7 @@ import mysql.connector
 from mysql.connector import Error
 from dotenv import load_dotenv
 from datetime import datetime
-from finders import findAPIadress, findColumnNames,findCodigosList,findName
+from finders import findAPIadress, findColumnNames,findCodigosList,findName,findAPIparameters
 import Operations
 
 #trata e processa os df em dataframes adequados para serem inseridos no SQL
@@ -91,10 +91,19 @@ def process_sidra(codigo,df):
     sidraJson = df
     df = pd.DataFrame(columns=['date'])
     
+    #pra nao dar merda quando uns tem classificação e outros nao
+    parameters = findAPIparameters(codigo)
+    classificacao = parameters["classificacao"]
+    
     try:
+        
         #abrir o json, retirar os valores e seus headers e montar um df melhor
         for item in sidraJson[0]["resultados"]:
-            title = list(item['classificacoes'][0]["categoria"].values())[0]
+            
+            if classificacao == "":
+                title = title = sidraJson[0]["variavel"]
+            else:
+                title = list(item['classificacoes'][0]["categoria"].values())[0]
             dfTemp = pd.DataFrame(item['series'][0]['serie'].items(),columns=['date',title])
             df = pd.merge(df, dfTemp, on='date',how='outer')
         
@@ -188,7 +197,6 @@ def process_operations(db_connection,codigo,operador):
         
         case "seasonal":
             df = Operations.seasonal(dfTemp)
-            print("seasonal operation done")
    
         
     

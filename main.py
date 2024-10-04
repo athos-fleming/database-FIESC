@@ -33,7 +33,7 @@ def update_variables():
     if database_connection is not None:
         
         #define quais iteracioes de adresses vao rodar
-        APIadresses = ["ipea","sidra","bcb"]
+        APIadresses = ["sidra"]
         listType = "Variables"
         
         for adress in APIadresses:
@@ -99,11 +99,14 @@ def seasonal_variables():
             
             codigo = codigo
             
+            #cria e processa o df vindo do sidra
             df = DFTableProcess.process_operations(db_connection,codigo,operador)
             
-            print(df)
             
-            #insere 
+            
+            #cria e insere a df como uma Table no DB
+            DBTableConfig.dftoSQL(df,database_connection,codigo = codigo, operador = operador)
+        
             
             print("{} operation on code - {} - done".format(operador,codigo))
 
@@ -142,7 +145,8 @@ def update_models():
         
         print("updating model data")
         name = "mensal"
-                
+        
+          
         #cria e insere a df como uma Table no DB
         DBTableConfig.dftoSQL(df,database_connection,name = name)
         
@@ -156,8 +160,8 @@ def update_models():
 
 #comando que roda o código central apenas se puxado do Main
 if __name__ == "__main__":
-    #update_variables()
-    seasonal_variables()
+    update_variables()
+    #seasonal_variables()
     #update_models()
     
 
