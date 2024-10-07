@@ -1,8 +1,10 @@
 import os
 import pandas as pd
 import numpy as np
+from dotenv import load_dotenv
 from statsmodels.tsa import x13
 import statsmodels.api as sm
+
 
 #define o path da X13-ARIMA-SEATS
 os.environ['X13PATH'] = "C:/Users/athos.fleming/OneDrive - SERVICO NACIONAL DE APRENDIZAGEM INDUSTRIAL/Documentos/x13as"
@@ -44,6 +46,36 @@ def seasonal(df):
     #muda os nan para espaços vazios
     dfProcessed = dfProcessed.replace({np.nan: None})
     
-    
  
     return dfProcessed
+
+def deflacionar(db_connection,df,parameters):
+    
+    parametersList = parameters.split(',')
+    indice = parametersList[0]
+    date_base = parametersList[1]
+    names = df.columns.values
+    
+    #puxa os dados do indice determinado    
+    mycursor = db_connection.cursor()
+    SelectSQLIndice = 'SELECT * FROM variables.{}'.format(indice)
+    mycursor.execute(SelectSQLIndice)
+    dfIndice = mycursor.fetchall()
+    dfIndice = pd.DataFrame(dfIndice)
+    #renomeia pra nao dar problema
+    dfIndice = dfIndice.set_axis(("date","indice"), axis=1)
+    df = df.set_axis(("date","value"), axis=1)     
+    dfTemp = pd.merge(dfIndice,df, on='date', how="inner")   
+    
+    
+    dfTemp['indice'] = dfTemp['indice'].apply(lambda indice: indice/100 + 1)    
+    dfTemp['indice'] = dfTemp['indice'].cumprod()
+    indiceBase = dfTemp.loc[dfTemp['date']==date_base,'indice'].values[0]
+    dfTemp['indice'] = dfTemp['indice'].apply(lambda indice: indice/indiceBase)
+    dfTemp['value'] = dfTemp['value'].divide(dfTemp['indice'])
+    
+    #rename para o original
+    df = df.set_axis(names, axis=1) 
+    
+    
+    return df

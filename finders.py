@@ -39,17 +39,6 @@ def findCodigosList(condition,*args, **kwargs):
                 
             return OperadoresListVariables
         
-        case "Series":
-            
-            SeriesListVariables = []
-            codigoListVariables = [obj.codigo for obj in listVariables]
-            for codigo in codigoListVariables:
-                Series = findSeries(codigo)
-                for i in Series:
-                    if i == result:
-                        SeriesListVariables.append(codigo)
-                
-            return SeriesListVariables
             
             return None
 
@@ -87,11 +76,11 @@ def findOperadores(codigo):
             return obj.Operadores
 
 #funcao que acha a frequencia baseado no codigo
-def findSeries(codigo):
+def findOperadorParameters(codigo):
     
     for obj in listVariables:
         if str(obj.codigo) == str(codigo):
-            return obj.Series
+            return obj.OperadorParameters
  
 #funcao que acha a lista com o nome das colunas do df baseado no codigo
 def findColumnNames(codigo):

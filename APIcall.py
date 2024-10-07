@@ -40,16 +40,19 @@ def getAPI(codigo):
 def get_bcb(codigo,parameters):
     
     dataInicial = parameters
+
     
     try:
         url = 'http://api.bcb.gov.br/dados/serie/bcdata.sgs.{}/dados?formato=json&parameters={}'.format(codigo,dataInicial)
         serie_bcb = pd.read_json(url)
+        return serie_bcb
         
                 
     except ValueError as e:
-        print(f"❌ [API CALL ERROR]: '{e}'")
+        print(f"❌ [API CALL ERROR] in {0}: '{e}'".format(codigo))
+        df = pd.DataFrame()
+        return df
 
-    return serie_bcb
     
 #operação de get no ipea, informando parametros
 def get_ipea(codigo,parameters):
@@ -59,11 +62,13 @@ def get_ipea(codigo,parameters):
         serie_ipea = urlopen(url)
         serie_ipea = json.load(serie_ipea)
         serie_ipea = pd.json_normalize(serie_ipea['value'])   
+        return serie_ipea
         
     except ValueError as e:
         print(f"❌ [API CALL ERROR]: '{e}'")
+        df = pd.DataFrame()
+        return df
 
-    return serie_ipea
     
 #operação de get no sidra do IBGE, informando parametros
 def get_sidra(codigo,parameters):
@@ -88,9 +93,12 @@ def get_sidra(codigo,parameters):
         request = requests.get(url)
         serie_sidra = request.json()
         
+        return serie_sidra
+
         
     except ValueError as e:
         print(f"❌ [API CALL ERROR]: '{e}'")
+        df = pd.DataFrame()
+        return df
   
          
-    return serie_sidra

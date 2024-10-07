@@ -20,6 +20,7 @@ def dftoSQL(df,database_connection, **kwargs):
         name = findName(codigo)
         if operador != None:
             name = "{}_{}".format(name,operador)
+    
         
     try:
         df.to_sql(con=database_connection,name=name, if_exists='replace', index=False)

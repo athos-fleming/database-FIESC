@@ -9,7 +9,7 @@ import mysql.connector
 from mysql.connector import Error
 from dotenv import load_dotenv
 from datetime import datetime
-from finders import findAPIadress, findColumnNames,findCodigosList,findName,findAPIparameters
+from finders import findAPIadress, findColumnNames,findCodigosList,findName,findAPIparameters, findOperadorParameters
 import Operations
 
 #trata e processa os df em dataframes adequados para serem inseridos no SQL
@@ -53,6 +53,10 @@ def process_bcb(codigo,df):
         df.loc[:,'data'] = dataColumn
         
         df = df.rename(columns=ColumnNames)
+
+        dfDate = df[["date"]].copy()
+        dfDate = dfDate.assign(date = lambda df: pd.to_datetime(df.date))
+        df["date"] = dfDate
         
     except ValueError as e:
         print(f"❌ [Table Process CALL ERROR]: '{e}'")
@@ -78,6 +82,10 @@ def process_ipea(codigo,df):
         df.loc[:,'VALDATA'] = dataColumn
             
         df = df.rename(columns=ColumnNames)
+
+        dfDate = df[["date"]].copy()
+        dfDate = dfDate.assign(date = lambda df: pd.to_datetime(df.date))
+        df["date"] = dfDate
         
     except ValueError as e:
         print(f"❌ [Table Process CALL ERROR]: '{e}'")
@@ -120,6 +128,11 @@ def process_sidra(codigo,df):
         dataColumn = df.loc[:,'date']
         dataColumn = dataColumn.apply(dataChange)
         df.loc[:,'date'] = dataColumn
+        
+
+        dfDate = df[["date"]].copy()
+        dfDate = dfDate.assign(date = lambda df: pd.to_datetime(df.date))
+        df["date"] = dfDate
         
     except ValueError as e:
         print(f"❌ [Table Process CALL ERROR]: '{e}'")
@@ -168,7 +181,7 @@ def process_operations(db_connection,codigo,operador):
     
     mycursor = db_connection.cursor()
     
-    #info necessaria de cada objeto
+    #info necessaria de cada objeto 
     name = findName(codigo)
       
     #puxa cada uma das tables e seus valores
@@ -177,27 +190,28 @@ def process_operations(db_connection,codigo,operador):
     dfTemp = mycursor.fetchall()
     dfTemp = pd.DataFrame(dfTemp)
     dfTemp = dfTemp.replace("-",np.nan)
-    
-    #print(dfTemp)
-    
+        
     #renomeia pra nao dar problema
     dfColumns = list(mycursor.column_names)
     dfTemp = dfTemp.set_axis(dfColumns, axis=1)
+     
+    OperadorParameters = findOperadorParameters(codigo)
     
-    from statsmodels.tsa import x13
-    import statsmodels.api as sm
-
-    #define o path da X13-ARIMA-SEATS
-    os.environ['X13PATH'] = "C:/Users/athos.fleming/OneDrive - SERVICO NACIONAL DE APRENDIZAGEM INDUSTRIAL/Documentos/x13as"
-    
-    
-
-    #operação pra seasonal
+    #chamar as funções de operação
     match operador:
         
         case "seasonal":
             df = Operations.seasonal(dfTemp)
-   
+            
+        case "deflacionar":
+            parameters = OperadorParameters["deflacionar"]
+            df = Operations.deflacionar(db_connection,dfTemp,parameters)
+            
+        case "seasonal-deflacionar":
+            dfTemp = Operations.seasonal(dfTemp)  
+            parameters = OperadorParameters["deflacionar"]
+            df = Operations.deflacionar(db_connection,dfTemp,parameters)
+
         
     
     return df
