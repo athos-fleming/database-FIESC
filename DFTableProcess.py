@@ -211,6 +211,10 @@ def process_operations(db_connection,codigo,operador):
             dfTemp = Operations.seasonal(dfTemp)  
             parameters = OperadorParameters["deflacionar"]
             df = Operations.deflacionar(db_connection,dfTemp,parameters)
+            
+        case "especial":
+            parameters = OperadorParameters["especial"]
+            df = Operations.especial(db_connection,dfTemp,parameters)
 
         
     

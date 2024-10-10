@@ -33,7 +33,7 @@ def seasonal(df):
         if len(dftemp)>35:
             
             #operações de seasonal       
-            ajusted = x13.x13_arima_analysis(endog = dftemp.value, freq = "M")
+            ajusted = x13.x13_arima_analysis(endog = dftemp.value, freq = "M",outlier=True, trading=True)
             dfajusted = pd.DataFrame(ajusted.seasadj)
             dfajusted = dfajusted.reset_index()
             dfajusted = dfajusted.reset_index(drop=True)
@@ -77,5 +77,9 @@ def deflacionar(db_connection,df,parameters):
     #rename para o original
     df = df.set_axis(names, axis=1) 
     
+    
+    return df
+
+def especial(db_connection,df,parameters):
     
     return df

@@ -33,7 +33,7 @@ def update_variables():
     if database_connection is not None:
         
         #define quais iteracioes de adresses vao rodar
-        APIadresses = ["sidra"]
+        APIadresses = ["bcb"]
         listType = "Variables"
         
         for adress in APIadresses:
@@ -66,7 +66,7 @@ def update_variables():
 
 
 
-def seasonal_variables():
+def operate_variables():
     
     #carregar info do .env
     load_dotenv()
@@ -88,7 +88,7 @@ def seasonal_variables():
         
         
         #define quais operadores vao rodar
-        Operadores = ["deflacionar"]
+        Operadores = ["seasonal"]
         for operador in Operadores:
             print("Doing the {} operation".format(operador))
             
@@ -162,7 +162,7 @@ def update_models():
 #comando que roda o código central apenas se puxado do Main
 if __name__ == "__main__":
     #update_variables()
-    seasonal_variables()
+    operate_variables()
     #update_models()
     
 
