@@ -33,7 +33,7 @@ def update_variables():
     if database_connection is not None:
         
         #define quais iteracioes de adresses vao rodar
-        APIadresses = ["bcb"]
+        APIadresses = ["sidra"]
         listType = "Variables"
         
         for adress in APIadresses:

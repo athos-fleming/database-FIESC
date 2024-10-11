@@ -103,13 +103,13 @@ listVariables.append(Variables('ibc_br_mensal',"24363","bcb",
 
 #variavel Indicador de Custo do Crédito - ICC - Recursos/Crédito livre - Pessoas jurídicas % a.m.
 listVariables.append(Variables('icc_rescursos_livres_pj',"25355","bcb",
-                               "01/01/2013",["#seasonal"],{},
+                               "01/01/2013",["seasonal"],{},
                                {"data": "date","valor": "icc_rescursos_livres_pj"}
     ))
 
 #variavel Inadimplência da carteira de crédito - Pessoas físicas - Total % a.m.
 listVariables.append(Variables('inadimplencia_pf_total',"21084","bcb",
-                               "01/03/2011",["#seasonal"],{},
+                               "01/03/2011",["seasonal"],{},
                                {"data": "date","valor": "inadimplencia_pf_total"}
     ))
 
@@ -121,7 +121,7 @@ listVariables.append(Variables('saldo_credito_pf_total',"20580","bcb",
 
 #variavel 	Saldo da carteira de crédito com recursos livres - Pessoas físicas - Aquisição de outros bens % a.m.
 listVariables.append(Variables('saldo_credito_pf_outros',"20582","bcb",
-                               "01/03/2011",["#seasonal"],{},
+                               "01/03/2011",["seasonal"],{},
                                {"data": "date","valor": "saldo_credito_pf_outros"}
     ))
 
@@ -137,8 +137,8 @@ listVariables.append(Variables('icc_rescursos_livres_pj_outros',"27659","bcb",
 
 #variavel Produção Física Industrial de SC, por seções e atividades industriais mensal % a.m.
 listVariables.append(Variables('pim_pf_mensal_sc',"8888-12606-sc","sidra",
-                               {"periodos":"200201|200202|200203|200204|200205|200206|200207|200208|200209|200210|200211|200212|200301|200302|200303|200304|200305|200306|200307|200308|200309|200310|200311|200312|200401|200402|200403|200404|200405|200406|200407|200408|200409|200410|200411|200412|200501|200502|200503|200504|200505|200506|200507|200508|200509|200510|200511|200512|200601|200602|200603|200604|200605|200606|200607|200608|200609|200610|200611|200612|200701|200702|200703|200704|200705|200706|200707|200708|200709|200710|200711|200712|200801|200802|200803|200804|200805|200806|200807|200808|200809|200810|200811|200812|200901|200902|200903|200904|200905|200906|200907|200908|200909|200910|200911|200912|201001|201002|201003|201004|201005|201006|201007|201008|201009|201010|201011|201012|201101|201102|201103|201104|201105|201106|201107|201108|201109|201110|201111|201112|201201|201202|201203|201204|201205|201206|201207|201208|201209|201210|201211|201212|201301|201302|201303|201304|201305|201306|201307|201308|201309|201310|201311|201312|201401|201402|201403|201404|201405|201406|201407|201408|201409|201410|201411|201412|201501|201502|201503|201504|201505|201506|201507|201508|201509|201510|201511|201512|201601|201602|201603|201604|201605|201606|201607|201608|201609|201610|201611|201612|201701|201702|201703|201704|201705|201706|201707|201708|201709|201710|201711|201712|201801|201802|201803|201804|201805|201806|201807|201808|201809|201810|201811|201812|201901|201902|201903|201904|201905|201906|201907|201908|201909|201910|201911|201912|202001|202002|202003|202004|202005|202006|202007|202008|202009|202010|202011|202012|202101|202102|202103|202104|202105|202106|202107|202108|202109|202110|202111|202112|202201|202202|202203|202204|202205|202206|202207|202208|202209|202210|202211|202212|202301|202302|202303|202304|202305|202306|202307|202308|202309|202310|202311|202312|202401|202402|202403|202404|202405|202406|202407",
-                                "variaveis":"12606","localidade":"N3[42]","classificacao":"544[all]"},["#seasonal"],{},
+                               {"periodos":"-500",
+                                "variaveis":"12606","localidade":"N3[42]","classificacao":"544[all]"},["seasonal"],{},
                                {"date":"date",
                                 "1 Indústria geral":"1_Industria_Geral_sc",
                                 "2 Indústrias extrativas":"2_Industria_Extrativa_sc",
@@ -172,8 +172,8 @@ listVariables.append(Variables('pim_pf_mensal_sc',"8888-12606-sc","sidra",
 
 #variavel Produção Física Industrial BR, por seções e atividades industriais mensal % a.m.
 listVariables.append(Variables('pim_pf_mensal_br',"8888-12606-br","sidra",
-                               {"periodos":"200201|200202|200203|200204|200205|200206|200207|200208|200209|200210|200211|200212|200301|200302|200303|200304|200305|200306|200307|200308|200309|200310|200311|200312|200401|200402|200403|200404|200405|200406|200407|200408|200409|200410|200411|200412|200501|200502|200503|200504|200505|200506|200507|200508|200509|200510|200511|200512|200601|200602|200603|200604|200605|200606|200607|200608|200609|200610|200611|200612|200701|200702|200703|200704|200705|200706|200707|200708|200709|200710|200711|200712|200801|200802|200803|200804|200805|200806|200807|200808|200809|200810|200811|200812|200901|200902|200903|200904|200905|200906|200907|200908|200909|200910|200911|200912|201001|201002|201003|201004|201005|201006|201007|201008|201009|201010|201011|201012|201101|201102|201103|201104|201105|201106|201107|201108|201109|201110|201111|201112|201201|201202|201203|201204|201205|201206|201207|201208|201209|201210|201211|201212|201301|201302|201303|201304|201305|201306|201307|201308|201309|201310|201311|201312|201401|201402|201403|201404|201405|201406|201407|201408|201409|201410|201411|201412|201501|201502|201503|201504|201505|201506|201507|201508|201509|201510|201511|201512|201601|201602|201603|201604|201605|201606|201607|201608|201609|201610|201611|201612|201701|201702|201703|201704|201705|201706|201707|201708|201709|201710|201711|201712|201801|201802|201803|201804|201805|201806|201807|201808|201809|201810|201811|201812|201901|201902|201903|201904|201905|201906|201907|201908|201909|201910|201911|201912|202001|202002|202003|202004|202005|202006|202007|202008|202009|202010|202011|202012|202101|202102|202103|202104|202105|202106|202107|202108|202109|202110|202111|202112|202201|202202|202203|202204|202205|202206|202207|202208|202209|202210|202211|202212|202301|202302|202303|202304|202305|202306|202307|202308|202309|202310|202311|202312|202401|202402|202403|202404|202405|202406|202407",
-                                "variaveis":"12606","localidade":"N1[all]","classificacao":"544[all]"},["#seasonal"],{},
+                               {"periodos":"-500",
+                                "variaveis":"12606","localidade":"N1[all]","classificacao":"544[all]"},["seasonal"],{},
                                {"date":"date",
                                 "1 Indústria geral":"1_Industria_Geral",
                                 "2 Indústrias extrativas":"2_Industria_Extrativa",
@@ -207,7 +207,7 @@ listVariables.append(Variables('pim_pf_mensal_br',"8888-12606-br","sidra",
 
 #variavel Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade (%) Total, Trimestre Móvel % a.m.
 listVariables.append(Variables('taxa_desocupacao_mensal_trimestre_movel',"6381-4099-br","sidra",
-                               {"periodos":"201203|201204|201205|201206|201207|201208|201209|201210|201211|201212|201301|201302|201303|201304|201305|201306|201307|201308|201309|201310|201311|201312|201401|201402|201403|201404|201405|201406|201407|201408|201409|201410|201411|201412|201501|201502|201503|201504|201505|201506|201507|201508|201509|201510|201511|201512|201601|201602|201603|201604|201605|201606|201607|201608|201609|201610|201611|201612|201701|201702|201703|201704|201705|201706|201707|201708|201709|201710|201711|201712|201801|201802|201803|201804|201805|201806|201807|201808|201809|201810|201811|201812|201901|201902|201903|201904|201905|201906|201907|201908|201909|201910|201911|201912|202001|202002|202003|202004|202005|202006|202007|202008|202009|202010|202011|202012|202101|202102|202103|202104|202105|202106|202107|202108|202109|202110|202111|202112|202201|202202|202203|202204|202205|202206|202207|202208|202209|202210|202211|202212|202301|202302|202303|202304|202305|202306|202307|202308|202309|202310|202311|202312|202401|202402|202403|202404|202405|202406|202407|202408",
+                               {"periodos":"-500",
                                 "variaveis":"4099","localidade":"N1[all]","classificacao":""},[""],{},
                                {"date":"date",
                                 "Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade":"taxa_desocupacao_mensal_trimestre_movel"
@@ -216,7 +216,7 @@ listVariables.append(Variables('taxa_desocupacao_mensal_trimestre_movel',"6381-4
 
 #variavel Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade (%) Total de SC, Trimestre Móvel % a.m.
 listVariables.append(Variables('taxa_desocupacao_mensal_trimestre_movel_sc',"6468-4099-sc","sidra",
-                               {"periodos":"201201|201202|201203|201204|201301|201302|201303|201304|201401|201402|201403|201404|201501|201502|201503|201504|201601|201602|201603|201604|201701|201702|201703|201704|201801|201802|201803|201804|201901|201902|201903|201904|202001|202002|202003|202004|202101|202102|202103|202104|202201|202202|202203|202204|202301|202302|202303|202304|202401|202402",
+                               {"periodos":"-500",
                                 "variaveis":"4099","localidade":"N3[42]","classificacao":""},[""],{},
                                {"date":"date",
                                 "Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade":"taxa_desocupacao_mensal_trimestre_movel_sc"
@@ -225,8 +225,8 @@ listVariables.append(Variables('taxa_desocupacao_mensal_trimestre_movel_sc',"646
 
 #variavel Rendimento médio mensal real, efetivamente recebido em todos os trabalhos % a.m.
 listVariables.append(Variables('rendimento_medio_mensal_todos_trabalhos',"6387-5935-br","sidra",
-                               {"periodos":"201203|201204|201205|201206|201207|201208|201209|201210|201211|201212|201301|201302|201303|201304|201305|201306|201307|201308|201309|201310|201311|201312|201401|201402|201403|201404|201405|201406|201407|201408|201409|201410|201411|201412|201501|201502|201503|201504|201505|201506|201507|201508|201509|201510|201511|201512|201601|201602|201603|201604|201605|201606|201607|201608|201609|201610|201611|201612|201701|201702|201703|201704|201705|201706|201707|201708|201709|201710|201711|201712|201801|201802|201803|201804|201805|201806|201807|201808|201809|201810|201811|201812|201901|201902|201903|201904|201905|201906|201907|201908|201909|201910|201911|201912|202001|202002|202003|202004|202005|202006|202007|202008|202009|202010|202011|202012|202101|202102|202103|202104|202105|202106|202107|202108|202109|202110|202111|202112|202201|202202|202203|202204|202205|202206|202207|202208|202209|202210|202211|202212|202301|202302|202303|202304|202305|202306|202307|202308|202309|202310|202311|202312|202401|202402|202403|202404|202405|202406|202407|202408",
-                                "variaveis":"5935","localidade":"N1[all]","classificacao":""},["#seasonal"],{},
+                               {"periodos":"-500",
+                                "variaveis":"5935","localidade":"N1[all]","classificacao":""},["seasonal"],{},
                                {"date":"date",
                                 "Rendimento médio mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, efetivamente recebido em todos os trabalhos":"rendimento_medio_mensal_todos_trabalhos"
                                 }
@@ -234,8 +234,8 @@ listVariables.append(Variables('rendimento_medio_mensal_todos_trabalhos',"6387-5
 
 #variavel Rendimento médio trimestral real, efetivamente recebido em todos os trabalhos - SC % a.t.
 listVariables.append(Variables('rendimento_medio_trimestral_todos_trabalhos_sc',"6469-5935-br","sidra",
-                               {"periodos":"201201|201202|201203|201204|201301|201302|201303|201304|201401|201402|201403|201404|201501|201502|201503|201504|201601|201602|201603|201604|201701|201702|201703|201704|201801|201802|201803|201804|201901|201902|201903|201904|202001|202002|202003|202004|202101|202102|202103|202104|202201|202202|202203|202204|202301|202302|202303|202304|202401|202402",
-                                "variaveis":"5935","localidade":"N3[42]","classificacao":""},["#seasonal"],{},
+                               {"periodos":"-500",
+                                "variaveis":"5935","localidade":"N3[42]","classificacao":""},["seasonal"],{},
                                {"date":"date",
                                 "Rendimento médio mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, efetivamente recebido em todos os trabalhos":"rendimento_medio_trimestral_todos_trabalhos_sc"
                                 }
@@ -243,8 +243,8 @@ listVariables.append(Variables('rendimento_medio_trimestral_todos_trabalhos_sc',
 
 #variavel Massa de Rendimento mensal real, efetivamente recebido em todos os trabalhos - BR % a.m.
 listVariables.append(Variables('rendimento_massa_mensal_real_todos_trabalhos',"6392-6293-br","sidra",
-                               {"periodos":"201203|201204|201205|201206|201207|201208|201209|201210|201211|201212|201301|201302|201303|201304|201305|201306|201307|201308|201309|201310|201311|201312|201401|201402|201403|201404|201405|201406|201407|201408|201409|201410|201411|201412|201501|201502|201503|201504|201505|201506|201507|201508|201509|201510|201511|201512|201601|201602|201603|201604|201605|201606|201607|201608|201609|201610|201611|201612|201701|201702|201703|201704|201705|201706|201707|201708|201709|201710|201711|201712|201801|201802|201803|201804|201805|201806|201807|201808|201809|201810|201811|201812|201901|201902|201903|201904|201905|201906|201907|201908|201909|201910|201911|201912|202001|202002|202003|202004|202005|202006|202007|202008|202009|202010|202011|202012|202101|202102|202103|202104|202105|202106|202107|202108|202109|202110|202111|202112|202201|202202|202203|202204|202205|202206|202207|202208|202209|202210|202211|202212|202301|202302|202303|202304|202305|202306|202307|202308|202309|202310|202311|202312|202401|202402|202403|202404|202405|202406|202407|202408",
-                                "variaveis":"6293","localidade":"N1[all]","classificacao":""},["#seasonal"],{},
+                               {"periodos":"-500",
+                                "variaveis":"6293","localidade":"N1[all]","classificacao":""},[""],{},
                                {"date":"date",
                                 "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_mensal_real_todos_trabalhos"
                                 }
@@ -252,7 +252,7 @@ listVariables.append(Variables('rendimento_massa_mensal_real_todos_trabalhos',"6
 
 #variavel Massa de Rendimento trimestral real, efetivamente recebido em todos os trabalhos - BR % a.m.
 listVariables.append(Variables('rendimento_massa_trimestral_real_todos_trabalhos',"6474-6293-br","sidra",
-                               {"periodos":"201201|201202|201203|201204|201301|201302|201303|201304|201401|201402|201403|201404|201501|201502|201503|201504|201601|201602|201603|201604|201701|201702|201703|201704|201801|201802|201803|201804|201901|201902|201903|201904|202001|202002|202003|202004|202101|202102|202103|202104|202201|202202|202203|202204|202301|202302|202303|202304|202401|202402",
+                               {"periodos":"-500",
                                 "variaveis":"6293","localidade":"N1[all]","classificacao":""},[""],{},
                                {"date":"date",
                                 "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_trimestral_real_todos_trabalhos"
@@ -261,7 +261,7 @@ listVariables.append(Variables('rendimento_massa_trimestral_real_todos_trabalhos
 
 #variavel Massa de Rendimento trimestral real, efetivamente recebido em todos os trabalhos - SC % a.m.
 listVariables.append(Variables('rendimento_massa_trimestral_real_todos_trabalhos_sc',"6474-6293-sc","sidra",
-                               {"periodos":"201201|201202|201203|201204|201301|201302|201303|201304|201401|201402|201403|201404|201501|201502|201503|201504|201601|201602|201603|201604|201701|201702|201703|201704|201801|201802|201803|201804|201901|201902|201903|201904|202001|202002|202003|202004|202101|202102|202103|202104|202201|202202|202203|202204|202301|202302|202303|202304|202401|202402",
+                               {"periodos":"-500",
                                 "variaveis":"6293","localidade":"N3[42]","classificacao":""},[""],{},
                                {"date":"date",
                                 "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_trimestral_real_todos_trabalhos_sc"
