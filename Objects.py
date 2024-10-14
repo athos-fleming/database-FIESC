@@ -24,7 +24,6 @@ listModels = []
 
 #grupo do ipea, corre bem tranquilo
 
-
 #variavel IPCA - geral - taxa de variação  mensa % a.m.
 listVariables.append(Variables('ipca_mensal_taxa_variação',"'PRECOS12_IPCAG12'","ipea",
                                "01/01/1980",["especial"],{"especial":"ipca_juros_real"},
@@ -132,8 +131,31 @@ listVariables.append(Variables('icc_rescursos_livres_pj_outros',"27659","bcb",
     ))
 
 
-#grupo do sidra, grande volume de dados, pode ser lento
 
+
+
+
+
+
+
+#grupo do bcb - focus, dados em painel, process mais complicado e demorado
+
+#variavel expectativa IPCA
+listVariables.append(Variables('expectativa_ipca_2024',"IPCA-ipca focus","bcb_focus",
+                               "2024",[""],{""},
+                               {""}    
+    ))
+
+#variavel expectativa IPCA serviços
+listVariables.append(Variables('expectativa_ipca_servicos_2024',"IPCA%20Servi%C3%A7os-ipca servicos focus","bcb_focus",
+                               "2024",[""],{""},
+                               {""}    
+    ))
+
+
+
+
+#grupo do sidra, grande volume de dados, pode ser lento
 
 #variavel Produção Física Industrial de SC, por seções e atividades industriais mensal % a.m.
 listVariables.append(Variables('pim_pf_mensal_sc',"8888-12606-sc","sidra",
@@ -271,7 +293,4 @@ listVariables.append(Variables('rendimento_massa_trimestral_real_todos_trabalhos
 
 
 #models estabelecidos
-
-
-
 

@@ -33,6 +33,10 @@ def ProcessTable(codigo, df):
             df = process_sidra(codigo,df)
             return df
         
+        case "bcb_focus":
+            df = process_bcbFocus(codigo,df)
+            return df
+        
         case default:
             print(f"❌ [AdressType não encontrado]")
 
@@ -141,6 +145,52 @@ def process_sidra(codigo,df):
     
     return df
 
+#processo de tratamento de df vindo do bcb focus
+def process_bcbFocus(codigo,df):
+
+    #reserva o json inicial
+    focusJson = df                
+    
+    #declara variaveis
+    oldDate = ""
+    dfList = []
+    dfempty = pd.DataFrame(columns=['date'])
+    dfReferencia = dfempty
+    dfFocus = dfempty
+    
+    #processo de modelagem do df final 
+    for item in focusJson['value']:
+   
+        date = item['Data']
+        DataReferencia = item['DataReferencia']
+        mediana = item['Mediana']
+        
+        if date != oldDate:
+            oldDate = date
+            dfFocus = pd.concat([dfReferencia,dfFocus],ignore_index=True)
+            dfReferencia = dfempty
+        
+        objectTemp = [[date,mediana]]
+        columnNames = ["date",DataReferencia]
+        dfTemp = pd.DataFrame(objectTemp,columns=columnNames)
+        dfReferencia = pd.merge(dfTemp, dfReferencia, on='date',how='outer')
+        
+    df = dfFocus
+    
+    #arruma a data para datetime
+    dfDate = df[["date"]].copy()
+    dfDate = dfDate.assign(date = lambda df: pd.to_datetime(df.date))
+    df["date"] = dfDate
+    
+    #muda os nan para espaços vazios
+    df = df.replace({np.nan: None})
+    
+    return df
+
+
+
+
+
 def process_models(db_connection,model):
   
     mycursor = db_connection.cursor()
@@ -174,7 +224,6 @@ def process_models(db_connection,model):
     print("{} model df made".format(model))
     
     return df
-
 
 
 def process_operations(db_connection,codigo,operador):

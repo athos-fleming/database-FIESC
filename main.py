@@ -33,7 +33,7 @@ def update_variables():
     if database_connection is not None:
         
         #define quais iteracioes de adresses vao rodar
-        APIadresses = ["sidra"]
+        APIadresses = ["bcb_focus"]
         listType = "Variables"
         
         for adress in APIadresses:
@@ -51,7 +51,8 @@ def update_variables():
                 #busca o df via API
                 df = APIcall.getAPI(codigo)
                 if pd.DataFrame(df).empty == False:
-                                
+                    
+                    
                     #função de processamento de dados par ao df
                     df = DFTableProcess.ProcessTable(codigo,df)
                     
@@ -161,8 +162,8 @@ def update_models():
 
 #comando que roda o código central apenas se puxado do Main
 if __name__ == "__main__":
-    #update_variables()
-    operate_variables()
+    update_variables()
+    #operate_variables()
     #update_models()
     
 
