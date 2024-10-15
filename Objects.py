@@ -13,8 +13,9 @@ class Variables(object):
         self.ColumnNames = ColumnNames
         
 class Models(object):
-    def __init__(self,name,regressor,variables):
+    def __init__(self,name,date,regressor,variables):
         self.name = name
+        self.date = date
         self.regressor = regressor
         self.variables = variables
         
@@ -67,7 +68,9 @@ listVariables.append(Variables('pib_mensal_taxa_variação',"'BM12_PIB12'","ipea
     ))
 
 
+
 #grupo do bcb, as vezes da erro de api call
+
 
 
 #variavel Dívida líquida do governo geral (% PIB) % a.m.
@@ -132,30 +135,27 @@ listVariables.append(Variables('icc_rescursos_livres_pj_outros',"27659","bcb",
 
 
 
-
-
-
-
-
-
 #grupo do bcb - focus, dados em painel, process mais complicado e demorado
+
+
 
 #variavel expectativa IPCA
 listVariables.append(Variables('expectativa_ipca_2024',"IPCA-ipca focus","bcb_focus",
-                               "2024",[""],{""},
+                               "2024",["transpose"],{""},
                                {""}    
     ))
 
 #variavel expectativa IPCA serviços
 listVariables.append(Variables('expectativa_ipca_servicos_2024',"IPCA%20Servi%C3%A7os-ipca servicos focus","bcb_focus",
-                               "2024",[""],{""},
+                               "2024",["transpose"],{""},
                                {""}    
     ))
 
 
 
-
 #grupo do sidra, grande volume de dados, pode ser lento
+
+
 
 #variavel Produção Física Industrial de SC, por seções e atividades industriais mensal % a.m.
 listVariables.append(Variables('pim_pf_mensal_sc',"8888-12606-sc","sidra",
@@ -294,3 +294,11 @@ listVariables.append(Variables('rendimento_massa_trimestral_real_todos_trabalhos
 
 #models estabelecidos
 
+
+#model para o power BI do ipca
+listModels.append(Models('ipca_evolucao',"'2019-01-01'", "",
+                         ["ipca_mensal_taxa_preços_livres_serviços",
+                          "ipca_mensal_taxa_variação"
+                          ]
+    
+    ))

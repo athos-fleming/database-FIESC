@@ -89,7 +89,7 @@ def operate_variables():
         
         
         #define quais operadores vao rodar
-        Operadores = ["seasonal"]
+        Operadores = ["transpose"]
         for operador in Operadores:
             print("Doing the {} operation".format(operador))
             
@@ -105,9 +105,8 @@ def operate_variables():
                 df = DFTableProcess.process_operations(db_connection,codigo,operador)
                 
                 
-                
                 #cria e insere a df como uma Table no DB
-                DBTableConfig.dftoSQL(df,database_connection,codigo = codigo, operador = operador)
+                #DBTableConfig.dftoSQL(df,database_connection,codigo = codigo, operador = operador)
             
                 
                 print("{} operation on code - {} - done".format(operador,codigo))
@@ -129,30 +128,32 @@ def update_models():
     #Conecta na base de dados variables
     MYSQL_DATABASE = os.getenv('MYSQL_DB_VARIABLES')
     db_connection = ConnectDB.create_db_connection(HOST,MYSQL_USERNAME,MYSQL_PASSWORD,MYSQL_DATABASE)
-
-    #se a conexão nao der problema, segue o processo de editar df, criar tabela e inserir valores
-    if db_connection is not None:
-        
-        #cria e processa o df do modelo agrupado
-        result = "mensal"        
-        df = DFTableProcess.process_models(db_connection,result)
     
     #cria a conexao com o DB pelo alchemy, para a model para inserir lá a Table
     MYSQL_DATABASE = os.getenv('MYSQL_DB_MODELS')
     database_connection = sqlalchemy.create_engine('mysql+mysqlconnector://{0}:{1}@{2}/{3}'.
                                                    format(MYSQL_USERNAME, MYSQL_PASSWORD,HOST, MYSQL_DATABASE))
 
+
     #se a conexão nao der problema, segue o processo de editar df, criar tabela e inserir valores
-    if database_connection is not None:
+    if db_connection is not None:        
         
-        print("updating model data")
-        name = "mensal"
+        modelos = ["ipca_evolucao"]
+        for model in modelos:
+            
+            #cria e processa o df do modelo agrupado
+            df = DFTableProcess.process_models(db_connection,model)
+
+    
+            #se a conexão nao der problema, segue o processo de editar df, criar tabela e inserir valores
+            if database_connection is not None:
+                
+                print("updating model data")
+                
+                #cria e insere a df como uma Table no DB
+                DBTableConfig.dftoSQL(df,database_connection,name = model)
         
-          
-        #cria e insere a df como uma Table no DB
-        DBTableConfig.dftoSQL(df,database_connection,name = name)
-        
-        print("Model {} updated ✅".format(name))
+            print("Model {} updated ✅".format(model))
 
 
 

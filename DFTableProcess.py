@@ -9,7 +9,7 @@ import mysql.connector
 from mysql.connector import Error
 from dotenv import load_dotenv
 from datetime import datetime
-from finders import findAPIadress, findColumnNames,findCodigosList,findName,findAPIparameters, findOperadorParameters
+from finders import findAPIadress,findColumnNames,findCodigosList,findName,findAPIparameters,findOperadorParameters,findDate,findRegressor,findVariables
 import Operations
 
 #trata e processa os df em dataframes adequados para serem inseridos no SQL
@@ -177,6 +177,7 @@ def process_bcbFocus(codigo,df):
         
     df = dfFocus
     
+    
     #arruma a data para datetime
     dfDate = df[["date"]].copy()
     dfDate = dfDate.assign(date = lambda df: pd.to_datetime(df.date))
@@ -185,10 +186,14 @@ def process_bcbFocus(codigo,df):
     #muda os nan para espaços vazios
     df = df.replace({np.nan: None})
     
+    #arruma o dtype das colunas
+    cols = df.columns
+    df[cols[1:]] = df[cols[1:]].apply(pd.to_numeric, errors='ignore')
+    
+    
+    print(df.dtypes)
+    
     return df
-
-
-
 
 
 def process_models(db_connection,model):
@@ -196,27 +201,26 @@ def process_models(db_connection,model):
     mycursor = db_connection.cursor()
      
     #chama a lista com todos os codigos incluidos no Objects com a condicao que frenquencia == mensal
-    codigoListVariables = findCodigosList("Series",result = model)
+    ListVariables = findVariables(model)
+    cutDate = findDate(model)
     df = pd.DataFrame(columns=['date'])
-        
     #roda o looping para todos os objetos na lista mensal
-    for codigo in codigoListVariables:               
-            
-      #info necessaria de cada objeto
-      name = findName(codigo)
+    for name in ListVariables:
+        
+        #info necessaria de cada objeto
       
-      #puxa cada uma das tables e seus valores
-      selectSQL = 'SELECT * FROM variables.{}'.format(name)
-      mycursor.execute(selectSQL)
-      dfTemp = mycursor.fetchall()
-      dfTemp = pd.DataFrame(dfTemp)
+        #puxa cada uma das tables e seus valores
+        selectSQL = 'SELECT * FROM variables.{} where date >= {}'.format(name,cutDate)
+        mycursor.execute(selectSQL)
+        dfTemp = mycursor.fetchall()
+        dfTemp = pd.DataFrame(dfTemp)
       
-      #renomeia pra nao dar problema
-      dfColumns = list(mycursor.column_names)
-      dfTemp = dfTemp.set_axis(dfColumns, axis=1)
+        #renomeia pra nao dar problema
+        dfColumns = list(mycursor.column_names)
+        dfTemp = dfTemp.set_axis(dfColumns, axis=1)
     
-      #junta todas elas por date
-      df = pd.merge(df, dfTemp, on='date',how='outer')
+        #junta todas elas por date
+        df = pd.merge(df, dfTemp, on='date',how='outer')
     
     #muda os nan para espaços vazios
     df = df.replace({np.nan: None})
@@ -260,7 +264,10 @@ def process_operations(db_connection,codigo,operador):
             dfTemp = Operations.seasonal(dfTemp)  
             parameters = OperadorParameters["deflacionar"]
             df = Operations.deflacionar(db_connection,dfTemp,parameters)
-            
+        
+        case "transpose":
+            df = Operations.transpose(dfTemp)
+        
         case "especial":
             parameters = OperadorParameters["especial"]
             df = Operations.especial(db_connection,dfTemp,parameters)

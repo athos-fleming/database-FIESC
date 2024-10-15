@@ -4,6 +4,7 @@ import numpy as np
 from dotenv import load_dotenv
 from statsmodels.tsa import x13
 import statsmodels.api as sm
+from datetime import datetime
 
 
 #define o path da X13-ARIMA-SEATS
@@ -79,6 +80,33 @@ def deflacionar(db_connection,df,parameters):
     
     
     return df
+
+def transpose(df):
+    
+    #transpoe a df
+    df = df.transpose()
+    
+    #muda os valores das colunas para o correto
+    def dataChange(date):
+        date = date.to_pydatetime()
+        x = date.strftime("%d/%m/%Y")
+        return x
+    
+    dataColumn = df.loc['date']
+    dataColumn = dataColumn.apply(dataChange)
+    df.loc['date'] = dataColumn
+    
+    df.columns = df.iloc[0]
+    df = df.iloc[1:]
+    
+    
+    #redefine a nova coluna date
+    
+    
+    
+    return df
+
+
 
 def especial(db_connection,df,parameters):
     

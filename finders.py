@@ -28,7 +28,6 @@ def findCodigosList(condition,*args, **kwargs):
             return codigoListVariables
         
         case "Operadores":
-            
             OperadoresListVariables = []
             codigoListVariables = [obj.codigo for obj in listVariables]
             for codigo in codigoListVariables:
@@ -39,8 +38,6 @@ def findCodigosList(condition,*args, **kwargs):
                 
             return OperadoresListVariables
         
-            
-            return None
 
 #funcao que acha a frequencia baseado no codigo
 def findName(codigo):
@@ -48,10 +45,7 @@ def findName(codigo):
     for obj in listVariables:
         if str(obj.codigo) == str(codigo):
             return obj.name
-        else:
-            for obj in listModels:
-                if str(obj.codigo) == str(codigo):
-                    return obj.name
+        
  
 #funcao que acha os parametros baseado no codigo
 def findAPIparameters(codigo):
@@ -89,3 +83,24 @@ def findColumnNames(codigo):
             
         if str(obj.codigo) == str(codigo):
             return obj.ColumnNames
+
+#funcao de finder para os models
+
+#funcao que acha a data de corte do modelo
+def findDate(model):
+    for obj in listModels:
+        if str(obj.name) == str(model):
+            return obj.date
+
+#funcao que acha o regressor, para modelos de analise de regressao
+def findRegressor(model):
+    for obj in listModels:
+        if str(obj.name) == str(model):
+            return obj.regressor
+
+#funcao que acha as variaveis que vao compor o df, incluindo o regressor
+def findVariables(model):
+    for obj in listModels:
+        if str(obj.name) == str(model):
+            return obj.variables
+
