@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 from statsmodels.tsa import x13
 import statsmodels.api as sm
 from datetime import datetime
-
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 #define o path da X13-ARIMA-SEATS
 os.environ['X13PATH'] = "C:/Users/athos.fleming/OneDrive - SERVICO NACIONAL DE APRENDIZAGEM INDUSTRIAL/Documentos/x13as"
@@ -82,26 +83,95 @@ def deflacionar(db_connection,df,parameters):
     return df
 
 def transpose(df):
+        
+    #transformar 1 coluna date em string
+    df = df.astype({'date':'string'})
     
-    #transpoe a df
+    #desce header ou indexa a date
+    df.set_index('date',inplace=True)
+    
+    #transpoe a df    
     df = df.transpose()
     
-    #muda os valores das colunas para o correto
-    def dataChange(date):
-        date = date.to_pydatetime()
-        x = date.strftime("%d/%m/%Y")
-        return x
     
-    dataColumn = df.loc['date']
-    dataColumn = dataColumn.apply(dataChange)
-    df.loc['date'] = dataColumn
+    #sobe header ou desindexa a date
+    df.index.name = 'date'
+    df = df.reset_index()
+    df.index.name = ""
     
-    df.columns = df.iloc[0]
-    df = df.iloc[1:]
+    #arruma o dtype das colunas
+    cols = df.columns
+    df[cols[1:]] = df[cols[1:]].apply(pd.to_numeric, errors='ignore')
+    df[cols[0]] = df[cols[0]].apply(pd.to_datetime, errors='ignore')
     
     
-    #redefine a nova coluna date
+    return df
+
+
+def rolling(db_connection,df,parameters):
     
+    parametersList = parameters.split('-')
+    variavel_base = parametersList[0]
+    rollSize = parametersList[1]
+    
+    if variavel_base != "":
+        
+        #garante que a date vai estar no padrao utilizado
+        def dataChange(date):
+            x = pd.to_datetime(date).strftime("%Y-%m-01")
+            return x
+    
+        dataColumn = df.loc[:,'date']
+        dataColumn = dataColumn.apply(dataChange)
+        df.loc[:,'date'] = dataColumn
+        
+        
+    #definir data externamente   
+    dfDate = df[["date"]].copy()
+    dfDate = dfDate.assign(date = lambda df: pd.to_datetime(df.date))
+    df = df.drop('date', axis=1)
+    dfProcessed = pd.DataFrame(dfDate)  
+    
+    
+    #looping para operacionalizar o rolling de cada coluna
+    for df, column in df.items():
+        
+        #setup do df para poder realizar a operação do seasonal
+        dftemp = pd.DataFrame(column)
+        name = dftemp.columns.values
+        dftemp = pd.concat([dfDate,dftemp],axis=1, join='inner')
+        dftemp = dftemp.dropna(axis = 0,how='any')
+        dftemp = dftemp.set_axis(["date","value"],axis=1)
+        dftemp = dftemp.assign(date = lambda df: pd.to_datetime(df.date))
+        
+        #para caso a variavel precise resgatar outra que tenha os dados dos "n" periodos para a operação
+        if variavel_base != "":
+            
+            dateInicio = dftemp.iloc[0,0]
+
+            #puxa os dados do indice determinado e cola "n" periodos atras de cada coluna
+            mycursor = db_connection.cursor()
+            SelectSQLIndice = 'SELECT * FROM variables.{} WHERE (date > "{}" - INTERVAL {} MONTH AND date < "{}")'.format(variavel_base,dateInicio,rollSize,dateInicio)
+            mycursor.execute(SelectSQLIndice)
+            dfIndice = mycursor.fetchall()
+            dfIndice = pd.DataFrame(dfIndice) 
+            dfIndice = dfIndice.set_axis(["date","value"],axis=1)
+            dftemp = pd.concat([dfIndice, dftemp])
+
+
+        #realiza a operação de rolling e apaga as colunas que nao tem rolling
+        dftemp['value'] = dftemp['value'].rolling(12,12).sum()
+        dftemp = dftemp.dropna(axis = 0,how='any')
+        
+        #merge todas as colunas operacionalizadas numa unica df
+        dftemp = dftemp.set_axis(['date',"{}".format(name[0])],axis=1)
+        
+        
+        #junta num df as seazonalizadas  
+        dfProcessed = pd.merge(dfProcessed, dftemp, on='date',how='outer')
+        dfProcessed = dfProcessed.replace({np.nan: None})
+        
+    df = dfProcessed  
     
     
     return df

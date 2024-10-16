@@ -250,29 +250,34 @@ def process_operations(db_connection,codigo,operador):
      
     OperadorParameters = findOperadorParameters(codigo)
     
-    #chamar as funções de operação
-    match operador:
+    ListOperadores = operador.split('_')
+    
+    for op in ListOperadores:  
         
-        case "seasonal":
-            df = Operations.seasonal(dfTemp)
+    
+        #chamar as funções de operação
+        match op:
             
-        case "deflacionar":
-            parameters = OperadorParameters["deflacionar"]
-            df = Operations.deflacionar(db_connection,dfTemp,parameters)
+            case "seasonal":
+                dfTemp = Operations.seasonal(dfTemp)
+                
+            case "deflacionar":
+                parameters = OperadorParameters["deflacionar"]
+                dfTemp = Operations.deflacionar(db_connection,dfTemp,parameters)
+                            
+            case "transpose":
+                dfTemp = Operations.transpose(dfTemp)
             
-        case "seasonal-deflacionar":
-            dfTemp = Operations.seasonal(dfTemp)  
-            parameters = OperadorParameters["deflacionar"]
-            df = Operations.deflacionar(db_connection,dfTemp,parameters)
-        
-        case "transpose":
-            df = Operations.transpose(dfTemp)
-        
-        case "especial":
-            parameters = OperadorParameters["especial"]
-            df = Operations.especial(db_connection,dfTemp,parameters)
+            case "rolling":
+                parameters = OperadorParameters["rolling"]
+                dfTemp = Operations.rolling(db_connection,dfTemp,parameters)
+            
+            case "especial":
+                parameters = OperadorParameters["especial"]
+                dfTemp = Operations.especial(db_connection,dfTemp,parameters)
 
-        
+    df = dfTemp
+    
     
     return df
 

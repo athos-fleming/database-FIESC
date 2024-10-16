@@ -89,7 +89,7 @@ def operate_variables():
         
         
         #define quais operadores vao rodar
-        Operadores = ["transpose"]
+        Operadores = ["rolling","transpose_rolling_transpose"]
         for operador in Operadores:
             print("Doing the {} operation".format(operador))
             
@@ -102,11 +102,12 @@ def operate_variables():
                 codigo = codigo
                 
                 #cria e processa o df vindo do sidra
+                
                 df = DFTableProcess.process_operations(db_connection,codigo,operador)
                 
                 
                 #cria e insere a df como uma Table no DB
-                #DBTableConfig.dftoSQL(df,database_connection,codigo = codigo, operador = operador)
+                DBTableConfig.dftoSQL(df,database_connection,codigo = codigo, operador = operador)
             
                 
                 print("{} operation on code - {} - done".format(operador,codigo))
@@ -163,8 +164,8 @@ def update_models():
 
 #comando que roda o código central apenas se puxado do Main
 if __name__ == "__main__":
-    update_variables()
-    #operate_variables()
+    #update_variables()
+    operate_variables()
     #update_models()
     
 

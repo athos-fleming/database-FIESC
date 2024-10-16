@@ -27,7 +27,7 @@ listModels = []
 
 #variavel IPCA - geral - taxa de variação  mensa % a.m.
 listVariables.append(Variables('ipca_mensal_taxa_variação',"'PRECOS12_IPCAG12'","ipea",
-                               "01/01/1980",["especial"],{"especial":"ipca_juros_real"},
+                               "01/01/1980",["rolling"],{"especial":"ipca_juros_real","rolling":"-12"},
                                {"VALDATA": "date","VALVALOR": "ipca_mensal_taxa_variação"}
     ))
 
@@ -117,7 +117,7 @@ listVariables.append(Variables('inadimplencia_pf_total',"21084","bcb",
 
 #variavel 	Saldo da carteira de crédito com recursos livres - Pessoas físicas - Total % a.m.
 listVariables.append(Variables('saldo_credito_pf_total',"20580","bcb",
-                               "01/03/2011",["#seasonal-deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/03/2011",["#seasonal_deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_credito_pf_total"}
     ))
 
@@ -141,13 +141,13 @@ listVariables.append(Variables('icc_rescursos_livres_pj_outros',"27659","bcb",
 
 #variavel expectativa IPCA
 listVariables.append(Variables('expectativa_ipca_2024',"IPCA-ipca focus","bcb_focus",
-                               "2024",["transpose"],{""},
+                               "2024",["transpose_rolling_transpose"],{"rolling":"ipca_mensal_taxa_variação-12"},
                                {""}    
     ))
 
 #variavel expectativa IPCA serviços
 listVariables.append(Variables('expectativa_ipca_servicos_2024',"IPCA%20Servi%C3%A7os-ipca servicos focus","bcb_focus",
-                               "2024",["transpose"],{""},
+                               "2024",["transpose_rolling_transpose"],{"rolling":"ipca_mensal_taxa_variação-12"},
                                {""}    
     ))
 
