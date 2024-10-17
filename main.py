@@ -89,7 +89,7 @@ def operate_variables():
         
         
         #define quais operadores vao rodar
-        Operadores = ["rolling","transpose_rolling_transpose"]
+        Operadores = ["firstdayofmonth_transpose_rolling"]
         for operador in Operadores:
             print("Doing the {} operation".format(operador))
             

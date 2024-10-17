@@ -57,7 +57,7 @@ listVariables.append(Variables('ipca_mensal_taxa_núcleo_exclusão_domiciliar',"
 
 #variavel IPCA - preços livres - serviços % a.m.
 listVariables.append(Variables('ipca_mensal_taxa_preços_livres_serviços',"'BM12_IPCAPLSER12'","ipea",
-                               "01/01/1992",[""],{},
+                               "01/01/1992",["rolling"],{"rolling":"-12"},
                                {"VALDATA": "date","VALVALOR": "ipca_mensal_taxa_preços_livres_serviços"}
     ))
 
@@ -141,13 +141,15 @@ listVariables.append(Variables('icc_rescursos_livres_pj_outros',"27659","bcb",
 
 #variavel expectativa IPCA
 listVariables.append(Variables('expectativa_ipca_2024',"IPCA-ipca focus","bcb_focus",
-                               "2024",["transpose_rolling_transpose"],{"rolling":"ipca_mensal_taxa_variação-12"},
+                               "2022-12-31",["transpose_rolling_transpose","latest_transpose_rolling","firstdayofmonth_transpose_rolling"],
+                               {"rolling":"ipca_mensal_taxa_variação-12"},
                                {""}    
     ))
 
 #variavel expectativa IPCA serviços
 listVariables.append(Variables('expectativa_ipca_servicos_2024',"IPCA%20Servi%C3%A7os-ipca servicos focus","bcb_focus",
-                               "2024",["transpose_rolling_transpose"],{"rolling":"ipca_mensal_taxa_variação-12"},
+                               "2022-12-31",["transpose_rolling_transpose","latest_transpose_rolling","firstdayofmonth_transpose_rolling"],
+                               {"rolling":"ipca_mensal_taxa_preços_livres_serviços-12"},
                                {""}    
     ))
 
@@ -297,8 +299,10 @@ listVariables.append(Variables('rendimento_massa_trimestral_real_todos_trabalhos
 
 #model para o power BI do ipca
 listModels.append(Models('ipca_evolucao',"'2019-01-01'", "",
-                         ["ipca_mensal_taxa_preços_livres_serviços",
-                          "ipca_mensal_taxa_variação"
+                         ["ipca_mensal_taxa_variação_rolling",
+                          "ipca_mensal_taxa_preços_livres_serviços_rolling",
+                          "expectativa_ipca_2024_latest_transpose_rolling",
+                          "expectativa_ipca_servicos_2024_latest_transpose_rolling"
                           ]
     
     ))

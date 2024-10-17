@@ -107,6 +107,41 @@ def transpose(df):
     
     return df
 
+def latest(df,name):
+    
+    #chama a ultima row da df
+    df = df.tail(1)
+    
+    #muda o nome para ser reconhecivel
+    df.iloc[0,0] = "latest_{}".format(name)
+    
+    return df
+
+def firstdayofmonth(df):
+    
+    
+    #agrupa em cada um dos meses de cada ano e pega o primeiro dado
+    df = df.groupby(df['date'].dt.strftime('%Y-%m')).first()
+    
+    
+    #elimina todos menos os 13 meses mais recentes
+    df = df.tail(13)
+    
+    #elimina o mes atual, pois ele nao esta completo
+    df.drop(df.tail(1).index,inplace=True)
+    
+    #print(df)
+    
+    #renomeia a date para o padrao de apenas mes
+    df['date'] = df['date'].dt.strftime('mes %m')
+    
+    #print(df)
+    
+    return df
+
+
+
+
 
 def rolling(db_connection,df,parameters):
     
@@ -151,7 +186,7 @@ def rolling(db_connection,df,parameters):
 
             #puxa os dados do indice determinado e cola "n" periodos atras de cada coluna
             mycursor = db_connection.cursor()
-            SelectSQLIndice = 'SELECT * FROM variables.{} WHERE (date > "{}" - INTERVAL {} MONTH AND date < "{}")'.format(variavel_base,dateInicio,rollSize,dateInicio)
+            SelectSQLIndice = 'SELECT * FROM variables.{} WHERE (date >= "{}" - INTERVAL {} MONTH AND date < "{}")'.format(variavel_base,dateInicio,rollSize,dateInicio)
             mycursor.execute(SelectSQLIndice)
             dfIndice = mycursor.fetchall()
             dfIndice = pd.DataFrame(dfIndice) 
@@ -175,6 +210,7 @@ def rolling(db_connection,df,parameters):
     
     
     return df
+
 
 
 

@@ -113,7 +113,7 @@ def get_bcbFocus(codigo,parameters):
     
     
     try:
-        url = "https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/ExpectativaMercadoMensais?$top=10000&$filter=endswith(Indicador%2C'{}')%20and%20baseCalculo%20eq%200%20and%20startswith(Data%2C'{}')&$format=json&$select=Data,DataReferencia,Mediana".format(codigo,parameters)
+        url = "https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/ExpectativaMercadoMensais?$top=10000&$filter=endswith(Indicador%2C'{}')%20and%20baseCalculo%20eq%200%20and%20Data%20gt%20'{}'&$format=json&$select=Data,DataReferencia,Mediana".format(codigo,parameters)
         serie_bcb = pd.read_json(url)
         return serie_bcb
         

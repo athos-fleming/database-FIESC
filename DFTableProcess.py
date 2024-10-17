@@ -191,8 +191,6 @@ def process_bcbFocus(codigo,df):
     df[cols[1:]] = df[cols[1:]].apply(pd.to_numeric, errors='ignore')
     
     
-    print(df.dtypes)
-    
     return df
 
 
@@ -267,6 +265,12 @@ def process_operations(db_connection,codigo,operador):
                             
             case "transpose":
                 dfTemp = Operations.transpose(dfTemp)
+                
+            case "latest":
+                dfTemp = Operations.latest(dfTemp,name)
+                
+            case "firstdayofmonth":
+                dfTemp = Operations.firstdayofmonth(dfTemp)
             
             case "rolling":
                 parameters = OperadorParameters["rolling"]
