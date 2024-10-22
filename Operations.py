@@ -7,6 +7,7 @@ import statsmodels.api as sm
 from datetime import datetime
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
+warnings.filterwarnings('ignore')
 
 #define o path da X13-ARIMA-SEATS
 os.environ['X13PATH'] = "C:/Users/athos.fleming/OneDrive - SERVICO NACIONAL DE APRENDIZAGEM INDUSTRIAL/Documentos/x13as"
@@ -35,7 +36,7 @@ def seasonal(df):
         if len(dftemp)>35:
             
             #operações de seasonal       
-            ajusted = x13.x13_arima_analysis(endog = dftemp.value, freq = "M",outlier=True, trading=True)
+            ajusted = x13.x13_arima_analysis(endog = dftemp.value, freq = "M",outlier=True, trading=False)
             dfajusted = pd.DataFrame(ajusted.seasadj)
             dfajusted = dfajusted.reset_index()
             dfajusted = dfajusted.reset_index(drop=True)
@@ -139,10 +140,6 @@ def firstdayofmonth(df):
     
     return df
 
-
-
-
-
 def rolling(db_connection,df,parameters):
     
     parametersList = parameters.split('-')
@@ -171,7 +168,7 @@ def rolling(db_connection,df,parameters):
     #looping para operacionalizar o rolling de cada coluna
     for df, column in df.items():
         
-        #setup do df para poder realizar a operação do seasonal
+        #setup do df para poder realizar a operação
         dftemp = pd.DataFrame(column)
         name = dftemp.columns.values
         dftemp = pd.concat([dfDate,dftemp],axis=1, join='inner')
@@ -198,11 +195,10 @@ def rolling(db_connection,df,parameters):
         dftemp['value'] = dftemp['value'].rolling(12,12).sum()
         dftemp = dftemp.dropna(axis = 0,how='any')
         
-        #merge todas as colunas operacionalizadas numa unica df
+        #define o nome da coluna
         dftemp = dftemp.set_axis(['date',"{}".format(name[0])],axis=1)
         
-        
-        #junta num df as seazonalizadas  
+        #merge todas as colunas operacionalizadas numa unica df
         dfProcessed = pd.merge(dfProcessed, dftemp, on='date',how='outer')
         dfProcessed = dfProcessed.replace({np.nan: None})
         
@@ -211,7 +207,69 @@ def rolling(db_connection,df,parameters):
     
     return df
 
+def changebase(db_connection,df,parameters):
+    
+    dateBase = parameters
+    valueBase = 100
+    
+    #realiza operação: P(n,m) = P(0,m)/P(0,n)*100 em todas as colunas, sendo m o numero da row e n a base definida nos parametros
+    def ValueChange(value):
+        x = value/valueBase*100
+        return x
+    
+    
+    #garante que a date vai estar no padrao utilizado
+    def dataChange(date):
+        x = pd.to_datetime(date).strftime("%Y-%m-01")
+        return x
+    
+    dataColumn = df.loc[:,'date']
+    dataColumn = dataColumn.apply(dataChange)
+    df.loc[:,'date'] = dataColumn
+    
+    #definir data externamente   
+    dfDate = df[["date"]].copy()
+    dfDate = dfDate.assign(date = lambda df: pd.to_datetime(df.date))
+    df = df.drop('date', axis=1)
+    dfProcessed = pd.DataFrame(dfDate)  
+    
+    #garantir que funcione para df grandes
+    for df, column in df.items():
+        
+        #setup do df para poder realizar a operação
+        dftemp = pd.DataFrame(column)
+        name = dftemp.columns.values
+        dftemp = pd.concat([dfDate,dftemp],axis=1, join='inner')
+        dftemp = dftemp.dropna(axis = 0,how='any')
+        dftemp = dftemp.set_axis(["date","value"],axis=1)
+        dftemp = dftemp.assign(date = lambda df: pd.to_datetime(df.date))
+        
+        #define o valor da base do calculo de mudança de base
+        valueBase = dftemp.loc[dftemp['date'] == dateBase,'value'].values[0]
+        
+        #aplica a mudança em todos os valores da coluna 
+        dfValue = dftemp.loc[:,'value']
+        dfValue = dfValue.apply(ValueChange)
+        dftemp.loc[:,'value'] = dfValue
+        
+        #define o nome da coluna
+        dftemp = dftemp.set_axis(['date',"{}_base_{}".format(name[0],dateBase)],axis=1)
+        
+        #merge todas as colunas operacionalizadas numa unica df
+        dfProcessed = pd.merge(dfProcessed, dftemp, on='date',how='outer')
+        dfProcessed = dfProcessed.replace({np.nan: None})
+        
+    df = dfProcessed
+    
+    
+    return df
 
+
+def allbases(db_connection,df,parameters):
+    
+    
+    
+    return df
 
 
 def especial(db_connection,df,parameters):

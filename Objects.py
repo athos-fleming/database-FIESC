@@ -61,10 +61,40 @@ listVariables.append(Variables('ipca_mensal_taxa_preços_livres_serviços',"'BM1
                                {"VALDATA": "date","VALVALOR": "ipca_mensal_taxa_preços_livres_serviços"}
     ))
 
-#variavel PIB - Mensal % a.m.
-listVariables.append(Variables('pib_mensal_taxa_variação',"'BM12_PIB12'","ipea",
+#variavel PIB - Mensal em Reais % a.m.
+listVariables.append(Variables('pib_mensal_reais',"'BM12_PIB12'","ipea",
                                "01/01/1990",[""],{},
-                               {"VALDATA": "date","VALVALOR": "pib_mensal_taxa_variação"}
+                               {"VALDATA": "date","VALVALOR": "pib_mensal_reais"}
+    ))
+
+#variavel IPP industria da transformação indice dez 2018 % a.m.
+listVariables.append(Variables('ipp_transformacao_dez18',"'IPP12_IPPC12'","ipea",
+                               "01/01/2010",[""],{},
+                               {"VALDATA": "date","VALVALOR": "ipp_transformacao_dez18"}
+    ))
+
+#variavel IPP industria da transformação indice dez 2018 % a.m.
+listVariables.append(Variables('ipp_transformacao_taxa_mensal',"'IPP12_IPPCG12'","ipea",
+                               "01/01/2010",[""],{},
+                               {"VALDATA": "date","VALVALOR": "ipp_transformacao_taxa_mensal"}
+    ))
+
+#IBC-BR base 2002=100 % a.m.
+listVariables.append(Variables('ibc_br_mensal',"'SGS12_IBCBR12'","ipea",
+                               "01/01/2003",["changebase"],{"changebase":"2003-01-01"},
+                               {"VALDATA": "date","VALVALOR": "ibc_br_mensal"}
+    ))
+
+#IBC-BR dessazonalizado % a.m.
+listVariables.append(Variables('ibc_br_mensal_dessazonalizado',"'SGS12_IBCBRDESSAZ12'","ipea",
+                               "01/01/2003",[""],{},
+                               {"VALDATA": "date","VALVALOR": "ibc_br_mensal_dessazonalizado"}
+    ))
+
+#PIB consumo final das familias % a.t.
+listVariables.append(Variables('pib_consumo_familias_trimestral_corrente',"'SCN104_CFPPN104'","ipea",
+                               "01/01/2003",[""],{},
+                               {"VALDATA": "date","VALVALOR": "pib_consumo_familias_trimestral_corrente"}
     ))
 
 
@@ -97,11 +127,6 @@ listVariables.append(Variables('selic_diaria',"11","bcb",
                                {"data": "date","valor": "selic_diaria"}
     ))
 
-#variavel Índice de Atividade Econômica do Banco Central IBC-BR % a.m.
-listVariables.append(Variables('ibc_br_mensal',"24363","bcb",
-                               "01/01/2003",["seasonal"],{},
-                               {"data": "date","valor": "ibc_br_mensal"}
-    ))
 
 #variavel Indicador de Custo do Crédito - ICC - Recursos/Crédito livre - Pessoas jurídicas % a.m.
 listVariables.append(Variables('icc_rescursos_livres_pj',"25355","bcb",
@@ -117,7 +142,7 @@ listVariables.append(Variables('inadimplencia_pf_total',"21084","bcb",
 
 #variavel 	Saldo da carteira de crédito com recursos livres - Pessoas físicas - Total % a.m.
 listVariables.append(Variables('saldo_credito_pf_total',"20580","bcb",
-                               "01/03/2011",["#seasonal_deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/03/2011",["seasonal_deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_credito_pf_total"}
     ))
 
@@ -132,6 +157,19 @@ listVariables.append(Variables('icc_rescursos_livres_pj_outros',"27659","bcb",
                                "01/01/2013",[""],{},
                                {"data": "date","valor": "icc_rescursos_livres_pj_outros"}
     ))
+
+#variavel IPCA Industrias, subcategoria de serviços % a.m.
+listVariables.append(Variables('ipca_industrial',"27863","bcb",
+                               "01/01/2000",["rolling"],{"rolling":"-12"},
+                               {"data": "date","valor": "ipca_industrial"}
+    ))
+
+#variavel Endividamento das familias em relação a renda acumulada dos 12 meses % a.m.
+listVariables.append(Variables('endividamento_familias_relacao_renda_acumulada',"29037","bcb",
+                               "01/01/2005",[""],{""},
+                               {"data": "date","valor": "endividamento_familias_relacao_renda_acumulada"}
+    ))
+
 
 
 
@@ -171,7 +209,7 @@ listVariables.append(Variables('pim_pf_mensal_sc',"8888-12606-sc","sidra",
                                 "3.11 Fabricação de bebidas":"3.11_bebidas_sc",
                                 "3.12 Fabricação de produtos do fumo":"3.12_fumo_sc",
                                 "3.13 Fabricação de produtos têxteis":"3.13_texteis_sc",
-                                "3.14 Confecção de artigos do vestuário e acessórios":"3.14_confeccoes",
+                                "3.14 Confecção de artigos do vestuário e acessórios":"3.14_confeccoes_sc",
                                 "3.15 Preparação de couros e fabricação de artefatos de couro, artigos para viagem e calçados":"3.15_couro_sc",
                                 "3.16 Fabricação de produtos de madeira":"3.16_madeira_sc",
                                 "3.17 Fabricação de celulose, papel e produtos de papel":"3.17_celulose_sc",
@@ -199,33 +237,33 @@ listVariables.append(Variables('pim_pf_mensal_br',"8888-12606-br","sidra",
                                {"periodos":"-500",
                                 "variaveis":"12606","localidade":"N1[all]","classificacao":"544[all]"},["seasonal"],{},
                                {"date":"date",
-                                "1 Indústria geral":"1_Industria_Geral",
-                                "2 Indústrias extrativas":"2_Industria_Extrativa",
-                                "3 Indústrias de transformação":"3_Industrias_Transformacao",
-                                "3.10 Fabricação de produtos alimentícios":"3.10_Alimenticios",
-                                "3.11 Fabricação de bebidas":"3.11_bebidas",
-                                "3.12 Fabricação de produtos do fumo":"3.12_fumo",
-                                "3.13 Fabricação de produtos têxteis":"3.13_texteis",
-                                "3.14 Confecção de artigos do vestuário e acessórios":"3.14_confeccoes",
-                                "3.15 Preparação de couros e fabricação de artefatos de couro, artigos para viagem e calçados":"3.15_couro",
-                                "3.16 Fabricação de produtos de madeira":"3.16_madeira",
-                                "3.17 Fabricação de celulose, papel e produtos de papel":"3.17_celulose",
-                                "3.18 Impressão e reprodução de gravações":"3.18_gravacoes",
-                                "3.19 Fabricação de coque, de produtos derivados do petróleo e de biocombustíveis":"3.19_petroleo_biocombustiveis",
-                                "3.20 Fabricação de produtos químicos":"3.20_quimicos",
-                                "3.21 Fabricação de produtos farmoquímicos e farmacêuticos":"3.21_farmoquimicos_farmaceuticos",
-                                "3.22 Fabricação de produtos de borracha e de material plástico":"3.22_borracha_plastico",
-                                "3.23 Fabricação de produtos de minerais não metálicos":"3.23_minerais_nao_metalicos",
-                                "3.24 Metalurgia":"3.24_Metalurgia",
-                                "3.25 Fabricação de produtos de metal, exceto máquinas e equipamentos":"3.25_metal_exceto_maquinas_equipamentos",
-                                "3.26 Fabricação de equipamentos de informática, produtos eletrônicos e ópticos":"3.26_informática_eletrônicos_opticos",
-                                "3.27 Fabricação de máquinas, aparelhos e materiais elétricos":"3.27_maquinas_aparelhos_eletricos",
-                                "3.28 Fabricação de máquinas e equipamentos":"3.28_maquinas_equipamentos",
-                                "3.29 Fabricação de veículos automotores, reboques e carrocerias":"3.29_veiculos",
-                                "3.30 Fabricação de outros equipamentos de transporte, exceto veículos automotores":"3.30_outros_transporte",
-                                "3.31 Fabricação de móveis":"3.31_moveis",
-                                "3.32 Fabricação de produtos diversos":"3.32_diversos",
-                                "3.33 Manutenção, reparação e instalação de máquinas e equipamentos":"3.33_Manutenção_maquinas_equipamentos"                            
+                                "1 Indústria geral":"1_Industria_Geral_br",
+                                "2 Indústrias extrativas":"2_Industria_Extrativa_br",
+                                "3 Indústrias de transformação":"3_Industrias_Transformacao_br",
+                                "3.10 Fabricação de produtos alimentícios":"3.10_Alimenticios_br",
+                                "3.11 Fabricação de bebidas":"3.11_bebidas_br",
+                                "3.12 Fabricação de produtos do fumo":"3.12_fumo_br",
+                                "3.13 Fabricação de produtos têxteis":"3.13_texteis_br",
+                                "3.14 Confecção de artigos do vestuário e acessórios":"3.14_confeccoes_br",
+                                "3.15 Preparação de couros e fabricação de artefatos de couro, artigos para viagem e calçados":"3.15_couro_br",
+                                "3.16 Fabricação de produtos de madeira":"3.16_madeira_br",
+                                "3.17 Fabricação de celulose, papel e produtos de papel":"3.17_celulose_br",
+                                "3.18 Impressão e reprodução de gravações":"3.18_gravacoes_br",
+                                "3.19 Fabricação de coque, de produtos derivados do petróleo e de biocombustíveis":"3.19_petroleo_biocombustiveis_br",
+                                "3.20 Fabricação de produtos químicos":"3.20_quimicos_br",
+                                "3.21 Fabricação de produtos farmoquímicos e farmacêuticos":"3.21_farmoquimicos_farmaceuticos_br",
+                                "3.22 Fabricação de produtos de borracha e de material plástico":"3.22_borracha_plastico_br",
+                                "3.23 Fabricação de produtos de minerais não metálicos":"3.23_minerais_nao_metalicos_br",
+                                "3.24 Metalurgia":"3.24_Metalurgia_br",
+                                "3.25 Fabricação de produtos de metal, exceto máquinas e equipamentos":"3.25_metal_exceto_maquinas_equipamentos_br",
+                                "3.26 Fabricação de equipamentos de informática, produtos eletrônicos e ópticos":"3.26_informática_eletrônicos_opticos_br",
+                                "3.27 Fabricação de máquinas, aparelhos e materiais elétricos":"3.27_maquinas_aparelhos_eletricos_br",
+                                "3.28 Fabricação de máquinas e equipamentos":"3.28_maquinas_equipamentos_br",
+                                "3.29 Fabricação de veículos automotores, reboques e carrocerias":"3.29_veiculos_br",
+                                "3.30 Fabricação de outros equipamentos de transporte, exceto veículos automotores":"3.30_outros_transporte_br",
+                                "3.31 Fabricação de móveis":"3.31_moveis_br",
+                                "3.32 Fabricação de produtos diversos":"3.32_diversos_br",
+                                "3.33 Manutenção, reparação e instalação de máquinas e equipamentos":"3.33_Manutenção_maquinas_equipamentos_br"                            
                                }
     ))
 
@@ -259,7 +297,7 @@ listVariables.append(Variables('rendimento_medio_mensal_todos_trabalhos',"6387-5
 #variavel Rendimento médio trimestral real, efetivamente recebido em todos os trabalhos - SC % a.t.
 listVariables.append(Variables('rendimento_medio_trimestral_todos_trabalhos_sc',"6469-5935-br","sidra",
                                {"periodos":"-500",
-                                "variaveis":"5935","localidade":"N3[42]","classificacao":""},["seasonal"],{},
+                                "variaveis":"5935","localidade":"N3[42]","classificacao":""},[""],{},
                                {"date":"date",
                                 "Rendimento médio mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, efetivamente recebido em todos os trabalhos":"rendimento_medio_trimestral_todos_trabalhos_sc"
                                 }
@@ -293,16 +331,59 @@ listVariables.append(Variables('rendimento_massa_trimestral_real_todos_trabalhos
     ))
 
 
+#variavel PIB despesa de consumo das familias Valores encadeados a preços de 1995 % a.t.
+listVariables.append(Variables('pib_consumo_familias_trimestral_base_fixa',"6612-9318-br","sidra",
+                               {"periodos":"-500",
+                                "variaveis":"9318","localidade":"N1[all]","classificacao":"11255[93404]"},[""],{},
+                               {"date":"date",
+                                "Despesa de consumo das famílias": "pib_consumo_familias_trimestral_base_fixa",
+                                }
+    ))
+
+#variavel PIB despesa de consumo das familias Valores encadeados a preços de 1995 % a.t.
+listVariables.append(Variables('pib_consumo_familias_trimestral_base_fixa_dessazonalizado',"6613-9319-br","sidra",
+                               {"periodos":"-500",
+                                "variaveis":"9319","localidade":"N1[all]","classificacao":"11255[93404]"},[""],{},
+                               {"date":"date",
+                                "Despesa de consumo das famílias": "pib_consumo_familias_trimestral_base_fixa_dessazonalizado",
+                                }
+    ))
+
 
 #models estabelecidos
 
 
 #model para o power BI do ipca
-listModels.append(Models('ipca_evolucao',"'2019-01-01'", "",
+listModels.append(Models('ipca_evolucao',"'2000-01-01'", "",
                          ["ipca_mensal_taxa_variação_rolling",
                           "ipca_mensal_taxa_preços_livres_serviços_rolling",
                           "expectativa_ipca_2024_latest_transpose_rolling",
-                          "expectativa_ipca_servicos_2024_latest_transpose_rolling"
+                          "expectativa_ipca_servicos_2024_latest_transpose_rolling",
+                          "meta_inflacao",
+                          "expectativa_ipca_2024_firstdayofmonth_transpose_rolling",
+                          "expectativa_ipca_servicos_2024_firstdayofmonth_transpose_rolling"
                           ]
     
     ))
+
+#model produção setorial para power BI
+listModels.append(Models('producao_setorial',"'2003-01-01'", "",
+                         ["ibc_br_mensal_seasonal",
+                          "pim_pf_mensal_br_seasonal",
+                          "pim_pf_mensal_sc_seasonal"
+                          ]
+    
+    ))
+
+
+
+
+#model trimestre para mensal
+listModels.append(Models('trimestral_para_mensal',"'1996-01-01'", "",
+                         ["ipca_mensal_taxa_variação",
+                          "pib_consumo_familias_trimestral_base_fixa",
+                          "pib_consumo_familias_trimestral_base_fixa_dessazonalizado"
+                          ]
+    
+    ))
+

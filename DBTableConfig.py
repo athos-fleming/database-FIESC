@@ -6,7 +6,7 @@ import json
 import mysql.connector
 from mysql.connector import Error
 from dotenv import load_dotenv
-from finders import findName
+from finders import findName,findOperadorParameters
 import sqlalchemy
 
 #define qual o tipo de dado de cada uma das colunas para colocar no MySQL
@@ -40,7 +40,12 @@ def dftoSQL(df,database_connection, **kwargs):
     else:    
         name = findName(codigo)
         if operador != None:
-            name = "{}_{}".format(name,operador)
+            if operador == 'changebase':
+                parameters = findOperadorParameters(codigo)
+                base = parameters["changebase"]
+                name = "{}_base_{}".format(name,base)
+            else:    
+                name = "{}_{}".format(name,operador)
     
     
     outputdict = sqlcol(df)

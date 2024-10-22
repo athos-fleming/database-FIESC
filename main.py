@@ -16,7 +16,7 @@ from finders import findCodigosList
 
  
 #codigo central das variaveis
-def update_variables():
+def update_variables(adresses):
     
     #carregar info do .env
     load_dotenv()
@@ -32,42 +32,45 @@ def update_variables():
     #se a conexão nao der problema, segue o processo de editar df, criar tabela e inserir valores
     if database_connection is not None:
         
-        #define quais iteracioes de adresses vao rodar
-        APIadresses = ["bcb_focus"]
+        #define quais iteracoes de adresses vao rodar
+        APIadresses = adresses
         listType = "Variables"
         
         for adress in APIadresses:
-            print("Updating {} data".format(adress))
             
-            #chama a lista com os codigos que batem com a condicao e resultado do APIadresses
-            codigoListVariables = findCodigosList("APIadress", result = adress)
-            print("List of Variables: {}".format(codigoListVariables))
-            
-            #roda o looping para todos os objetos na lista
-            for codigo in codigoListVariables:               
+            if adress != "null":
                 
-                codigo = codigo
+                print("Updating {} data".format(adress))
                 
-                #busca o df via API
-                df = APIcall.getAPI(codigo)
-                if pd.DataFrame(df).empty == False:
-                    
-                    
-                    #função de processamento de dados par ao df
-                    df = DFTableProcess.ProcessTable(codigo,df)
-                    
-
-                    #cria e insere a df como uma Table no DB
-                    DBTableConfig.dftoSQL(df,database_connection,codigo = codigo)
-                    
-                    
-                    print("{} code - {} - update request done".format(adress,codigo))
+                #chama a lista com os codigos que batem com a condicao e resultado do APIadresses
+                codigoListVariables = findCodigosList("APIadress", result = adress)
+                print("List of Variables: {}".format(codigoListVariables))
                 
-            print("{} updated ✅".format(adress))
+                #roda o looping para todos os objetos na lista
+                for codigo in codigoListVariables:               
+                                    
+                    codigo = codigo
+                    
+                    #busca o df via API
+                    df = APIcall.getAPI(codigo)
+                    if pd.DataFrame(df).empty == False:
+                        
+                        
+                        #função de processamento de dados par ao df
+                        df = DFTableProcess.ProcessTable(codigo,df)
+                        
+
+                        #cria e insere a df como uma Table no DB
+                        DBTableConfig.dftoSQL(df,database_connection,codigo = codigo)
+                        
+                        
+                        print("{} code - {} - update request done".format(adress,codigo))
+                    
+                print("{} updated ✅".format(adress))
 
 
 
-def operate_variables():
+def operate_variables(Operadores):
     
     #carregar info do .env
     load_dotenv()
@@ -88,37 +91,37 @@ def operate_variables():
     if db_connection is not None:
         
         
-        #define quais operadores vao rodar
-        Operadores = ["firstdayofmonth_transpose_rolling"]
+        #define quais operadores vao rodar da lista
+        Operadores = Operadores
         for operador in Operadores:
-            print("Doing the {} operation".format(operador))
             
-            #chama a lista com os codigos que batem com a condicao e resultado do Operador
-            OperadoresCodigoList = findCodigosList("Operadores",result = operador)
-            print("List of Variables: {}".format(OperadoresCodigoList))
-        
-            for codigo in OperadoresCodigoList:
+            if operador != "null":
                 
-                codigo = codigo
+                print("Doing the {} operation".format(operador))
                 
-                #cria e processa o df vindo do sidra
-                
-                df = DFTableProcess.process_operations(db_connection,codigo,operador)
-                
-                
-                #cria e insere a df como uma Table no DB
-                DBTableConfig.dftoSQL(df,database_connection,codigo = codigo, operador = operador)
+                #chama a lista com os codigos que batem com a condicao e resultado do Operador
+                OperadoresCodigoList = findCodigosList("Operadores",result = operador)
+                print("List of Variables: {}".format(OperadoresCodigoList))
             
+                for codigo in OperadoresCodigoList:
+                    
+                    codigo = codigo
+                    
+                    #cria e processa o df vindo do sidra
+                    
+                    df = DFTableProcess.process_operations(db_connection,codigo,operador)
+                    
+                    
+                    #cria e insere a df como uma Table no DB
+                    DBTableConfig.dftoSQL(df,database_connection,codigo = codigo, operador = operador)
                 
-                print("{} operation on code - {} - done".format(operador,codigo))
+                    
+                    print("{} operation on code - {} - done".format(operador,codigo))
 
-        
-            
 
-    
 
 #codigo central dos modelos agrupados
-def update_models():
+def update_models(modelos):
     
     #carregar info do .env
     load_dotenv()
@@ -139,23 +142,24 @@ def update_models():
     #se a conexão nao der problema, segue o processo de editar df, criar tabela e inserir valores
     if db_connection is not None:        
         
-        modelos = ["ipca_evolucao"]
+        #faz o update dos models declarados na lista
+        modelos = modelos
         for model in modelos:
             
-            #cria e processa o df do modelo agrupado
-            df = DFTableProcess.process_models(db_connection,model)
-
-    
-            #se a conexão nao der problema, segue o processo de editar df, criar tabela e inserir valores
-            if database_connection is not None:
+            if model != "null":
                 
-                print("updating model data")
-                
-                #cria e insere a df como uma Table no DB
-                DBTableConfig.dftoSQL(df,database_connection,name = model)
-        
-            print("Model {} updated ✅".format(model))
-
+                #cria e processa o df do modelo agrupado
+                df = DFTableProcess.process_models(db_connection,model)
+            
+                #se a conexão nao der problema, segue o processo de editar df, criar tabela e inserir valores
+                if database_connection is not None:
+                    
+                    print("updating model data")
+                    
+                    #cria e insere a df como uma Table no DB
+                    DBTableConfig.dftoSQL(df,database_connection,name = model)
+            
+                print("Model {} updated ✅".format(model))
 
 
 
@@ -164,9 +168,31 @@ def update_models():
 
 #comando que roda o código central apenas se puxado do Main
 if __name__ == "__main__":
-    #update_variables()
-    operate_variables()
-    #update_models()
+    
+    adresses = ["null"
+       # ,"ipea"
+        #,"bcb"
+        #,"sidra"
+        #,"bcb_focus"
+        ]
+    operadores = ["null"
+        #,"seasonal"
+        #,"seasonal_deflacionar"
+        #,"rolling"
+        #,"transpose_rolling_transpose"
+        #,"latest_transpose_rolling"
+        #,"firstdayofmonth_transpose_rolling"
+        ,"changebase"
+        ]
+    modelos = ["null"
+        #,"ipca_evolucao"
+        #,"producao_setorial"
+        #,"trimestral_para_mensal"
+        ]
+    
+    update_variables(adresses)
+    operate_variables(operadores)
+    update_models(modelos)
     
 
 

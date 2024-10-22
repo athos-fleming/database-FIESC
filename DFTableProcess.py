@@ -276,6 +276,13 @@ def process_operations(db_connection,codigo,operador):
                 parameters = OperadorParameters["rolling"]
                 dfTemp = Operations.rolling(db_connection,dfTemp,parameters)
             
+            case "changebase":
+                parameters = OperadorParameters["changebase"]
+                dfTemp = Operations.changebase(db_connection,dfTemp,parameters)
+            
+            case "allbases":
+                dfTemp = Operations.allbases(dfTemp)
+                        
             case "especial":
                 parameters = OperadorParameters["especial"]
                 dfTemp = Operations.especial(db_connection,dfTemp,parameters)
