@@ -104,3 +104,10 @@ def findVariables(model):
         if str(obj.name) == str(model):
             return obj.variables
 
+#funcao que acha os parametros para a operação de Merge do modelo
+def findMergeParameters(model):
+    for obj in listModels:
+        if str(obj.name) == str(model):
+            return obj.mergeParameters
+        
+        

@@ -178,15 +178,18 @@ if __name__ == "__main__":
     operadores = ["null"
         #,"seasonal"
         #,"seasonal_deflacionar"
+        #,"changebase"
+        #,"seasonal_changebase"
+        #,"seasonal_getallbases"
+        #,"getallbases"
         #,"rolling"
         #,"transpose_rolling_transpose"
         #,"latest_transpose_rolling"
         #,"firstdayofmonth_transpose_rolling"
-        ,"changebase"
         ]
     modelos = ["null"
         #,"ipca_evolucao"
-        #,"producao_setorial"
+        ,"producao_setorial"
         #,"trimestral_para_mensal"
         ]
     

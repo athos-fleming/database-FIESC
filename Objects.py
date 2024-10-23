@@ -13,11 +13,12 @@ class Variables(object):
         self.ColumnNames = ColumnNames
         
 class Models(object):
-    def __init__(self,name,date,regressor,variables):
+    def __init__(self,name,date,regressor,variables,mergeParameters):
         self.name = name
         self.date = date
         self.regressor = regressor
         self.variables = variables
+        self.mergeParameters = mergeParameters
         
 
 listVariables = []
@@ -81,7 +82,7 @@ listVariables.append(Variables('ipp_transformacao_taxa_mensal',"'IPP12_IPPCG12'"
 
 #IBC-BR base 2002=100 % a.m.
 listVariables.append(Variables('ibc_br_mensal',"'SGS12_IBCBR12'","ipea",
-                               "01/01/2003",["changebase"],{"changebase":"2003-01-01"},
+                               "01/01/2003",["seasonal_getallbases"],{},
                                {"VALDATA": "date","VALVALOR": "ibc_br_mensal"}
     ))
 
@@ -199,8 +200,8 @@ listVariables.append(Variables('expectativa_ipca_servicos_2024',"IPCA%20Servi%C3
 
 #variavel Produção Física Industrial de SC, por seções e atividades industriais mensal % a.m.
 listVariables.append(Variables('pim_pf_mensal_sc',"8888-12606-sc","sidra",
-                               {"periodos":"-500",
-                                "variaveis":"12606","localidade":"N3[42]","classificacao":"544[all]"},["seasonal"],{},
+                               {"periodos":"-500","variaveis":"12606","localidade":"N3[42]","classificacao":"544[all]"},
+                               ["seasonal","seasonal_getallbases"],{},
                                {"date":"date",
                                 "1 Indústria geral":"1_Industria_Geral_sc",
                                 "2 Indústrias extrativas":"2_Industria_Extrativa_sc",
@@ -234,8 +235,8 @@ listVariables.append(Variables('pim_pf_mensal_sc',"8888-12606-sc","sidra",
 
 #variavel Produção Física Industrial BR, por seções e atividades industriais mensal % a.m.
 listVariables.append(Variables('pim_pf_mensal_br',"8888-12606-br","sidra",
-                               {"periodos":"-500",
-                                "variaveis":"12606","localidade":"N1[all]","classificacao":"544[all]"},["seasonal"],{},
+                               {"periodos":"-500","variaveis":"12606","localidade":"N1[all]","classificacao":"544[all]"},
+                               ["seasonal","","seasonal_getallbases"],{},
                                {"date":"date",
                                 "1 Indústria geral":"1_Industria_Geral_br",
                                 "2 Indústrias extrativas":"2_Industria_Extrativa_br",
@@ -269,8 +270,7 @@ listVariables.append(Variables('pim_pf_mensal_br',"8888-12606-br","sidra",
 
 #variavel Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade (%) Total, Trimestre Móvel % a.m.
 listVariables.append(Variables('taxa_desocupacao_mensal_trimestre_movel',"6381-4099-br","sidra",
-                               {"periodos":"-500",
-                                "variaveis":"4099","localidade":"N1[all]","classificacao":""},[""],{},
+                               {"periodos":"-500","variaveis":"4099","localidade":"N1[all]","classificacao":""},[""],{},
                                {"date":"date",
                                 "Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade":"taxa_desocupacao_mensal_trimestre_movel"
                                 }
@@ -278,8 +278,7 @@ listVariables.append(Variables('taxa_desocupacao_mensal_trimestre_movel',"6381-4
 
 #variavel Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade (%) Total de SC, Trimestre Móvel % a.m.
 listVariables.append(Variables('taxa_desocupacao_mensal_trimestre_movel_sc',"6468-4099-sc","sidra",
-                               {"periodos":"-500",
-                                "variaveis":"4099","localidade":"N3[42]","classificacao":""},[""],{},
+                               {"periodos":"-500","variaveis":"4099","localidade":"N3[42]","classificacao":""},[""],{},
                                {"date":"date",
                                 "Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade":"taxa_desocupacao_mensal_trimestre_movel_sc"
                                 }
@@ -287,8 +286,7 @@ listVariables.append(Variables('taxa_desocupacao_mensal_trimestre_movel_sc',"646
 
 #variavel Rendimento médio mensal real, efetivamente recebido em todos os trabalhos % a.m.
 listVariables.append(Variables('rendimento_medio_mensal_todos_trabalhos',"6387-5935-br","sidra",
-                               {"periodos":"-500",
-                                "variaveis":"5935","localidade":"N1[all]","classificacao":""},["seasonal"],{},
+                               {"periodos":"-500", "variaveis":"5935","localidade":"N1[all]","classificacao":""},["seasonal"],{},
                                {"date":"date",
                                 "Rendimento médio mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, efetivamente recebido em todos os trabalhos":"rendimento_medio_mensal_todos_trabalhos"
                                 }
@@ -296,8 +294,7 @@ listVariables.append(Variables('rendimento_medio_mensal_todos_trabalhos',"6387-5
 
 #variavel Rendimento médio trimestral real, efetivamente recebido em todos os trabalhos - SC % a.t.
 listVariables.append(Variables('rendimento_medio_trimestral_todos_trabalhos_sc',"6469-5935-br","sidra",
-                               {"periodos":"-500",
-                                "variaveis":"5935","localidade":"N3[42]","classificacao":""},[""],{},
+                               {"periodos":"-500", "variaveis":"5935","localidade":"N3[42]","classificacao":""},[""],{},
                                {"date":"date",
                                 "Rendimento médio mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, efetivamente recebido em todos os trabalhos":"rendimento_medio_trimestral_todos_trabalhos_sc"
                                 }
@@ -305,8 +302,7 @@ listVariables.append(Variables('rendimento_medio_trimestral_todos_trabalhos_sc',
 
 #variavel Massa de Rendimento mensal real, efetivamente recebido em todos os trabalhos - BR % a.m.
 listVariables.append(Variables('rendimento_massa_mensal_real_todos_trabalhos',"6392-6293-br","sidra",
-                               {"periodos":"-500",
-                                "variaveis":"6293","localidade":"N1[all]","classificacao":""},[""],{},
+                               {"periodos":"-500", "variaveis":"6293","localidade":"N1[all]","classificacao":""},[""],{},
                                {"date":"date",
                                 "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_mensal_real_todos_trabalhos"
                                 }
@@ -314,8 +310,7 @@ listVariables.append(Variables('rendimento_massa_mensal_real_todos_trabalhos',"6
 
 #variavel Massa de Rendimento trimestral real, efetivamente recebido em todos os trabalhos - BR % a.m.
 listVariables.append(Variables('rendimento_massa_trimestral_real_todos_trabalhos',"6474-6293-br","sidra",
-                               {"periodos":"-500",
-                                "variaveis":"6293","localidade":"N1[all]","classificacao":""},[""],{},
+                               {"periodos":"-500","variaveis":"6293","localidade":"N1[all]","classificacao":""},[""],{},
                                {"date":"date",
                                 "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_trimestral_real_todos_trabalhos"
                                 }
@@ -323,8 +318,7 @@ listVariables.append(Variables('rendimento_massa_trimestral_real_todos_trabalhos
 
 #variavel Massa de Rendimento trimestral real, efetivamente recebido em todos os trabalhos - SC % a.m.
 listVariables.append(Variables('rendimento_massa_trimestral_real_todos_trabalhos_sc',"6474-6293-sc","sidra",
-                               {"periodos":"-500",
-                                "variaveis":"6293","localidade":"N3[42]","classificacao":""},[""],{},
+                               {"periodos":"-500","variaveis":"6293","localidade":"N3[42]","classificacao":""},[""],{},
                                {"date":"date",
                                 "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_trimestral_real_todos_trabalhos_sc"
                                 }
@@ -333,8 +327,7 @@ listVariables.append(Variables('rendimento_massa_trimestral_real_todos_trabalhos
 
 #variavel PIB despesa de consumo das familias Valores encadeados a preços de 1995 % a.t.
 listVariables.append(Variables('pib_consumo_familias_trimestral_base_fixa',"6612-9318-br","sidra",
-                               {"periodos":"-500",
-                                "variaveis":"9318","localidade":"N1[all]","classificacao":"11255[93404]"},[""],{},
+                               {"periodos":"-500", "variaveis":"9318","localidade":"N1[all]","classificacao":"11255[93404]"},[""],{},
                                {"date":"date",
                                 "Despesa de consumo das famílias": "pib_consumo_familias_trimestral_base_fixa",
                                 }
@@ -342,8 +335,7 @@ listVariables.append(Variables('pib_consumo_familias_trimestral_base_fixa',"6612
 
 #variavel PIB despesa de consumo das familias Valores encadeados a preços de 1995 % a.t.
 listVariables.append(Variables('pib_consumo_familias_trimestral_base_fixa_dessazonalizado',"6613-9319-br","sidra",
-                               {"periodos":"-500",
-                                "variaveis":"9319","localidade":"N1[all]","classificacao":"11255[93404]"},[""],{},
+                               {"periodos":"-500", "variaveis":"9319","localidade":"N1[all]","classificacao":"11255[93404]"},[""],{},
                                {"date":"date",
                                 "Despesa de consumo das famílias": "pib_consumo_familias_trimestral_base_fixa_dessazonalizado",
                                 }
@@ -362,16 +354,18 @@ listModels.append(Models('ipca_evolucao',"'2000-01-01'", "",
                           "meta_inflacao",
                           "expectativa_ipca_2024_firstdayofmonth_transpose_rolling",
                           "expectativa_ipca_servicos_2024_firstdayofmonth_transpose_rolling"
-                          ]
+                          ],
+                         ["date"]
     
     ))
 
 #model produção setorial para power BI
 listModels.append(Models('producao_setorial',"'2003-01-01'", "",
-                         ["ibc_br_mensal_seasonal",
-                          "pim_pf_mensal_br_seasonal",
-                          "pim_pf_mensal_sc_seasonal"
-                          ]
+                         ["ibc_br_mensal_seasonal_getallbases",
+                          "pim_pf_mensal_br_seasonal_getallbases",
+                          "pim_pf_mensal_sc_seasonal_getallbases"
+                          ],
+                         ["dateBase","date"]
     
     ))
 
@@ -383,7 +377,8 @@ listModels.append(Models('trimestral_para_mensal',"'1996-01-01'", "",
                          ["ipca_mensal_taxa_variação",
                           "pib_consumo_familias_trimestral_base_fixa",
                           "pib_consumo_familias_trimestral_base_fixa_dessazonalizado"
-                          ]
+                          ],
+                         ["date"]
     
     ))
 

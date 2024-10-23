@@ -9,14 +9,14 @@ import mysql.connector
 from mysql.connector import Error
 from dotenv import load_dotenv
 from datetime import datetime
-from finders import findAPIadress,findColumnNames,findCodigosList,findName,findAPIparameters,findOperadorParameters,findDate,findRegressor,findVariables
+import finders
 import Operations
 
 #trata e processa os df em dataframes adequados para serem inseridos no SQL
 def ProcessTable(codigo, df):
     
     #reutiliza o findAPIadress para identificar o tipo de df que veio da API
-    AdressType = findAPIadress(codigo)
+    AdressType = finders.findAPIadress(codigo)
 
     #define qual função de API vai rodar
     match AdressType:
@@ -44,7 +44,7 @@ def ProcessTable(codigo, df):
 def process_bcb(codigo,df):
         
     df = pd.DataFrame(df)
-    ColumnNames = findColumnNames(codigo)
+    ColumnNames = finders.findColumnNames(codigo)
     
     try:  
         def dataChange(date):
@@ -72,7 +72,7 @@ def process_bcb(codigo,df):
 def process_ipea(codigo,df):
     
     df = pd.DataFrame(df)     
-    ColumnNames = findColumnNames(codigo)
+    ColumnNames = finders.findColumnNames(codigo)
     df = df[['VALDATA', 'VALVALOR']]
     
     try:
@@ -104,7 +104,7 @@ def process_sidra(codigo,df):
     df = pd.DataFrame(columns=['date'])
     
     #pra nao dar merda quando uns tem classificação e outros nao
-    parameters = findAPIparameters(codigo)
+    parameters = finders.findAPIparameters(codigo)
     classificacao = parameters["classificacao"]
     
     try:
@@ -120,7 +120,7 @@ def process_sidra(codigo,df):
             df = pd.merge(df, dfTemp, on='date',how='outer')
         
         #renomeia as colunas para o padrao correto
-        ColumnNames = findColumnNames(codigo)
+        ColumnNames = finders.findColumnNames(codigo)
         df = df.rename(columns=ColumnNames)
         
         #arruma a data para o formato Y-m
@@ -199,9 +199,11 @@ def process_models(db_connection,model):
     mycursor = db_connection.cursor()
      
     #chama a lista com todos os codigos incluidos no Objects com a condicao que frenquencia == mensal
-    ListVariables = findVariables(model)
-    cutDate = findDate(model)
-    df = pd.DataFrame(columns=['date'])
+    ListVariables = finders.findVariables(model)
+    cutDate = finders.findDate(model)
+    mergeParameters = finders.findMergeParameters(model)
+    df = pd.DataFrame(columns=mergeParameters)
+    
     #roda o looping para todos os objetos na lista mensal
     for name in ListVariables:
         
@@ -212,13 +214,16 @@ def process_models(db_connection,model):
         mycursor.execute(selectSQL)
         dfTemp = mycursor.fetchall()
         dfTemp = pd.DataFrame(dfTemp)
+        
+        print(dfTemp)
       
         #renomeia pra nao dar problema
         dfColumns = list(mycursor.column_names)
         dfTemp = dfTemp.set_axis(dfColumns, axis=1)
-    
-        #junta todas elas por date
-        df = pd.merge(df, dfTemp, on='date',how='outer')
+        
+        #junta todas elas poelos MergeParameters
+        df = pd.merge(df, dfTemp, on=mergeParameters,how='outer')
+        
     
     #muda os nan para espaços vazios
     df = df.replace({np.nan: None})
@@ -233,7 +238,7 @@ def process_operations(db_connection,codigo,operador):
     mycursor = db_connection.cursor()
     
     #info necessaria de cada objeto 
-    name = findName(codigo)
+    name = finders.findName(codigo)
       
     #puxa cada uma das tables e seus valores
     selectSQL = 'SELECT * FROM variables.{}'.format(name)
@@ -246,7 +251,7 @@ def process_operations(db_connection,codigo,operador):
     dfColumns = list(mycursor.column_names)
     dfTemp = dfTemp.set_axis(dfColumns, axis=1)
      
-    OperadorParameters = findOperadorParameters(codigo)
+    OperadorParameters = finders.findOperadorParameters(codigo)
     
     ListOperadores = operador.split('_')
     
@@ -274,14 +279,14 @@ def process_operations(db_connection,codigo,operador):
             
             case "rolling":
                 parameters = OperadorParameters["rolling"]
-                dfTemp = Operations.rolling(db_connection,dfTemp,parameters)
+                dfTemp = Operations.rolling(dfTemp,parameters)
             
             case "changebase":
                 parameters = OperadorParameters["changebase"]
                 dfTemp = Operations.changebase(db_connection,dfTemp,parameters)
             
-            case "allbases":
-                dfTemp = Operations.allbases(dfTemp)
+            case "getallbases":
+                dfTemp = Operations.getallbases(dfTemp)
                         
             case "especial":
                 parameters = OperadorParameters["especial"]

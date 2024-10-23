@@ -207,14 +207,15 @@ def rolling(db_connection,df,parameters):
     
     return df
 
-def changebase(db_connection,df,parameters):
+def changebase(df,parameters,*args, **kwargs):
     
     dateBase = parameters
     valueBase = 100
-    
+    keepname = kwargs.get('keepname')
+        
     #realiza operação: P(n,m) = P(0,m)/P(0,n)*100 em todas as colunas, sendo m o numero da row e n a base definida nos parametros
     def ValueChange(value):
-        x = value/valueBase*100
+        x = pd.to_numeric(value)/valueBase*100
         return x
     
     
@@ -231,11 +232,11 @@ def changebase(db_connection,df,parameters):
     dfDate = df[["date"]].copy()
     dfDate = dfDate.assign(date = lambda df: pd.to_datetime(df.date))
     df = df.drop('date', axis=1)
-    dfProcessed = pd.DataFrame(dfDate)  
+    dfProcessed = pd.DataFrame(dfDate)
     
     #garantir que funcione para df grandes
     for df, column in df.items():
-        
+                
         #setup do df para poder realizar a operação
         dftemp = pd.DataFrame(column)
         name = dftemp.columns.values
@@ -244,28 +245,79 @@ def changebase(db_connection,df,parameters):
         dftemp = dftemp.set_axis(["date","value"],axis=1)
         dftemp = dftemp.assign(date = lambda df: pd.to_datetime(df.date))
         
-        #define o valor da base do calculo de mudança de base
-        valueBase = dftemp.loc[dftemp['date'] == dateBase,'value'].values[0]
+            
+       
+        valueDate = dftemp.loc[dftemp['date'] == dateBase,'value'].values
         
-        #aplica a mudança em todos os valores da coluna 
-        dfValue = dftemp.loc[:,'value']
-        dfValue = dfValue.apply(ValueChange)
-        dftemp.loc[:,'value'] = dfValue
+        if(len(dftemp)!=0 and valueDate!=None):
+            #define o valor da base do calculo de mudança de base
+            valueBase = pd.to_numeric(dftemp.loc[dftemp['date'] == dateBase,'value'].values[0])
         
-        #define o nome da coluna
-        dftemp = dftemp.set_axis(['date',"{}_base_{}".format(name[0],dateBase)],axis=1)
+            #aplica a mudança em todos os valores da coluna 
+            dfValue = dftemp.loc[:,'value']        
+            dfValue = dfValue.apply(ValueChange)
+            dftemp.loc[:,'value'] = dfValue
+            
+            #define o nome da coluna decidindo de mantem o nome original ou nao
+            if(keepname==False):
+                dftemp = dftemp.set_axis(['date',"{}".format(name[0],dateBase)],axis=1)
+            else:
+                dftemp = dftemp.set_axis(['date',"{}_base_{}".format(name[0],dateBase)],axis=1)
+                
+            #merge todas as colunas operacionalizadas numa unica df
+            dfProcessed = pd.merge(dfProcessed, dftemp, on='date',how='outer')
         
-        #merge todas as colunas operacionalizadas numa unica df
-        dfProcessed = pd.merge(dfProcessed, dftemp, on='date',how='outer')
-        dfProcessed = dfProcessed.replace({np.nan: None})
-        
+     
+    dfProcessed = dfProcessed.replace({np.nan: None})
     df = dfProcessed
-    
     
     return df
 
+def getallbases(df):
+    
+     #garante que a date vai estar no padrao utilizado
+    def dataChange(date):
+        x = pd.to_datetime(date).strftime("%Y-%m-01")
+        return x
+    
+    dataColumn = df.loc[:,'date']
+    dataColumn = dataColumn.apply(dataChange)
+    df.loc[:,'date'] = dataColumn
+    
+    #definir data externamente para poder rodar a função em cada data
+    dfDate = df[["date"]].copy()
+    
+    #agrupa em cada um dos meses de cada ano e pega o primeiro dado
+    dfDate = dfDate.groupby(dfDate['date'].dt.strftime('%Y')).first()
+    
+    
+    dfProcessed = pd.DataFrame()
+    
+    #roda a função para criar o df com todas as bases
+    for date in dfDate['date']:
+    
+        date = date
+        
+        #puxa o dfTemp com a base em uma data especifica
+        date = dataChange(date)        
+        dfTemp = changebase(df,date,keepname=False)
+                        
+        #cria uma nova coluna com a data
+        dfTemp['dateBase'] = date
 
-def allbases(db_connection,df,parameters):
+        
+        #concatena uma abaixo da outra  
+        dfProcessed = pd.concat([dfProcessed,dfTemp])
+        
+        #muda a posição da coluna dataBase para o final
+        dataBasedf = dfProcessed[['dateBase']].copy()
+        dfProcessed = dfProcessed.drop('dateBase', axis=1)
+        dfProcessed['dateBase'] = dataBasedf
+        
+    
+    
+    #muda os nan para espaços vazios
+    df = dfProcessed.replace({np.nan: None})
     
     
     
