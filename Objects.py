@@ -171,6 +171,12 @@ listVariables.append(Variables('endividamento_familias_relacao_renda_acumulada',
                                {"data": "date","valor": "endividamento_familias_relacao_renda_acumulada"}
     ))
 
+#variavel IBCR-SC Indice de Atividade Economica de Santa Catarina % a.m.
+listVariables.append(Variables('ibcr_sc_mensal',"25402","bcb",
+                               "01/01/2003",["seasonal","seasonal_getallbases"],{""},
+                               {"data": "date","valor": "ibcr_sc_mensal"}
+    ))
+
 
 
 
@@ -268,6 +274,43 @@ listVariables.append(Variables('pim_pf_mensal_br',"8888-12606-br","sidra",
                                }
     ))
 
+#pesquisa nacional de serviços volume por atividades e subdivisões mensal % a.m.
+listVariables.append(Variables('pms_br_volume_mensal',"8688-7167-volume","sidra",
+                               {"periodos":"-500","variaveis":"7167","localidade":"N1[all]","classificacao":"11046[56726]|12355[all]"},
+                               ["seasonal","","seasonal_getallbases"],{},
+                               {"date":"date",
+                                "Total":"total",
+                                "1. Serviços prestados às famílias":"1_prestados_familias",
+                                "1.1 Serviços de alojamento e alimentação":"1.1_alojamento_alimentacao",
+                                "1.1.1 Alojamento":"1.1.1_Alojamento",
+                                "1.1.2 Alimentação":"1.1.2_Alimentacao",
+                                "1.2 Outros serviços prestados às famílias":"1.2_outros_prestados_familias",
+                                "2. Serviços de informação e comunicação":"2_informacao_comunicacao",
+                                "2.1 Serviços de Tecnologia de Informação e Comunicação (TIC)":"2.1_tecnologia__informacao_comunicacao",
+                                "2.1.1 Telecomunicações":"2.1.1_telecomunicacoes",
+                                "2.1.2 Serviços de Tecnologia da Informação":"2.1.2_tecnologia_informacao",
+                                "2.2 Serviços audiovisuais, de edição e agências de notícias":"2.2_audiovisuais_edicao_agencias_noticias",
+                                "3. Serviços profissionais, administrativos e complementares":"3_profissionais_administrativos_complementares",
+                                "3.1 Serviços técnico-profissionais":"3.1__tecnico_profissionais",
+                                "3.2 Serviços administrativos e complementares":"3.2_administrativos_complementares",
+                                "3.2.1 Aluguéis não imobiliários":"3.2.1_Alugueis_nao_imobiliarios",
+                                "3.2.2 Serviços de apoio às atividades empresariais":"3.2.2_apoio_atividades_empresariais",
+                                "4. Transportes, serviços auxiliares aos transportes e correio":"4_transportes_auxiliares_transportes_correio",
+                                "4.1 Transporte terrestre":"4.1_transporte_terrestre",
+                                "4.1.1 Rodoviário de cargas":"4.1.1_rodoviario_cargas",
+                                "4.1.2 Rodoviário de passageiros":"4.1.2_rodoviario_passageiros",
+                                "4.1.3 Outros segmentos do transporte terrestre":"4.1.3_outros_segmentos_transporte_terrestre",
+                                "4.2 Transporte aquaviário":"4.2_transporte_aquaviario",
+                                "4.3 Transporte aéreo":"4.3_transporte_aereo",
+                                "4.4 Armazenagem, serviços auxiliares aos transportes e correio":"4.4_armazenagem_auxiliares_transportes_correio",
+                                "5. Outros serviços":"5_outros",
+                                "5.1 Esgoto, gestão de resíduos, recuperação de materiais e descontaminação":"5.1_esgoto_gestao_residuos_recuperacao_materiais_descontaminacao",
+                                "5.2 Atividades auxiliares dos serviços financeiros":"5.2_auxiliares_financeiros",
+                                "5.3 Atividades imobiliárias":"5.3_atividade_imobiliarias",
+                                "5.4 Outros serviços não especificados anteriormente":"5.4_outros_nao_especificados"
+                                }
+    ))
+
 #variavel Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade (%) Total, Trimestre Móvel % a.m.
 listVariables.append(Variables('taxa_desocupacao_mensal_trimestre_movel',"6381-4099-br","sidra",
                                {"periodos":"-500","variaveis":"4099","localidade":"N1[all]","classificacao":""},[""],{},
@@ -362,6 +405,7 @@ listModels.append(Models('ipca_evolucao',"'2000-01-01'", "",
 #model produção setorial para power BI
 listModels.append(Models('producao_setorial',"'2003-01-01'", "",
                          ["ibc_br_mensal_seasonal_getallbases",
+                          "ibcr_sc_mensal_seasonal_getallbases",
                           "pim_pf_mensal_br_seasonal_getallbases",
                           "pim_pf_mensal_sc_seasonal_getallbases"
                           ],
@@ -369,7 +413,13 @@ listModels.append(Models('producao_setorial',"'2003-01-01'", "",
     
     ))
 
-
+#model produção setorial para power BI
+listModels.append(Models('servicos_setorial',"'2011-01-01'", "",
+                         ["pms_br_volume_mensal_seasonal_getallbases"
+                          ],
+                         ["dateBase","date"]
+    
+    ))
 
 
 #model trimestre para mensal

@@ -107,15 +107,21 @@ def process_sidra(codigo,df):
     parameters = finders.findAPIparameters(codigo)
     classificacao = parameters["classificacao"]
     
+    #garante que a classificação esta bem definida e separada
+    classificacao = classificacao.split('|')
+    classificacaoTitleIndex = len(classificacao)-1
+   
+      
     try:
         
         #abrir o json, retirar os valores e seus headers e montar um df melhor
         for item in sidraJson[0]["resultados"]:
             
-            if classificacao == "":
+            if classificacao[0] == '':
                 title = title = sidraJson[0]["variavel"]
             else:
-                title = list(item['classificacoes'][0]["categoria"].values())[0]
+                title = list(item['classificacoes'][classificacaoTitleIndex]["categoria"].values())[0]
+            
             dfTemp = pd.DataFrame(item['series'][0]['serie'].items(),columns=['date',title])
             df = pd.merge(df, dfTemp, on='date',how='outer')
         
@@ -193,7 +199,7 @@ def process_bcbFocus(codigo,df):
     
     return df
 
-
+#processamento dos modelos gerados por agregação de dados
 def process_models(db_connection,model):
   
     mycursor = db_connection.cursor()
@@ -215,7 +221,6 @@ def process_models(db_connection,model):
         dfTemp = mycursor.fetchall()
         dfTemp = pd.DataFrame(dfTemp)
         
-        print(dfTemp)
       
         #renomeia pra nao dar problema
         dfColumns = list(mycursor.column_names)
@@ -232,7 +237,7 @@ def process_models(db_connection,model):
     
     return df
 
-
+#processamento das operações de transformação dos dados
 def process_operations(db_connection,codigo,operador):
     
     mycursor = db_connection.cursor()
@@ -279,7 +284,7 @@ def process_operations(db_connection,codigo,operador):
             
             case "rolling":
                 parameters = OperadorParameters["rolling"]
-                dfTemp = Operations.rolling(dfTemp,parameters)
+                dfTemp = Operations.rolling(db_connection,dfTemp,parameters)
             
             case "changebase":
                 parameters = OperadorParameters["changebase"]

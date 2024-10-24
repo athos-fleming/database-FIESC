@@ -70,6 +70,7 @@ def update_variables(adresses):
 
 
 
+#codigo central das operações
 def operate_variables(Operadores):
     
     #carregar info do .env
@@ -166,11 +167,11 @@ def update_models(modelos):
 
 
 
-#comando que roda o código central apenas se puxado do Main
+#comando que define os parametros para a operação do software
 if __name__ == "__main__":
     
     adresses = ["null"
-       # ,"ipea"
+        #,"ipea"
         #,"bcb"
         #,"sidra"
         #,"bcb_focus"
@@ -188,9 +189,10 @@ if __name__ == "__main__":
         #,"firstdayofmonth_transpose_rolling"
         ]
     modelos = ["null"
-        #,"ipca_evolucao"
+        ,"ipca_evolucao"
         ,"producao_setorial"
-        #,"trimestral_para_mensal"
+        ,"servicos_setorial"
+        ,"trimestral_para_mensal"
         ]
     
     update_variables(adresses)

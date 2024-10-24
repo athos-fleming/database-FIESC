@@ -96,7 +96,7 @@ def get_sidra(codigo,parameters):
         
         request = requests.get(url)
         serie_sidra = request.json()
-        
+                
         return serie_sidra
 
         
@@ -104,6 +104,7 @@ def get_sidra(codigo,parameters):
         print(f"❌ [API CALL ERROR]: '{e}'")
         df = pd.DataFrame()
         return df
+  
   
 #operação de get no bcb Focus, informando parametros
 def get_bcbFocus(codigo,parameters):
