@@ -34,7 +34,7 @@ listVariables.append(Variables('ipca_mensal_taxa_variação',"'PRECOS12_IPCAG12'
 
 #variavel IPCA - núcleo médias aparadas com suavização - taxa de variação % a.m.
 listVariables.append(Variables('ipca_mensal_taxa_núcleo_médias_aparadas_suavização',"'BM12_IPCA2012'","ipea",
-                               "01/01/1992",[""],{},
+                               "01/01/1992",["rolling"],{"rolling":"-12"},
                                {"VALDATA": "date","VALVALOR": "ipca_mensal_taxa_núcleo_médias_aparadas_suavização"}
     ))
 
@@ -46,7 +46,7 @@ listVariables.append(Variables('ipca_mensal_taxa_núcleo_médias_aparadas_sem_su
 
 #variavel IPCA - núcleo por exclusão - EX1 - taxa de variação % a.m.
 listVariables.append(Variables('ipca_mensal_taxa_núcleo_exclusão',"'BM12_IPCAEXCEX212'","ipea",
-                               "01/01/1992",[""],{},
+                               "01/01/1992",["rolling"],{"rolling":"-12"},
                                {"VALDATA": "date","VALVALOR": "ipca_mensal_taxa_núcleo_exclusão"}
     ))
 
@@ -82,19 +82,19 @@ listVariables.append(Variables('ipp_transformacao_taxa_mensal',"'IPP12_IPPCG12'"
 
 #IBC-BR base 2002=100 % a.m.
 listVariables.append(Variables('ibc_br_mensal',"'SGS12_IBCBR12'","ipea",
-                               "01/01/2003",["seasonal_getallbases"],{},
+                               "01/01/2003",["seasonal_getallbases","variation"],{"variation":"12"},
                                {"VALDATA": "date","VALVALOR": "ibc_br_mensal"}
     ))
 
 #IBC-BR dessazonalizado % a.m.
 listVariables.append(Variables('ibc_br_mensal_dessazonalizado',"'SGS12_IBCBRDESSAZ12'","ipea",
-                               "01/01/2003",[""],{},
+                               "01/01/2003",["getallbases","variation"],{"variation":"12"},
                                {"VALDATA": "date","VALVALOR": "ibc_br_mensal_dessazonalizado"}
     ))
 
 #PIB consumo final das familias % a.t.
 listVariables.append(Variables('pib_consumo_familias_trimestral_corrente',"'SCN104_CFPPN104'","ipea",
-                               "01/01/2003",[""],{},
+                               "01/01/2003",["#trimestertomonth"],{"trimestertomonth":False},
                                {"VALDATA": "date","VALVALOR": "pib_consumo_familias_trimestral_corrente"}
     ))
 
@@ -173,11 +173,15 @@ listVariables.append(Variables('endividamento_familias_relacao_renda_acumulada',
 
 #variavel IBCR-SC Indice de Atividade Economica de Santa Catarina % a.m.
 listVariables.append(Variables('ibcr_sc_mensal',"25402","bcb",
-                               "01/01/2003",["seasonal","seasonal_getallbases"],{""},
+                               "01/01/2003",["seasonal","seasonal_getallbases","seasonal_variation"],{"variation":"12"},
                                {"data": "date","valor": "ibcr_sc_mensal"}
     ))
 
-
+#variavel IBCR-SC Indice de Atividade Economica de Santa Catarina dessazonalizado % a.m.
+listVariables.append(Variables('ibcr_sc_mensal_dessazonalizado',"25405","bcb",
+                               "01/01/2003",["getallbases","variation"],{"variation":"12"},
+                               {"data": "date","valor": "ibcr_sc_mensal_dessazonalizado"}
+    ))
 
 
 #grupo do bcb - focus, dados em painel, process mais complicado e demorado
@@ -203,114 +207,361 @@ listVariables.append(Variables('expectativa_ipca_servicos_2024',"IPCA%20Servi%C3
 #grupo do sidra, grande volume de dados, pode ser lento
 
 
-
+#PIM PF
 #variavel Produção Física Industrial de SC, por seções e atividades industriais mensal % a.m.
 listVariables.append(Variables('pim_pf_mensal_sc',"8888-12606-sc","sidra",
                                {"periodos":"-500","variaveis":"12606","localidade":"N3[42]","classificacao":"544[all]"},
-                               ["seasonal","seasonal_getallbases"],{},
+                               ["seasonal","seasonal_getallbases","variation"],{"variation":"12"},
                                {"date":"date",
-                                "1 Indústria geral":"1_Industria_Geral_sc",
-                                "2 Indústrias extrativas":"2_Industria_Extrativa_sc",
-                                "3 Indústrias de transformação":"3_Industrias_Transformacao_sc",
-                                "3.10 Fabricação de produtos alimentícios":"3.10_Alimenticios_sc",
-                                "3.11 Fabricação de bebidas":"3.11_bebidas_sc",
-                                "3.12 Fabricação de produtos do fumo":"3.12_fumo_sc",
-                                "3.13 Fabricação de produtos têxteis":"3.13_texteis_sc",
-                                "3.14 Confecção de artigos do vestuário e acessórios":"3.14_confeccoes_sc",
-                                "3.15 Preparação de couros e fabricação de artefatos de couro, artigos para viagem e calçados":"3.15_couro_sc",
-                                "3.16 Fabricação de produtos de madeira":"3.16_madeira_sc",
-                                "3.17 Fabricação de celulose, papel e produtos de papel":"3.17_celulose_sc",
-                                "3.18 Impressão e reprodução de gravações":"3.18_gravacoes_sc",
-                                "3.19 Fabricação de coque, de produtos derivados do petróleo e de biocombustíveis":"3.19_petroleo_biocombustiveis_sc",
-                                "3.20 Fabricação de produtos químicos":"3.20_quimicos_sc",
-                                "3.21 Fabricação de produtos farmoquímicos e farmacêuticos":"3.21_farmoquimicos_farmaceuticos_sc",
-                                "3.22 Fabricação de produtos de borracha e de material plástico":"3.22_borracha_plastico_sc",
-                                "3.23 Fabricação de produtos de minerais não metálicos":"3.23_minerais_nao_metalicos_sc",
+                                "1 Indústria geral":"1_Indústria_Geral_sc",
+                                "2 Indústrias extrativas":"2_Indústria_Extrativa_sc",
+                                "3 Indústrias de transformação":"3_Indústrias_da_Transformacao_sc",
+                                "3.10 Fabricação de produtos alimentícios":"3.10_Alimentícios_sc",
+                                "3.11 Fabricação de bebidas":"3.11_Bebidas_sc",
+                                "3.12 Fabricação de produtos do fumo":"3.12_Fumo_sc", 
+                                "3.13 Fabricação de produtos têxteis":"3.13_Têxteis_sc",
+                                "3.14 Confecção de artigos do vestuário e acessórios":"3.14_confecções_sc",
+                                "3.15 Preparação de couros e fabricação de artefatos de couro, artigos para viagem e calçados":"3.15_Couro_sc",
+                                "3.16 Fabricação de produtos de madeira":"3.16_Madeira_sc",
+                                "3.17 Fabricação de celulose, papel e produtos de papel":"3.17_Celulose_sc",
+                                "3.18 Impressão e reprodução de gravações":"3.18_Gravações_sc",
+                                "3.19 Fabricação de coque, de produtos derivados do petróleo e de biocombustíveis":"3.19_Petróleo_e_biocombustiveis_sc",
+                                "3.20 Fabricação de produtos químicos":"3.20_Químicos_sc",
+                                "3.21 Fabricação de produtos farmoquímicos e farmacêuticos":"3.21_Farmoquímicos_e_farmacêuticos_sc",
+                                "3.22 Fabricação de produtos de borracha e de material plástico":"3.22_Borracha_e_Plástico_sc",
+                                "3.23 Fabricação de produtos de minerais não metálicos":"3.23_Minerais_nâo_metálicos_sc",
                                 "3.24 Metalurgia":"3.24_Metalurgia_sc",
-                                "3.25 Fabricação de produtos de metal, exceto máquinas e equipamentos":"3.25_metal_exceto_maquinas_equipamentos_sc",
-                                "3.26 Fabricação de equipamentos de informática, produtos eletrônicos e ópticos":"3.26_informática_eletrônicos_opticos_sc",
-                                "3.27 Fabricação de máquinas, aparelhos e materiais elétricos":"3.27_maquinas_aparelhos_eletricos_sc",
-                                "3.28 Fabricação de máquinas e equipamentos":"3.28_maquinas_equipamentos_sc",
-                                "3.29 Fabricação de veículos automotores, reboques e carrocerias":"3.29_veiculos_sc",
-                                "3.30 Fabricação de outros equipamentos de transporte, exceto veículos automotores":"3.30_outros_transporte_sc",
-                                "3.31 Fabricação de móveis":"3.31_moveis_sc",
-                                "3.32 Fabricação de produtos diversos":"3.32_diversos_sc",
-                                "3.33 Manutenção, reparação e instalação de máquinas e equipamentos":"3.33_Manutenção_maquinas_equipamentos_sc"                            
+                                "3.25 Fabricação de produtos de metal, exceto máquinas e equipamentos":"3.25_Produtos_de_metal_sc",
+                                "3.26 Fabricação de equipamentos de informática, produtos eletrônicos e ópticos":"3.26_informática,_eletrônicos_e_opticos_sc",
+                                "3.27 Fabricação de máquinas, aparelhos e materiais elétricos":"3.27_Materiais_elétricos_sc",
+                                "3.28 Fabricação de máquinas e equipamentos":"3.28_Maquinas_e_equipamentos_sc",
+                                "3.29 Fabricação de veículos automotores, reboques e carrocerias":"3.29_Veículos_sc",
+                                "3.30 Fabricação de outros equipamentos de transporte, exceto veículos automotores":"3.30_outros_equipamentos_de_transporte_sc",
+                                "3.31 Fabricação de móveis":"3.31_Móveis_sc",
+                                "3.32 Fabricação de produtos diversos":"3.32_Diversos_sc",
+                                "3.33 Manutenção, reparação e instalação de máquinas e equipamentos":"3.33_Manutenção_sc"                            
+                               }
+    ))
+
+#variavel Produção Física Industrial de SC já dessazonalizada, por seções e atividades industriais mensal % a.m.
+listVariables.append(Variables('pim_pf_mensal_sc_dessazonalizado',"8888-12607-sc","sidra",
+                               {"periodos":"-500","variaveis":"12607","localidade":"N3[42]","classificacao":"544[all]"},
+                               ["getallbases"],{},
+                               {"date":"date",
+                                "1 Indústria geral":"1_Indústria_Geral_sc",
+                                "2 Indústrias extrativas":"2_Indústria_Extrativa_sc",
+                                "3 Indústrias de transformação":"3_Indústrias_da_Transformacao_sc",
+                                "3.10 Fabricação de produtos alimentícios":"3.10_Alimentícios_sc",
+                                "3.11 Fabricação de bebidas":"3.11_Bebidas_sc",
+                                "3.12 Fabricação de produtos do fumo":"3.12_Fumo_sc",
+                                "3.13 Fabricação de produtos têxteis":"3.13_Têxteis_sc",
+                                "3.14 Confecção de artigos do vestuário e acessórios":"3.14_confecções_sc",
+                                "3.15 Preparação de couros e fabricação de artefatos de couro, artigos para viagem e calçados":"3.15_Couro_sc",
+                                "3.16 Fabricação de produtos de madeira":"3.16_Madeira_sc",
+                                "3.17 Fabricação de celulose, papel e produtos de papel":"3.17_Celulose_sc",
+                                "3.18 Impressão e reprodução de gravações":"3.18_Gravações_sc",
+                                "3.19 Fabricação de coque, de produtos derivados do petróleo e de biocombustíveis":"3.19_Petróleo_e_biocombustiveis_sc",
+                                "3.20 Fabricação de produtos químicos":"3.20_Químicos_sc",
+                                "3.21 Fabricação de produtos farmoquímicos e farmacêuticos":"3.21_Farmoquímicos_e_farmacêuticos_sc",
+                                "3.22 Fabricação de produtos de borracha e de material plástico":"3.22_Borracha_e_Plástico_sc",
+                                "3.23 Fabricação de produtos de minerais não metálicos":"3.23_Minerais_nâo_metálicos_sc",
+                                "3.24 Metalurgia":"3.24_Metalurgia_sc",
+                                "3.25 Fabricação de produtos de metal, exceto máquinas e equipamentos":"3.25_Metal_exceto_máquinas_e_equipamentos_sc",
+                                "3.26 Fabricação de equipamentos de informática, produtos eletrônicos e ópticos":"3.26_informática,_eletrônicos_e_opticos_sc",
+                                "3.27 Fabricação de máquinas, aparelhos e materiais elétricos":"3.27_Maquinas,_aparelhos_e_materiais_elétricos_sc",
+                                "3.28 Fabricação de máquinas e equipamentos":"3.28_Maquinas_e_equipamentos_sc",
+                                "3.29 Fabricação de veículos automotores, reboques e carrocerias":"3.29_Veículos_sc",
+                                "3.30 Fabricação de outros equipamentos de transporte, exceto veículos automotores":"3.30_outros_equipamentos_de_transporte_sc",
+                                "3.31 Fabricação de móveis":"3.31_Móveis_sc",
+                                "3.32 Fabricação de produtos diversos":"3.32_Diversos_sc",
+                                "3.33 Manutenção, reparação e instalação de máquinas e equipamentos":"3.33_Manutenção_de_máquinas_e_equipamentos_sc"                            
                                }
     ))
 
 #variavel Produção Física Industrial BR, por seções e atividades industriais mensal % a.m.
 listVariables.append(Variables('pim_pf_mensal_br',"8888-12606-br","sidra",
                                {"periodos":"-500","variaveis":"12606","localidade":"N1[all]","classificacao":"544[all]"},
-                               ["seasonal","","seasonal_getallbases"],{},
+                               ["seasonal","","seasonal_getallbases","variation"],{"variation":"12"},
                                {"date":"date",
-                                "1 Indústria geral":"1_Industria_Geral_br",
-                                "2 Indústrias extrativas":"2_Industria_Extrativa_br",
-                                "3 Indústrias de transformação":"3_Industrias_Transformacao_br",
-                                "3.10 Fabricação de produtos alimentícios":"3.10_Alimenticios_br",
-                                "3.11 Fabricação de bebidas":"3.11_bebidas_br",
-                                "3.12 Fabricação de produtos do fumo":"3.12_fumo_br",
-                                "3.13 Fabricação de produtos têxteis":"3.13_texteis_br",
-                                "3.14 Confecção de artigos do vestuário e acessórios":"3.14_confeccoes_br",
-                                "3.15 Preparação de couros e fabricação de artefatos de couro, artigos para viagem e calçados":"3.15_couro_br",
-                                "3.16 Fabricação de produtos de madeira":"3.16_madeira_br",
-                                "3.17 Fabricação de celulose, papel e produtos de papel":"3.17_celulose_br",
-                                "3.18 Impressão e reprodução de gravações":"3.18_gravacoes_br",
-                                "3.19 Fabricação de coque, de produtos derivados do petróleo e de biocombustíveis":"3.19_petroleo_biocombustiveis_br",
-                                "3.20 Fabricação de produtos químicos":"3.20_quimicos_br",
-                                "3.21 Fabricação de produtos farmoquímicos e farmacêuticos":"3.21_farmoquimicos_farmaceuticos_br",
-                                "3.22 Fabricação de produtos de borracha e de material plástico":"3.22_borracha_plastico_br",
-                                "3.23 Fabricação de produtos de minerais não metálicos":"3.23_minerais_nao_metalicos_br",
+                                "1 Indústria geral":"1_Indústria_Geral_br",
+                                "2 Indústrias extrativas":"2_Indústria_Extrativa_br",
+                                "3 Indústrias de transformação":"3_Indústrias_da_Transformacao_br",
+                                "3.10 Fabricação de produtos alimentícios":"3.10_Alimentícios_br",
+                                "3.11 Fabricação de bebidas":"3.11_Bebidas_br",
+                                "3.12 Fabricação de produtos do fumo":"3.12_Fumo_br",
+                                "3.13 Fabricação de produtos têxteis":"3.13_Têxteis_br",
+                                "3.14 Confecção de artigos do vestuário e acessórios":"3.14_confecções_br",
+                                "3.15 Preparação de couros e fabricação de artefatos de couro, artigos para viagem e calçados":"3.15_Couro_br",
+                                "3.16 Fabricação de produtos de madeira":"3.16_Madeira_br",
+                                "3.17 Fabricação de celulose, papel e produtos de papel":"3.17_Celulose_br",
+                                "3.18 Impressão e reprodução de gravações":"3.18_Gravações_br",
+                                "3.19 Fabricação de coque, de produtos derivados do petróleo e de biocombustíveis":"3.19_Petróleo_e_biocombustiveis_br",
+                                "3.20 Fabricação de produtos químicos":"3.20_Químicos_br",
+                                "3.21 Fabricação de produtos farmoquímicos e farmacêuticos":"3.21_Farmoquímicos_e_farmacêuticos_br",
+                                "3.22 Fabricação de produtos de borracha e de material plástico":"3.22_Borracha_e_Plástico_br",
+                                "3.23 Fabricação de produtos de minerais não metálicos":"3.23_Minerais_nâo_metálicos_br",
                                 "3.24 Metalurgia":"3.24_Metalurgia_br",
-                                "3.25 Fabricação de produtos de metal, exceto máquinas e equipamentos":"3.25_metal_exceto_maquinas_equipamentos_br",
-                                "3.26 Fabricação de equipamentos de informática, produtos eletrônicos e ópticos":"3.26_informática_eletrônicos_opticos_br",
-                                "3.27 Fabricação de máquinas, aparelhos e materiais elétricos":"3.27_maquinas_aparelhos_eletricos_br",
-                                "3.28 Fabricação de máquinas e equipamentos":"3.28_maquinas_equipamentos_br",
-                                "3.29 Fabricação de veículos automotores, reboques e carrocerias":"3.29_veiculos_br",
-                                "3.30 Fabricação de outros equipamentos de transporte, exceto veículos automotores":"3.30_outros_transporte_br",
-                                "3.31 Fabricação de móveis":"3.31_moveis_br",
-                                "3.32 Fabricação de produtos diversos":"3.32_diversos_br",
-                                "3.33 Manutenção, reparação e instalação de máquinas e equipamentos":"3.33_Manutenção_maquinas_equipamentos_br"                            
+                                "3.25 Fabricação de produtos de metal, exceto máquinas e equipamentos":"3.25_Metal_exceto_máquinas_e_equipamentos_br",
+                                "3.26 Fabricação de equipamentos de informática, produtos eletrônicos e ópticos":"3.26_informática,_eletrônicos_e_opticos_br",
+                                "3.27 Fabricação de máquinas, aparelhos e materiais elétricos":"3.27_Maquinas,_aparelhos_e_materiais_elétricos_br",
+                                "3.28 Fabricação de máquinas e equipamentos":"3.28_Maquinas_e_equipamentos_br",
+                                "3.29 Fabricação de veículos automotores, reboques e carrocerias":"3.29_Veículos_br",
+                                "3.30 Fabricação de outros equipamentos de transporte, exceto veículos automotores":"3.30_outros_equipamentos_de_transporte_br",
+                                "3.31 Fabricação de móveis":"3.31_Móveis_br",
+                                "3.32 Fabricação de produtos diversos":"3.32_Diversos_br",
+                                "3.33 Manutenção, reparação e instalação de máquinas e equipamentos":"3.33_Manutenção_de_máquinas_e_equipamentos_br"                            
                                }
     ))
 
+#variavel Produção Física Industrial BR já dessazonalizada, por seções e atividades industriais mensal % a.m.
+listVariables.append(Variables('pim_pf_mensal_br_dessazonalizado',"8888-12607-br","sidra",
+                               {"periodos":"-500","variaveis":"12607","localidade":"N1[all]","classificacao":"544[all]"},
+                               ["getallbases"],{},
+                               {"date":"date",
+                                "1 Indústria geral":"1_Indústria_Geral_br",
+                                "2 Indústrias extrativas":"2_Indústria_Extrativa_br",
+                                "3 Indústrias de transformação":"3_Indústrias_da_Transformacao_br",
+                                "3.10 Fabricação de produtos alimentícios":"3.10_Alimentícios_br",
+                                "3.11 Fabricação de bebidas":"3.11_Bebidas_br",
+                                "3.12 Fabricação de produtos do fumo":"3.12_Fumo_br",
+                                "3.13 Fabricação de produtos têxteis":"3.13_Têxteis_br",
+                                "3.14 Confecção de artigos do vestuário e acessórios":"3.14_confecções_br",
+                                "3.15 Preparação de couros e fabricação de artefatos de couro, artigos para viagem e calçados":"3.15_Couro_br",
+                                "3.16 Fabricação de produtos de madeira":"3.16_Madeira_br",
+                                "3.17 Fabricação de celulose, papel e produtos de papel":"3.17_Celulose_br",
+                                "3.18 Impressão e reprodução de gravações":"3.18_Gravações_br",
+                                "3.19 Fabricação de coque, de produtos derivados do petróleo e de biocombustíveis":"3.19_Petróleo_e_biocombustiveis_br",
+                                "3.20 Fabricação de produtos químicos":"3.20_Químicos_br",
+                                "3.21 Fabricação de produtos farmoquímicos e farmacêuticos":"3.21_Farmoquímicos_e_farmacêuticos_br",
+                                "3.22 Fabricação de produtos de borracha e de material plástico":"3.22_Borracha_e_Plástico_br",
+                                "3.23 Fabricação de produtos de minerais não metálicos":"3.23_Minerais_nâo_metálicos_br",
+                                "3.24 Metalurgia":"3.24_Metalurgia_br",
+                                "3.25 Fabricação de produtos de metal, exceto máquinas e equipamentos":"3.25_Metal_exceto_máquinas_e_equipamentos_br",
+                                "3.26 Fabricação de equipamentos de informática, produtos eletrônicos e ópticos":"3.26_informática,_eletrônicos_e_opticos_br",
+                                "3.27 Fabricação de máquinas, aparelhos e materiais elétricos":"3.27_Maquinas,_aparelhos_e_materiais_elétricos_br",
+                                "3.28 Fabricação de máquinas e equipamentos":"3.28_Maquinas_e_equipamentos_br",
+                                "3.29 Fabricação de veículos automotores, reboques e carrocerias":"3.29_Veículos_br",
+                                "3.30 Fabricação de outros equipamentos de transporte, exceto veículos automotores":"3.30_outros_equipamentos_de_transporte_br",
+                                "3.31 Fabricação de móveis":"3.31_Móveis_br",
+                                "3.32 Fabricação de produtos diversos":"3.32_Diversos_br",
+                                "3.33 Manutenção, reparação e instalação de máquinas e equipamentos":"3.33_Manutenção_de_máquinas_e_equipamentos_br"                            
+                               }
+    ))
+
+#PMS
 #pesquisa nacional de serviços volume por atividades e subdivisões mensal % a.m.
-listVariables.append(Variables('pms_br_volume_mensal',"8688-7167-volume","sidra",
+listVariables.append(Variables('pms_br_volume_mensal',"8688-7167-br","sidra",
                                {"periodos":"-500","variaveis":"7167","localidade":"N1[all]","classificacao":"11046[56726]|12355[all]"},
-                               ["seasonal","","seasonal_getallbases"],{},
+                               ["seasonal","","seasonal_getallbases","variation"],{"variation":"12"},
                                {"date":"date",
                                 "Total":"total",
-                                "1. Serviços prestados às famílias":"1_prestados_familias",
-                                "1.1 Serviços de alojamento e alimentação":"1.1_alojamento_alimentacao",
+                                "1. Serviços prestados às famílias":"1_Prestados_às_famílias",
+                                "1.1 Serviços de alojamento e alimentação":"1.1_Alojamento_e_alimentção",
                                 "1.1.1 Alojamento":"1.1.1_Alojamento",
-                                "1.1.2 Alimentação":"1.1.2_Alimentacao",
-                                "1.2 Outros serviços prestados às famílias":"1.2_outros_prestados_familias",
-                                "2. Serviços de informação e comunicação":"2_informacao_comunicacao",
-                                "2.1 Serviços de Tecnologia de Informação e Comunicação (TIC)":"2.1_tecnologia__informacao_comunicacao",
-                                "2.1.1 Telecomunicações":"2.1.1_telecomunicacoes",
-                                "2.1.2 Serviços de Tecnologia da Informação":"2.1.2_tecnologia_informacao",
-                                "2.2 Serviços audiovisuais, de edição e agências de notícias":"2.2_audiovisuais_edicao_agencias_noticias",
-                                "3. Serviços profissionais, administrativos e complementares":"3_profissionais_administrativos_complementares",
-                                "3.1 Serviços técnico-profissionais":"3.1__tecnico_profissionais",
-                                "3.2 Serviços administrativos e complementares":"3.2_administrativos_complementares",
-                                "3.2.1 Aluguéis não imobiliários":"3.2.1_Alugueis_nao_imobiliarios",
-                                "3.2.2 Serviços de apoio às atividades empresariais":"3.2.2_apoio_atividades_empresariais",
-                                "4. Transportes, serviços auxiliares aos transportes e correio":"4_transportes_auxiliares_transportes_correio",
-                                "4.1 Transporte terrestre":"4.1_transporte_terrestre",
-                                "4.1.1 Rodoviário de cargas":"4.1.1_rodoviario_cargas",
-                                "4.1.2 Rodoviário de passageiros":"4.1.2_rodoviario_passageiros",
-                                "4.1.3 Outros segmentos do transporte terrestre":"4.1.3_outros_segmentos_transporte_terrestre",
-                                "4.2 Transporte aquaviário":"4.2_transporte_aquaviario",
-                                "4.3 Transporte aéreo":"4.3_transporte_aereo",
-                                "4.4 Armazenagem, serviços auxiliares aos transportes e correio":"4.4_armazenagem_auxiliares_transportes_correio",
+                                "1.1.2 Alimentação":"1.1.2_Alimentação",
+                                "1.2 Outros serviços prestados às famílias":"1.2_Outros_prestados_às_famílias",
+                                "2. Serviços de informação e comunicação":"2_Informação_e_comunicação",
+                                "2.1 Serviços de Tecnologia de Informação e Comunicação (TIC)":"2.1_Tecnologia,__Informação_e_comunicação",
+                                "2.1.1 Telecomunicações":"2.1.1_Telecomunicações",
+                                "2.1.2 Serviços de Tecnologia da Informação":"2.1.2_Tecnologia_da_informação",
+                                "2.2 Serviços audiovisuais, de edição e agências de notícias":"2.2_Audiovisuais",
+                                "3. Serviços profissionais, administrativos e complementares":"3_Profissionais,_administrativos_e_complementares",
+                                "3.1 Serviços técnico-profissionais":"3.1__Técnico-profissionais",
+                                "3.2 Serviços administrativos e complementares":"3.2_Administrativos_e_complementares",
+                                "3.2.1 Aluguéis não imobiliários":"3.2.1_Aluguéis_não_imobiliários",
+                                "3.2.2 Serviços de apoio às atividades empresariais":"3.2.2_Apoio_às_atividades_empresariais",
+                                "4. Transportes, serviços auxiliares aos transportes e correio":"4_Transportes,_auxiliares",
+                                "4.1 Transporte terrestre":"4.1_Transporte_terrestre",
+                                "4.1.1 Rodoviário de cargas":"4.1.1_Rodoviário_de_cargas",
+                                "4.1.2 Rodoviário de passageiros":"4.1.1_Rodoviário_de_passageiros",
+                                "4.1.3 Outros segmentos do transporte terrestre":"4.1.3_Outros_do_transporte_terrestre",
+                                "4.2 Transporte aquaviário":"4.2_Transporte_aquaviário",
+                                "4.3 Transporte aéreo":"4.3_Transporte_aéreo",
+                                "4.4 Armazenagem, serviços auxiliares aos transportes e correio":"4.4_Armazenagem_e_auxiliares",
                                 "5. Outros serviços":"5_outros",
-                                "5.1 Esgoto, gestão de resíduos, recuperação de materiais e descontaminação":"5.1_esgoto_gestao_residuos_recuperacao_materiais_descontaminacao",
-                                "5.2 Atividades auxiliares dos serviços financeiros":"5.2_auxiliares_financeiros",
-                                "5.3 Atividades imobiliárias":"5.3_atividade_imobiliarias",
-                                "5.4 Outros serviços não especificados anteriormente":"5.4_outros_nao_especificados"
+                                "5.1 Esgoto, gestão de resíduos, recuperação de materiais e descontaminação":"5.1_Esgoto",
+                                "5.2 Atividades auxiliares dos serviços financeiros":"5.2_Auxiliares_dos_financeiros",
+                                "5.3 Atividades imobiliárias":"5.3_Atividades_imobiliárias",
+                                "5.4 Outros serviços não especificados anteriormente":"5.4_Outros_não_especificados"
                                 }
     ))
 
+#pesquisa mensal de serviços volume por atividades e subdivisões dessazonalizado mensal % a.m.
+listVariables.append(Variables('pms_br_volume_mensal_dessazonalizado',"8688-7168-br","sidra",
+                               {"periodos":"-500","variaveis":"7168","localidade":"N1[all]","classificacao":"11046[56726]|12355[all]"},
+                               ["getallbases"],{},
+                               {"date":"date",
+                                "Total":"total",
+                                "1. Serviços prestados às famílias":"1_Prestados_às_famílias",
+                                "1.1 Serviços de alojamento e alimentação":"1.1_Alojamento_e_alimentção",
+                                "1.1.1 Alojamento":"1.1.1_Alojamento",
+                                "1.1.2 Alimentação":"1.1.2_Alimentação",
+                                "1.2 Outros serviços prestados às famílias":"1.2_Outros_prestados_às_famílias",
+                                "2. Serviços de informação e comunicação":"2_Informação_e_comunicação",
+                                "2.1 Serviços de Tecnologia de Informação e Comunicação (TIC)":"2.1_Tecnologia,__Informação_e_comunicação",
+                                "2.1.1 Telecomunicações":"2.1.1_Telecomunicações",
+                                "2.1.2 Serviços de Tecnologia da Informação":"2.1.2_Tecnologia_da_informação",
+                                "2.2 Serviços audiovisuais, de edição e agências de notícias":"2.2_Audiovisuais",
+                                "3. Serviços profissionais, administrativos e complementares":"3_Profissionais,_administrativos_e_complementares",
+                                "3.1 Serviços técnico-profissionais":"3.1__Técnico-profissionais",
+                                "3.2 Serviços administrativos e complementares":"3.2_Administrativos_e_complementares",
+                                "3.2.1 Aluguéis não imobiliários":"3.2.1_Aluguéis_não_imobiliários",
+                                "3.2.2 Serviços de apoio às atividades empresariais":"3.2.2_Apoio_às_atividades_empresariais",
+                                "4. Transportes, serviços auxiliares aos transportes e correio":"4_Transportes,_auxiliares",
+                                "4.1 Transporte terrestre":"4.1_Transporte_terrestre",
+                                "4.1.1 Rodoviário de cargas":"4.1.1_Rodoviário_de_cargas",
+                                "4.1.2 Rodoviário de passageiros":"4.1.1_Rodoviário_de_passageiros",
+                                "4.1.3 Outros segmentos do transporte terrestre":"4.1.3_Outros_do_transporte_terrestre",
+                                "4.2 Transporte aquaviário":"4.2_Transporte_aquaviário",
+                                "4.3 Transporte aéreo":"4.3_Transporte_aéreo",
+                                "4.4 Armazenagem, serviços auxiliares aos transportes e correio":"4.4_Armazenagem_e_auxiliares",
+                                "5. Outros serviços":"5_outros",
+                                "5.1 Esgoto, gestão de resíduos, recuperação de materiais e descontaminação":"5.1_Esgoto",
+                                "5.2 Atividades auxiliares dos serviços financeiros":"5.2_Auxiliares_dos_financeiros",
+                                "5.3 Atividades imobiliárias":"5.3_Atividades_imobiliárias",
+                                "5.4 Outros serviços não especificados anteriormente":"5.4_Outros_não_especificados"
+                                }
+    ))
+
+#pesquisa mensal de serviços - indice do volume de serviços BR % a.m.
+listVariables.append(Variables('pms_volume_serviços_br',"5906-7167-br","sidra",
+                               {"periodos":"-500","variaveis":"7167","localidade":"N1[all]","classificacao":"11046[56726]"},
+                               ["getallbases","seasonal_getallbases"],{},
+                               {"date":"date",
+                                "Índice de volume de serviços":"pms_volume_serviços_br"
+                                }
+    ))
+
+#pesquisa mensal de serviços - indice do volume de serviços dessazonalizado BR % a.m.
+listVariables.append(Variables('pms_volume_serviços_br_dessazonalizado',"5906-7168-br","sidra",
+                               {"periodos":"-500","variaveis":"7168","localidade":"N1[all]","classificacao":"11046[56726]"},
+                               ["getallbases"],{},
+                               {"date":"date",
+                                "Índice de volume de vendas no comércio varejista":"pms_volume_serviços_br_desazonalizado"
+                                }
+    ))
+
+#pesquisa mensal de serviços - indice do volume de serviços SC % a.m.
+listVariables.append(Variables('pms_volume_serviços_br',"5906-7167-sc","sidra",
+                               {"periodos":"-500","variaveis":"7167","localidade":"N3[42]","classificacao":"11046[56726]"},
+                               ["getallbases","seasonal_getallbases"],{},
+                               {"date":"date",
+                                "Índice de volume de serviços":"pms_volume_serviços_sc"
+                                }
+    ))
+
+#pesquisa mensal de serviços - indice do volume de serviços dessazonalizado BR % a.m.
+listVariables.append(Variables('pms_volume_serviços_sc_dessazonalizado',"5906-7168-br","sidra",
+                               {"periodos":"-500","variaveis":"7168","localidade":"N3[42]","classificacao":"11046[56726]"},
+                               ["getallbases"],{},
+                               {"date":"date",
+                                "Índice de volume de vendas no comércio varejista":"pms_volume_serviços_sc_desazonalizado"
+                                }
+    ))
+
+#PMC
+#pesquisa mensal de comercio - indice do volume de  vendas no comercio varejista BR % a.m.
+listVariables.append(Variables('pmc_volume_varejista_br',"8880-7169-br","sidra",
+                               {"periodos":"-500","variaveis":"7169","localidade":"N1[all]","classificacao":"11046[56734]"},
+                               ["getallbases","seasonal_getallbases"],{},
+                               {"date":"date",
+                                "Índice de volume de vendas no comércio varejista":"pmc_volume_varejista_br"
+                                }
+    ))
+
+#pesquisa mensal de comercio - indice do volume de  vendas no comercio varejista dessazonalizado BR % a.m.
+listVariables.append(Variables('pmc_volume_varejista_br_dessazonalizado',"8880-7170-br","sidra",
+                               {"periodos":"-500","variaveis":"7170","localidade":"N1[all]","classificacao":"11046[56734]"},
+                               ["getallbases"],{},
+                               {"date":"date",
+                                "Índice de volume de vendas no comércio varejista":"pmc_volume_varejista_br_desazonalizado"
+                                }
+    ))
+
+#pesquisa mensal de comercio - indice do volume de  vendas no comercio varejista SC % a.m.
+listVariables.append(Variables('pmc_volume_varejista_sc',"8880-7169-sc","sidra",
+                               {"periodos":"-500","variaveis":"7169","localidade":"N3[42]","classificacao":"11046[56734]"},
+                               ["seasonal","seasonal_getallbases"],{},
+                               {"date":"date",
+                                "Índice de volume de vendas no comércio varejista":"pmc_volume_varejista_sc"
+                                }
+    ))
+
+#pesquisa mensal de comercio - indice do volume de  vendas no comercio varejista dessazonalizado SC % a.m.
+listVariables.append(Variables('pmc_volume_varejista_sc_dessazonalizado',"8880-7170-sc","sidra",
+                               {"periodos":"-500","variaveis":"7170","localidade":"N3[42]","classificacao":"11046[56734]"},
+                               ["getallbases"],{},
+                               {"date":"date",
+                                "Índice de volume de vendas no comércio varejista":"pmc_volume_varejista_sc_dessazonalizado"
+                                }
+    ))
+
+#PIM PF Grandes Categorias
+#variavel produção fisica industrial por grandes categorias economicas (bens de capital/intermediarios/duraveis e tals) % a.m.
+listVariables.append(Variables('pim_pf_bens_categorias',"8887-12606","sidra",
+                               {"periodos":"-500","variaveis":"12606","localidade":"N1[all]","classificacao":"543[all]"},
+                               ["seasonal","seasonal_getallbases"],{},
+                               {"date":"date",
+                                "1 Bens de capital":"1._Bens_capital",
+                                "110 Bens de capital, exceto equipamentos de transporte industrial":"1.1 Bens_capital_exceto_equipamentos_transporte",
+                                "120 Equipamentos de transporte industrial":"1.2_Equipamentos_transporte,",
+                                "2 Bens intermediários":"2._Bens_intermediários",
+                                "210 Alimentos e bebidas básicos, destinados principalmente à indústria":"2.1_Alimentos_bebidas_básicos_indústria",
+                                "220 Alimentos e bebidas elaborados, destinados principalmente à indústria":"2.2_Alimentos_bebidas_elaborados_indústria",
+                                "230 Insumos industriais básicos":"2.3_Insumos_básicos",
+                                "240 Insumos industriais elaborados":"2.4_Insumos_elaborados",
+                                "250 Combustíveis e lubrificantes básicos":"2.5_Combustíveis_básicos",
+                                "260 Combustíveis e lubrificantes elaborados - exceto gasolinas para automóvel":"2.6_Combustíveis_elaborados_exceto_gasolina",
+                                "270 Peças e acessórios para bens de capital":"2.7_Peças_acessórios_bens_capital",
+                                "280 Peças e acessórios para equipamentos de transporte":"2.8_Peças_acessórios_equipamentos_transporte",
+                                "3 Bens de consumo":"3._Bens_consumo",
+                                "31 Bens de consumo duráveis":"3.1_Bens_consumo_duráveis",
+                                "311 Bens de consumo duráveis - exceto automóveis para passageiros e equipamentos de transporte não industrial":"3.1.1_duráveis_exceto_automóveis",
+                                "312 Automóveis para passageiros":"3.1.2_Automóveis",
+                                "313 Equipamentos de transporte não industrial":"3.1.3_Equipamentos_transporte",
+                                "32 Bens de consumo semiduráveis e não duráveis":"3.2_Bens_consumo_semiduráveis_não_duráveis",
+                                "321 Bens de consumo semiduráveis":"3.2.1_semiduráveis",
+                                "322 Bens de consumo não duráveis":"3.2.2_duráveis",
+                                "323 Alimentos e bebidas básicos, destinados principalmente ao consumo doméstico":"3.2.3_Alimentos_bebidas_básicos_consumo",
+                                "324 Alimentos e bebidas elaborados, destinados principalmente ao consumo doméstico":"3.2.4_Alimentos_bebidas_elaborados_consumo",
+                                "325 Gasolinas para automóvel (motor spirit)":"3.2.5_Gasolinas",
+                                "9 Bens não especificados anteriormente":"9_Outros"
+                                }
+    ))
+
+#variavel produção fisica industrial por grandes categorias economicas (bens de capital/intermediarios/duraveis e tals) % a.m.
+listVariables.append(Variables('pim_pf_bens_categorias_dessazonalizado',"8887-12607","sidra",
+                               {"periodos":"-500","variaveis":"12607","localidade":"N1[all]","classificacao":"543[all]"},
+                               ["getallbases"],{},
+                               {"date":"date",
+                                "1 Bens de capital":"1._Bens_capital",
+                                "110 Bens de capital, exceto equipamentos de transporte industrial":"1.1 Bens_capital_exceto_equipamentos_transporte",
+                                "120 Equipamentos de transporte industrial":"1.2_Equipamentos_transporte,",
+                                "2 Bens intermediários":"2._Bens_intermediários",
+                                "210 Alimentos e bebidas básicos, destinados principalmente à indústria":"2.1_Alimentos_bebidas_básicos_indústria",
+                                "220 Alimentos e bebidas elaborados, destinados principalmente à indústria":"2.2_Alimentos_bebidas_elaborados_indústria",
+                                "230 Insumos industriais básicos":"2.3_Insumos_básicos",
+                                "240 Insumos industriais elaborados":"2.4_Insumos_elaborados",
+                                "250 Combustíveis e lubrificantes básicos":"2.5_Combustíveis_básicos",
+                                "260 Combustíveis e lubrificantes elaborados - exceto gasolinas para automóvel":"2.6_Combustíveis_elaborados_exceto_gasolina",
+                                "270 Peças e acessórios para bens de capital":"2.7_Peças_acessórios_bens_capital",
+                                "280 Peças e acessórios para equipamentos de transporte":"2.8_Peças_acessórios_equipamentos_transporte",
+                                "3 Bens de consumo":"3._Bens_consumo",
+                                "31 Bens de consumo duráveis":"3.1_Bens_consumo_duráveis",
+                                "311 Bens de consumo duráveis - exceto automóveis para passageiros e equipamentos de transporte não industrial":"3.1.1_duráveis_exceto_automóveis",
+                                "312 Automóveis para passageiros":"3.1.2_Automóveis",
+                                "313 Equipamentos de transporte não industrial":"3.1.3_Equipamentos_transporte",
+                                "32 Bens de consumo semiduráveis e não duráveis":"3.2_Bens_consumo_semiduráveis_não_duráveis",
+                                "321 Bens de consumo semiduráveis":"3.2.1_semiduráveis",
+                                "322 Bens de consumo não duráveis":"3.2.2_duráveis",
+                                "323 Alimentos e bebidas básicos, destinados principalmente ao consumo doméstico":"3.2.3_Alimentos_bebidas_básicos_consumo",
+                                "324 Alimentos e bebidas elaborados, destinados principalmente ao consumo doméstico":"3.2.4_Alimentos_bebidas_elaborados_consumo",
+                                "325 Gasolinas para automóvel (motor spirit)":"3.2.5_Gasolinas",
+                                "9 Bens não especificados anteriormente":"9_Outros"
+                                }
+    ))
+
+#descoupação
 #variavel Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade (%) Total, Trimestre Móvel % a.m.
 listVariables.append(Variables('taxa_desocupacao_mensal_trimestre_movel',"6381-4099-br","sidra",
                                {"periodos":"-500","variaveis":"4099","localidade":"N1[all]","classificacao":""},[""],{},
@@ -321,64 +572,65 @@ listVariables.append(Variables('taxa_desocupacao_mensal_trimestre_movel',"6381-4
 
 #variavel Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade (%) Total de SC, Trimestre Móvel % a.m.
 listVariables.append(Variables('taxa_desocupacao_mensal_trimestre_movel_sc',"6468-4099-sc","sidra",
-                               {"periodos":"-500","variaveis":"4099","localidade":"N3[42]","classificacao":""},[""],{},
+                               {"periodos":"-500","variaveis":"4099","localidade":"N3[42]","classificacao":""},["trimestertomonth"],{"trimestertomonth":True},
                                {"date":"date",
                                 "Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade":"taxa_desocupacao_mensal_trimestre_movel_sc"
                                 }
     ))
 
+#rendimento
 #variavel Rendimento médio mensal real, efetivamente recebido em todos os trabalhos % a.m.
-listVariables.append(Variables('rendimento_medio_mensal_todos_trabalhos',"6387-5935-br","sidra",
+listVariables.append(Variables('rendimento_medio_mensal',"6387-5935-br","sidra",
                                {"periodos":"-500", "variaveis":"5935","localidade":"N1[all]","classificacao":""},["seasonal"],{},
                                {"date":"date",
-                                "Rendimento médio mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, efetivamente recebido em todos os trabalhos":"rendimento_medio_mensal_todos_trabalhos"
+                                "Rendimento médio mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, efetivamente recebido em todos os trabalhos":"rendimento_medio_mensal"
                                 }
     ))
 
 #variavel Rendimento médio trimestral real, efetivamente recebido em todos os trabalhos - SC % a.t.
-listVariables.append(Variables('rendimento_medio_trimestral_todos_trabalhos_sc',"6469-5935-br","sidra",
-                               {"periodos":"-500", "variaveis":"5935","localidade":"N3[42]","classificacao":""},[""],{},
+listVariables.append(Variables('rendimento_medio_trimestral_sc',"6469-5935-br","sidra",
+                               {"periodos":"-500", "variaveis":"5935","localidade":"N3[42]","classificacao":""},["trimestertomonth"],{"trimestertomonth":True},
                                {"date":"date",
-                                "Rendimento médio mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, efetivamente recebido em todos os trabalhos":"rendimento_medio_trimestral_todos_trabalhos_sc"
+                                "Rendimento médio mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, efetivamente recebido em todos os trabalhos":"rendimento_medio_trimestral_sc"
                                 }
     ))
 
 #variavel Massa de Rendimento mensal real, efetivamente recebido em todos os trabalhos - BR % a.m.
-listVariables.append(Variables('rendimento_massa_mensal_real_todos_trabalhos',"6392-6293-br","sidra",
+listVariables.append(Variables('rendimento_massa_mensal_real',"6392-6293-br","sidra",
                                {"periodos":"-500", "variaveis":"6293","localidade":"N1[all]","classificacao":""},[""],{},
                                {"date":"date",
-                                "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_mensal_real_todos_trabalhos"
+                                "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_mensal_real"
                                 }
     ))
 
 #variavel Massa de Rendimento trimestral real, efetivamente recebido em todos os trabalhos - BR % a.m.
-listVariables.append(Variables('rendimento_massa_trimestral_real_todos_trabalhos',"6474-6293-br","sidra",
-                               {"periodos":"-500","variaveis":"6293","localidade":"N1[all]","classificacao":""},[""],{},
+listVariables.append(Variables('rendimento_massa_trimestral_real',"6474-6293-br","sidra",
+                               {"periodos":"-500","variaveis":"6293","localidade":"N1[all]","classificacao":""},["trimestertomonth"],{"trimestertomonth":True},
                                {"date":"date",
-                                "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_trimestral_real_todos_trabalhos"
+                                "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_trimestral_real"
                                 }
     ))
 
 #variavel Massa de Rendimento trimestral real, efetivamente recebido em todos os trabalhos - SC % a.m.
-listVariables.append(Variables('rendimento_massa_trimestral_real_todos_trabalhos_sc',"6474-6293-sc","sidra",
-                               {"periodos":"-500","variaveis":"6293","localidade":"N3[42]","classificacao":""},[""],{},
+listVariables.append(Variables('rendimento_massa_trimestral_real_sc',"6474-6293-sc","sidra",
+                               {"periodos":"-500","variaveis":"6293","localidade":"N3[42]","classificacao":""},["trimestertomonth"],{"trimestertomonth":True},
                                {"date":"date",
-                                "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_trimestral_real_todos_trabalhos_sc"
+                                "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_trimestral_real_sc"
                                 }
     ))
 
-
+#despesa de consumo das familias
 #variavel PIB despesa de consumo das familias Valores encadeados a preços de 1995 % a.t.
-listVariables.append(Variables('pib_consumo_familias_trimestral_base_fixa',"6612-9318-br","sidra",
-                               {"periodos":"-500", "variaveis":"9318","localidade":"N1[all]","classificacao":"11255[93404]"},[""],{},
+listVariables.append(Variables('pib_consumo_familias_trimestral',"6612-9318-br","sidra",
+                               {"periodos":"-500", "variaveis":"9318","localidade":"N1[all]","classificacao":"11255[93404]"},["trimestertomonth"],{"trimestertomonth":True},
                                {"date":"date",
                                 "Despesa de consumo das famílias": "pib_consumo_familias_trimestral_base_fixa",
                                 }
     ))
 
 #variavel PIB despesa de consumo das familias Valores encadeados a preços de 1995 % a.t.
-listVariables.append(Variables('pib_consumo_familias_trimestral_base_fixa_dessazonalizado',"6613-9319-br","sidra",
-                               {"periodos":"-500", "variaveis":"9319","localidade":"N1[all]","classificacao":"11255[93404]"},[""],{},
+listVariables.append(Variables('pib_consumo_familias_trimestral_dessazonalizado',"6613-9319-br","sidra",
+                               {"periodos":"-500", "variaveis":"9319","localidade":"N1[all]","classificacao":"11255[93404]"},["trimestertomonth"],{"trimestertomonth":True},
                                {"date":"date",
                                 "Despesa de consumo das famílias": "pib_consumo_familias_trimestral_base_fixa_dessazonalizado",
                                 }
@@ -392,6 +644,8 @@ listVariables.append(Variables('pib_consumo_familias_trimestral_base_fixa_dessaz
 listModels.append(Models('ipca_evolucao',"'2000-01-01'", "",
                          ["ipca_mensal_taxa_variação_rolling",
                           "ipca_mensal_taxa_preços_livres_serviços_rolling",
+                          "ipca_mensal_taxa_núcleo_médias_aparadas_suavização_rolling",
+                          "ipca_mensal_taxa_núcleo_exclusão_rolling",
                           "expectativa_ipca_2024_latest_transpose_rolling",
                           "expectativa_ipca_servicos_2024_latest_transpose_rolling",
                           "meta_inflacao",
@@ -404,10 +658,10 @@ listModels.append(Models('ipca_evolucao',"'2000-01-01'", "",
 
 #model produção setorial para power BI
 listModels.append(Models('producao_setorial',"'2003-01-01'", "",
-                         ["ibc_br_mensal_seasonal_getallbases",
-                          "ibcr_sc_mensal_seasonal_getallbases",
-                          "pim_pf_mensal_br_seasonal_getallbases",
-                          "pim_pf_mensal_sc_seasonal_getallbases"
+                         ["ibc_br_mensal_dessazonalizado_getallbases",
+                          "ibcr_sc_mensal_dessazonalizado_getallbases",
+                          "pim_pf_mensal_br_dessazonalizado_getallbases",
+                          "pim_pf_mensal_sc_dessazonalizado_getallbases"
                           ],
                          ["dateBase","date"]
     
@@ -415,20 +669,22 @@ listModels.append(Models('producao_setorial',"'2003-01-01'", "",
 
 #model produção setorial para power BI
 listModels.append(Models('servicos_setorial',"'2011-01-01'", "",
-                         ["pms_br_volume_mensal_seasonal_getallbases"
+                         ["ibc_br_mensal_dessazonalizado_getallbases",
+                          "pms_br_volume_mensal_dessazonalizado_getallbases"
                           ],
                          ["dateBase","date"]
     
     ))
 
-
-#model trimestre para mensal
-listModels.append(Models('trimestral_para_mensal',"'1996-01-01'", "",
-                         ["ipca_mensal_taxa_variação",
-                          "pib_consumo_familias_trimestral_base_fixa",
-                          "pib_consumo_familias_trimestral_base_fixa_dessazonalizado"
+#model produção setorial para power BI
+listModels.append(Models('rendimentos',"'2012-01-01'", "",
+                         ["rendimento_massa_trimestral_real_trimestertomonth",
+                          "rendimento_medio_mensal",
+                          "rendimento_massa_trimestral_real_sc_trimestertomonth",
+                          "rendimento_medio_trimestral_sc_trimestertomonth"
                           ],
                          ["date"]
     
     ))
+
 

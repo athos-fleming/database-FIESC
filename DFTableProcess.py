@@ -110,7 +110,8 @@ def process_sidra(codigo,df):
     #garante que a classificação esta bem definida e separada
     classificacao = classificacao.split('|')
     classificacaoTitleIndex = len(classificacao)-1
-   
+    
+    
       
     try:
         
@@ -118,7 +119,7 @@ def process_sidra(codigo,df):
         for item in sidraJson[0]["resultados"]:
             
             if classificacao[0] == '':
-                title = title = sidraJson[0]["variavel"]
+                title= sidraJson[0]["variavel"]
             else:
                 title = list(item['classificacoes'][classificacaoTitleIndex]["categoria"].values())[0]
             
@@ -293,6 +294,14 @@ def process_operations(db_connection,codigo,operador):
             case "getallbases":
                 dfTemp = Operations.getallbases(dfTemp)
                         
+            case "variation":
+                parameters = OperadorParameters["variation"]
+                dfTemp = Operations.variation(dfTemp,parameters)
+            
+            case "trimestertomonth":
+                parameters = OperadorParameters["trimestertomonth"]
+                dfTemp = Operations.trimestertomonth(dfTemp,parameters)
+            
             case "especial":
                 parameters = OperadorParameters["especial"]
                 dfTemp = Operations.especial(db_connection,dfTemp,parameters)

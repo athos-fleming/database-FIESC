@@ -183,16 +183,18 @@ if __name__ == "__main__":
         #,"seasonal_changebase"
         #,"seasonal_getallbases"
         #,"getallbases"
+        #,"variation"
+        #,"trimestertomonth"
         #,"rolling"
         #,"transpose_rolling_transpose"
         #,"latest_transpose_rolling"
         #,"firstdayofmonth_transpose_rolling"
         ]
     modelos = ["null"
-        ,"ipca_evolucao"
-        ,"producao_setorial"
-        ,"servicos_setorial"
-        ,"trimestral_para_mensal"
+        #,"ipca_evolucao"
+        #,"producao_setorial"
+        #,"servicos_setorial"
+        #,"rendimentos"
         ]
     
     update_variables(adresses)

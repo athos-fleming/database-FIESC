@@ -40,7 +40,7 @@ def seasonal(df):
             dfajusted = pd.DataFrame(ajusted.seasadj)
             dfajusted = dfajusted.reset_index()
             dfajusted = dfajusted.reset_index(drop=True)
-            dfajusted = dfajusted.set_axis(['date',"{}_seasonal".format(name[0])],axis=1)
+            dfajusted = dfajusted.set_axis(['date',"{}_seas".format(name[0])],axis=1)
             
             #junta num df as seazonalizadas  
             dfProcessed = pd.merge(dfProcessed, dfajusted, on='date',how='outer')
@@ -323,6 +323,118 @@ def getallbases(df):
     
     return df
 
+def variation(df,parameters):
+    
+    variation = parameters
+    
+    
+    #garante que a date vai estar no padrao utilizado
+    def dataChange(date):
+        x = pd.to_datetime(date).strftime("%Y-%m-01")
+        return x
+    
+    dataColumn = df.loc[:,'date']
+    dataColumn = dataColumn.apply(dataChange)
+    df.loc[:,'date'] = dataColumn
+    
+    #definir data externamente   
+    dfDate = df[["date"]].copy()
+    dfDate = dfDate.assign(date = lambda df: pd.to_datetime(df.date))
+    df = df.drop('date', axis=1)
+    dfProcessed = pd.DataFrame(dfDate)
+    
+    #garantir que funcione para df grandes
+    for df, column in df.items():
+                
+        #setup do df para poder realizar a operação
+        dftemp = pd.DataFrame(column)
+        name = dftemp.columns.values
+        dftemp = pd.concat([dfDate,dftemp],axis=1, join='inner')
+        dftemp = dftemp.dropna(axis = 0,how='any')
+        dftemp = dftemp.set_axis(["date","value"],axis=1)
+        dftemp = dftemp.assign(date = lambda df: pd.to_datetime(df.date))
+        
+        #operação de diferença por n meses
+        dfTempDifference = pd.to_numeric(dftemp.value).diff(variation)
+        dftemp['value'] = dfTempDifference
+
+        #define o nome da coluna
+        dftemp = dftemp.set_axis(['date',"{}".format(name[0])],axis=1)
+        
+        #merge todas as colunas operacionalizadas numa unica df
+        dfProcessed = pd.merge(dfProcessed, dftemp, on='date',how='outer')
+        
+     
+    dfProcessed = dfProcessed.replace({np.nan: None})
+    df = dfProcessed
+    
+    return df
+
+def trimestertomonth(df,parameters):
+    
+    ajustdate = parameters
+    
+    #garante que a date vai estar no padrao utilizado
+    def dataChange(date):
+        x = pd.to_datetime(date).strftime("%Y-%m-01")
+        return x
+    
+    dataColumn = df.loc[:,'date']
+    dataColumn = dataColumn.apply(dataChange)
+    df.loc[:,'date'] = dataColumn
+    
+    #definir data externamente   
+    dfDate = df[["date"]].copy()
+    dfDate = dfDate.assign(date = lambda df: pd.to_datetime(df.date))
+    
+    #muda a date para o mes  correspondente do ano, se precisar
+    if ajustdate == True:
+        dfDate = dfDate['date'].dt.strftime("%Y-%m-01")
+        dfDate = pd.DataFrame(dfDate.str.replace("-04-","-12-").str.replace("-03-","-09-").str.replace("-02-","-06-").str.replace("-01-","-03-"))
+        dfDate = dfDate.assign(date = lambda dfDate: pd.to_datetime(dfDate.date))
+    
+    #define a base que vai sofrer merge
+    df = df.drop('date', axis=1)
+    dfProcessed = pd.DataFrame(dfDate)
+    
+    #garantir que funcione para df grandes
+    for df, column in df.items():
+                
+        #setup do df para poder realizar a operação
+        dftemp = pd.DataFrame(column)
+        name = dftemp.columns.values
+        dftemp = pd.concat([dfDate,dftemp],axis=1, join='inner')
+        dftemp = dftemp.dropna(axis = 0,how='any')
+        dftemp = dftemp.set_axis(["date","value"],axis=1)
+        dftemp = dftemp.assign(date = lambda df: pd.to_datetime(df.date))
+        dftemp = dftemp.assign(value = lambda df: pd.to_numeric(df.value))
+        
+        
+        
+        #operação para expandir para mensal e interpolar os valores vazios:        
+        dfajuste = dftemp
+        dfajuste.set_index('date',inplace=True)
+        
+        #expande para mensal
+        dfajuste = dfajuste.resample('M').mean()
+        
+        #interpola
+        dfajuste = dfajuste.resample('M').interpolate(method='linear')
+        
+        #ajusta a data novamente
+        dftemp = dfajuste.reset_index()
+        dftemp['date'] = dftemp['date'].dt.strftime("%Y-%m-01")
+        dftemp = dftemp.assign(date = lambda df: pd.to_datetime(df.date))
+        
+        #define o nome da coluna
+        dftemp = dftemp.set_axis(['date',"{}".format(name[0])],axis=1)
+        
+        #merge todas as colunas operacionalizadas numa unica df
+        dfProcessed = pd.merge(dfProcessed, dftemp, on='date',how='outer')
+    
+    df = dfProcessed
+    
+    return df
 
 def especial(db_connection,df,parameters):
     
