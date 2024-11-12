@@ -215,9 +215,12 @@ def process_models(db_connection,model):
     for name in ListVariables:
         
         #info necessaria de cada objeto
-      
+        
         #puxa cada uma das tables e seus valores
-        selectSQL = 'SELECT * FROM variables.{} where date >= {}'.format(name,cutDate)
+        if(mergeParameters[0] == "dateBase"):
+            selectSQL = 'SELECT * FROM variables.{} where date >= {} AND dateBase >= {}'.format(name,cutDate,cutDate)
+        else:   
+            selectSQL = 'SELECT * FROM variables.{} where date >= {}'.format(name,cutDate)
         mycursor.execute(selectSQL)
         dfTemp = mycursor.fetchall()
         dfTemp = pd.DataFrame(dfTemp)

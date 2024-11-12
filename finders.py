@@ -110,4 +110,3 @@ def findMergeParameters(model):
         if str(obj.name) == str(model):
             return obj.mergeParameters
         
-        
