@@ -26,6 +26,7 @@ listModels = []
 
 #grupo do ipea, corre bem tranquilo
 
+#IPCA
 #variavel IPCA - geral - taxa de variação  mensa % a.m.
 listVariables.append(Variables('ipca_mensal_taxa_variação',"'PRECOS12_IPCAG12'","ipea",
                                "01/01/1980",["rolling"],{"especial":"ipca_juros_real","rolling":"-12"},
@@ -62,6 +63,7 @@ listVariables.append(Variables('ipca_mensal_taxa_preços_livres_serviços',"'BM1
                                {"VALDATA": "date","VALVALOR": "ipca_mensal_taxa_preços_livres_serviços"}
     ))
 
+#extras
 #variavel PIB - Mensal em Reais % a.m.
 listVariables.append(Variables('pib_mensal_reais',"'BM12_PIB12'","ipea",
                                "01/01/1990",[""],{},
@@ -104,61 +106,119 @@ listVariables.append(Variables('pib_consumo_familias_trimestral_corrente',"'SCN1
 
 
 
-#variavel Dívida líquida do governo geral (% PIB) % a.m.
-listVariables.append(Variables('divida_mensal_publica__liquida_consolidado_pib',"4513","bcb",
-                               "01/12/2001",[""],{},
-                               {"data": "date","valor": "divida_mensal_publica__liquida_consolidado_pib"}
+#Saldo de crédito
+#variavel 	Saldo da carteira de crédito com recursos livres - Pessoas físicas - Total % a.m.
+listVariables.append(Variables('saldo_credito_pf_total',"20570","bcb",
+                               "01/03/2011",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_credito_pf_total"}
     ))
 
-#variavel Dívida bruta do governo geral (% PIB) % a.m.
-listVariables.append(Variables('divida_mensal_publica__bruta_pib',"13762","bcb",
-                               "01/12/2006",[""],{},
-                               {"data": "date","valor": "divida_mensal_publica__bruta_pib"}
+#variavel 	Saldo da carteira de crédito com recursos livres - Pessoas físicas - Aquisição de veículos % a.m.
+listVariables.append(Variables('saldo_credito_pf_veiculos',"20581","bcb",
+                               "01/03/2011",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_credito_pf_veiculos"}
     ))
 
-#variavel SELIC Mensal % a.m.
-listVariables.append(Variables('selic_mensal',"4189","bcb",
-                               "01/01/2000",[""],{},
-                               {"data": "date","valor": "selic_mensal"}
+#variavel 	Saldo da carteira de crédito com recursos livres - Pessoas físicas - Aquisição de outros bens % a.m.
+listVariables.append(Variables('saldo_credito_pf_outros',"20582","bcb",
+                               "01/03/2011",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_credito_pf_outros"}
     ))
 
-#variavel SELIC diaria % a.a.
-listVariables.append(Variables('selic_diaria',"11","bcb",
-                               "01/01/2000",[""],{},
-                               {"data": "date","valor": "selic_diaria"}
+#variavel 	Saldo da carteira de crédito com recursos livres - Pessoas físicas - Aquisição de outros bens % a.m.
+listVariables.append(Variables('saldo_credito_pf_bens_total',"20583","bcb",
+                               "01/03/2011",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_credito_pf_bens_total"}
     ))
 
-
+#ICC
 #variavel Indicador de Custo do Crédito - ICC - Recursos/Crédito livre - Pessoas jurídicas % a.m.
 listVariables.append(Variables('icc_rescursos_livres_pj',"25355","bcb",
                                "01/01/2013",["seasonal"],{},
                                {"data": "date","valor": "icc_rescursos_livres_pj"}
     ))
 
-#variavel Inadimplência da carteira de crédito - Pessoas físicas - Total % a.m.
-listVariables.append(Variables('inadimplencia_pf_total',"21084","bcb",
-                               "01/03/2011",["seasonal"],{},
-                               {"data": "date","valor": "inadimplencia_pf_total"}
+#variavel Indicador de Custo do Crédito - ICC - Recursos/Crédito livre - Pessoas jurídicas - Aquisição de veículos % a.m.
+listVariables.append(Variables('icc_rescursos_livres_pj_veiculos',"27658","bcb",
+                               "01/01/2013",["seasonal"],{},
+                               {"data": "date","valor": "icc_rescursos_livres_pj_veiculos"}
     ))
 
-#variavel 	Saldo da carteira de crédito com recursos livres - Pessoas físicas - Total % a.m.
-listVariables.append(Variables('saldo_credito_pf_total',"20580","bcb",
-                               "01/03/2011",["seasonal_deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
-                               {"data": "date","valor": "saldo_credito_pf_total"}
-    ))
-
-#variavel 	Saldo da carteira de crédito com recursos livres - Pessoas físicas - Aquisição de outros bens % a.m.
-listVariables.append(Variables('saldo_credito_pf_outros',"20582","bcb",
-                               "01/03/2011",["seasonal"],{},
-                               {"data": "date","valor": "saldo_credito_pf_outros"}
-    ))
-
-#variavel 	Saldo da carteira de crédito com recursos livres - Pessoas físicas - Aquisição de outros bens % a.m.
+#variavel Indicador de Custo do Crédito - ICC - Recursos/Crédito livre - Pessoas jurídicas - Aquisição de outros bens % a.m.
 listVariables.append(Variables('icc_rescursos_livres_pj_outros',"27659","bcb",
-                               "01/01/2013",[""],{},
+                               "01/01/2013",["seasonal"],{},
                                {"data": "date","valor": "icc_rescursos_livres_pj_outros"}
     ))
 
+#variavel Indicador de Custo do Crédito - ICC - Recursos/Crédito livre - Pessoas fisica % a.m.
+listVariables.append(Variables('icc_rescursos_livres_pf',"25356","bcb",
+                               "01/01/2013",["seasonal"],{},
+                               {"data": "date","valor": "icc_rescursos_livres_pf"}
+    ))
+
+#variavel Indicador de Custo do Crédito - ICC - Recursos/Crédito livre - Pessoas fisica - Aquisição de veículos % a.m.
+listVariables.append(Variables('icc_rescursos_livres_pf_veiculos',"27680","bcb",
+                               "01/01/2013",["seasonal"],{},
+                               {"data": "date","valor": "icc_rescursos_livres_pf_veiculos"}
+    ))
+
+#variavel Indicador de Custo do Crédito - ICC - Recursos/Crédito livre - Pessoas fisica - Aquisição de outros bens % a.m.
+listVariables.append(Variables('icc_rescursos_livres_pf_outros',"27681","bcb",
+                               "01/01/2013",["seasonal"],{},
+                               {"data": "date","valor": "icc_rescursos_livres_pf_outros"}
+    ))
+
+#Concessões
+#Concessões de crédito com recursos livres - Pessoas físicas - Total % a.m.
+listVariables.append(Variables('concessoes_credito_recursos_livres_pf',"20675","bcb",
+                               "01/01/2013",["seasonal"],{},
+                               {"data": "date","valor": "concessoes_recursos_livres_pf"}
+    ))
+
+#Concessões de crédito com recursos livres - Pessoas físicas - Aquisição de veículos % a.m.
+listVariables.append(Variables('concessoes_credito_recursos_livres_pf_veiculos',"20673","bcb",
+                               "01/01/2013",["seasonal"],{},
+                               {"data": "date","valor": "concessoes_recursos_livres_pf_veiculos"}
+    ))
+
+#Concessões de crédito com recursos livres - Pessoas físicas - Aquisição de outros bens % a.m.
+listVariables.append(Variables('concessoes_credito_recursos_livres_pf_outros',"20674","bcb",
+                               "01/01/2013",["seasonal"],{},
+                               {"data": "date","valor": "concessoes_recursos_livres_pf_outros"}
+    ))
+
+#Concessões de crédito com recursos livres - Pessoas jurídicas - Total % a.m.
+listVariables.append(Variables('concessoes_credito_recursos_livres_pj',"20647","bcb",
+                               "01/01/2013",["seasonal"],{},
+                               {"data": "date","valor": "concessoes_recursos_livres_pj"}
+    ))
+
+#Concessões de crédito com recursos livres - Pessoas jurídicas - Aquisição de veículos % a.m.
+listVariables.append(Variables('concessoes_credito_recursos_livres_pj_veiculos',"20645","bcb",
+                               "01/01/2013",["seasonal"],{},
+                               {"data": "date","valor": "concessoes_recursos_livres_pj_veiculos"}
+    ))
+
+#Concessões de crédito com recursos livres - Pessoas jurídicas - Aquisição de outros bens % a.m.
+listVariables.append(Variables('concessoes_credito_recursos_livres_pj_outros',"20646","bcb",
+                               "01/01/2013",["seasonal"],{},
+                               {"data": "date","valor": "concessoes_recursos_livres_pj_outros"}
+    ))
+
+
+
+#taxa de juros
+
+
+
+#Saldo setorial
+#Saldo ao setor agropecuario - R$ Milhões %a.m.
+listVariables.append(Variables('concessoes_credito_recursos_livres_pj_outros',"20646","bcb",
+                               "01/01/2013",["seasonal"],{},
+                               {"data": "date","valor": "concessoes_recursos_livres_pj_outros"}
+    ))
+
+#extras
 #variavel IPCA Industrias, subcategoria de serviços % a.m.
 listVariables.append(Variables('ipca_industrial',"27863","bcb",
                                "01/01/2000",["rolling"],{"rolling":"-12"},
@@ -182,6 +242,31 @@ listVariables.append(Variables('ibcr_sc_mensal_dessazonalizado',"25405","bcb",
                                "01/01/2003",["getallbases","variation"],{"variation":"12"},
                                {"data": "date","valor": "ibcr_sc_mensal_dessazonalizado"}
     ))
+
+#variavel Dívida líquida do governo geral (% PIB) % a.m.
+listVariables.append(Variables('divida_mensal_publica__liquida_consolidado_pib',"4513","bcb",
+                               "01/12/2001",[""],{},
+                               {"data": "date","valor": "divida_mensal_publica__liquida_consolidado_pib"}
+    ))
+
+#variavel Dívida bruta do governo geral (% PIB) % a.m.
+listVariables.append(Variables('divida_mensal_publica__bruta_pib',"13762","bcb",
+                               "01/12/2006",[""],{},
+                               {"data": "date","valor": "divida_mensal_publica__bruta_pib"}
+    ))
+
+#variavel SELIC Mensal % a.m.
+listVariables.append(Variables('selic_mensal',"4189","bcb",
+                               "01/01/2000",[""],{},
+                               {"data": "date","valor": "selic_mensal"}
+    ))
+
+#variavel Inadimplência da carteira de crédito - Pessoas físicas - Total % a.m.
+listVariables.append(Variables('inadimplencia_pf_total',"21084","bcb",
+                               "01/03/2011",["seasonal"],{},
+                               {"data": "date","valor": "inadimplencia_pf_total"}
+    ))
+
 
 
 #grupo do bcb - focus, dados em painel, process mais complicado e demorado
@@ -211,7 +296,7 @@ listVariables.append(Variables('expectativa_ipca_servicos_2024',"IPCA%20Servi%C3
 #variavel Produção Física Industrial de SC, por seções e atividades industriais mensal % a.m.
 listVariables.append(Variables('pim_pf_mensal_sc',"8888-12606-sc","sidra",
                                {"periodos":"-500","variaveis":"12606","localidade":"N3[42]","classificacao":"544[all]"},
-                               ["seasonal","seasonal_getallbases","variation"],{"variation":"12"},
+                               ["###seasonal","###seasonal_getallbases","###variation"],{"variation":"12"},
                                {"date":"date",
                                 "1 Indústria geral":"1_Geral_sc",
                                 "2 Indústrias extrativas":"2_Extrativa_sc",
@@ -246,7 +331,7 @@ listVariables.append(Variables('pim_pf_mensal_sc',"8888-12606-sc","sidra",
 #variavel Produção Física Industrial de SC já dessazonalizada, por seções e atividades industriais mensal % a.m.
 listVariables.append(Variables('pim_pf_mensal_sc_dessazonalizado',"8888-12607-sc","sidra",
                                {"periodos":"-500","variaveis":"12607","localidade":"N3[42]","classificacao":"544[129314]"},
-                               ["getallbases","variation"],{"variation":"12"},
+                               ["###getallbases","###variation"],{"variation":"12"},
                                {"date":"date",
                                 "1 Indústria geral":"1_Geral_sc"
                                  }
@@ -561,6 +646,14 @@ listVariables.append(Variables('rendimento_medio_mensal',"6387-5935-br","sidra",
                                 }
     ))
 
+#variavel Rendimento médio mensal real, habitualmente recebido em todos os trabalhos % a.m.
+listVariables.append(Variables('rendimento_medio_mensal_hab',"6390-5933-br","sidra",
+                               {"periodos":"-500", "variaveis":"5933","localidade":"N1[all]","classificacao":""},["seasonal"],{},
+                               {"date":"date",
+                                "Rendimento médio mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_medio_mensal_hab"
+                                }
+    ))
+
 #variavel Rendimento médio trimestral real, efetivamente recebido em todos os trabalhos - SC % a.t.
 listVariables.append(Variables('rendimento_medio_trimestral_sc',"6469-5935-br","sidra",
                                {"periodos":"-500", "variaveis":"5935","localidade":"N3[42]","classificacao":""},["trimestertomonth_seasonal"],{"trimestertomonth":True},
@@ -569,30 +662,63 @@ listVariables.append(Variables('rendimento_medio_trimestral_sc',"6469-5935-br","
                                 }
     ))
 
+#variavel Rendimento médio trimestral real, habitualmente recebido em todos os trabalhos - SC % a.t.
+listVariables.append(Variables('rendimento_medio_tri_sc_hab',"6472-5933-br","sidra",
+                               {"periodos":"-500", "variaveis":"5933","localidade":"N3[42]","classificacao":""},["trimestertomonth_seasonal"],{"trimestertomonth":True},
+                               {"date":"date",
+                                "Rendimento médio mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_medio_tri_sc_hab"
+                                }
+    ))
+
 #variavel Massa de Rendimento mensal real, efetivamente recebido em todos os trabalhos - BR % a.m.
-listVariables.append(Variables('rendimento_massa_mensal_real',"6392-6293-br","sidra",
+listVariables.append(Variables('rendimento_massa_mensal_real',"6393-6295-br","sidra",
+                               {"periodos":"-500", "variaveis":"6295","localidade":"N1[all]","classificacao":""},["seasonal"],{},
+                               {"date":"date",
+                                "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, efetivamente recebido em todos os trabalhos":"rendimento_massa_mensal_real"
+                                }
+    ))
+
+#variavel Massa de Rendimento mensal real, habitualmente recebido em todos os trabalhos - BR % a.m.
+listVariables.append(Variables('rendimento_massa_mensal_real_hab',"6392-6293-br","sidra",
                                {"periodos":"-500", "variaveis":"6293","localidade":"N1[all]","classificacao":""},["seasonal"],{},
                                {"date":"date",
-                                "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_mensal_real"
+                                "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_mensal_real_hab"
                                 }
     ))
 
 #variavel Massa de Rendimento trimestral real, efetivamente recebido em todos os trabalhos - BR % a.m.
-listVariables.append(Variables('rendimento_massa_trimestral_real',"6474-6293-br","sidra",
+listVariables.append(Variables('rendimento_massa_trimestral_real',"5606-6295-br","sidra",
+                               {"periodos":"-500","variaveis":"6295","localidade":"N1[all]","classificacao":""},["trimestertomonth_seasonal"],{"trimestertomonth":True},
+                               {"date":"date",
+                                "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, efetivamente recebido em todos os trabalhos":"rendimento_massa_trimestral_real"
+                                }
+    ))
+
+#variavel Massa de Rendimento trimestral real, habitualmente recebido em todos os trabalhos - BR % a.m.
+listVariables.append(Variables('rendimento_massa_tri_real_hab',"5606-6293-br","sidra",
                                {"periodos":"-500","variaveis":"6293","localidade":"N1[all]","classificacao":""},["trimestertomonth_seasonal"],{"trimestertomonth":True},
                                {"date":"date",
-                                "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_trimestral_real"
+                                "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_tri_real_hab"
                                 }
     ))
 
 #variavel Massa de Rendimento trimestral real, efetivamente recebido em todos os trabalhos - SC % a.m.
-listVariables.append(Variables('rendimento_massa_trimestral_real_sc',"6474-6293-sc","sidra",
-                               {"periodos":"-500","variaveis":"6293","localidade":"N3[42]","classificacao":""},["trimestertomonth_seasonal"],{"trimestertomonth":True},
+listVariables.append(Variables('rendimento_massa_tri_real_sc',"5606-6295-sc","sidra",
+                               {"periodos":"-500","variaveis":"6295","localidade":"N3[42]","classificacao":""},["trimestertomonth_seasonal"],{"trimestertomonth":True},
                                {"date":"date",
-                                "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_trimestral_real_sc"
+                                "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, efetivamente recebido em todos os trabalhos":"rendimento_massa_trimestral_real_sc"
                                 }
     ))
 
+#variavel Massa de Rendimento trimestral real, habitualmente recebido em todos os trabalhos - SC % a.m.
+listVariables.append(Variables('rendimento_massa_tri_real_sc_hab',"5606-6293-sc","sidra",
+                               {"periodos":"-500","variaveis":"6293","localidade":"N3[42]","classificacao":""},["trimestertomonth_seasonal"],{"trimestertomonth":True},
+                               {"date":"date",
+                                "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_tri_real_sc_hab"
+                                }
+    ))
+
+#extras
 #despesa de consumo das familias
 #variavel PIB despesa de consumo das familias Valores encadeados a preços de 1995 % a.t.
 listVariables.append(Variables('pib_consumo_familias_trimestral',"6612-9318-br","sidra",
@@ -653,12 +779,25 @@ listModels.append(Models('servicos_setorial',"'2011-01-01'", "",
 
 #model rendimentos para power BI
 listModels.append(Models('rendimentos',"'2012-01-01'", "",
-                         ["rendimento_massa_mensal_real",
+                         ["ibc_br_mensal_dessazonalizado",
+                          "ibcr_sc_mensal_dessazonalizado",
+                          "rendimento_massa_mensal_real",
                           "rendimento_medio_mensal",
-                          "rendimento_medio_mensal_seasonal",
                           "rendimento_massa_trimestral_real_sc_trimestertomonth",
                           "rendimento_medio_trimestral_sc_trimestertomonth",
-                          "rendimento_medio_trimestral_sc_trimestertomonth_seasonal"
+                          "taxa_desocupacao_mensal_trimestre_movel",
+                          "taxa_desocupacao_mensal_trimestre_movel_sc_trimestertomonth"
+                          ],
+                         ["date"]
+    
+    ))
+
+#model Saldo de crédito PF para power BI
+listModels.append(Models('saldo_credito_pf',"'2008-01-01'", "",
+                         ["selic_mensal",
+                          "saldo_credito_pf_outros_deflacionar",
+                          "saldo_credito_pf_veiculos_deflacionar",
+                          "saldo_credito_pf_total_deflacionar"
                           ],
                          ["date"]
     
@@ -684,5 +823,3 @@ listModels.append(Models('bens',"'2002-01-01'", "",
                          ["dateBase","date"]
     
     ))
-
-

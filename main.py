@@ -171,14 +171,15 @@ def update_models(modelos):
 if __name__ == "__main__":
     
     adresses = ["null"
-        #,"ipea"
+        ,"ipea"
         ,"bcb"
-        #,"sidra"
-        #,"bcb_focus"
+        ,"sidra"
+        ,"bcb_focus"
         ]
     operadores = ["null"
         ,"seasonal"
         ,"seasonal_deflacionar"
+        ,"deflacionar"
         ,"changebase"
         ,"seasonal_changebase"
         ,"seasonal_getallbases"
@@ -196,10 +197,11 @@ if __name__ == "__main__":
         ,"producao_setorial"
         ,"servicos_setorial"
         ,"rendimentos"
+        ,"saldo_credito_pf"
         ,"grandes_setores"
         ,"bens"
         ]
-    
+
     update_variables(adresses)
     operate_variables(operadores)
     update_models(modelos)

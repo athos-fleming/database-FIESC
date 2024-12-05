@@ -75,7 +75,10 @@ def deflacionar(db_connection,df,parameters):
     dfTemp['indice'] = dfTemp['indice'].cumprod()
     indiceBase = dfTemp.loc[dfTemp['date']==date_base,'indice'].values[0]
     dfTemp['indice'] = dfTemp['indice'].apply(lambda indice: indice/indiceBase)
-    dfTemp['value'] = dfTemp['value'].divide(dfTemp['indice'])
+    dfTemp['value'] = dfTemp.apply(lambda row: (float(row['value']/row['indice'])),axis=1)
+    
+    df['value'] = dfTemp['value']
+    
     
     #rename para o original
     df = df.set_axis(names, axis=1) 
