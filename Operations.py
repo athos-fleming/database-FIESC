@@ -115,10 +115,10 @@ def latest(df,name):
     
     #chama a ultima row da df
     df = df.tail(1)
-    
+        
     #muda o nome para ser reconhecivel
     df.iloc[0,0] = "latest_{}".format(name)
-    
+        
     return df
 
 def firstdayofmonth(df):
@@ -148,7 +148,8 @@ def rolling(db_connection,df,parameters):
     parametersList = parameters.split('-')
     variavel_base = parametersList[0]
     rollSize = parametersList[1]
-    
+    indiceNeed = parametersList[2]
+        
     if variavel_base != "":
         
         #garante que a date vai estar no padrao utilizado
@@ -159,7 +160,7 @@ def rolling(db_connection,df,parameters):
         dataColumn = df.loc[:,'date']
         dataColumn = dataColumn.apply(dataChange)
         df.loc[:,'date'] = dataColumn
-        
+    
         
     #definir data externamente   
     dfDate = df[["date"]].copy()
@@ -193,11 +194,23 @@ def rolling(db_connection,df,parameters):
             dfIndice = dfIndice.set_axis(["date","value"],axis=1)
             dftemp = pd.concat([dfIndice, dftemp])
 
+        #transforma em índice se precisar
+        if indiceNeed != "":
+        
+            if indiceNeed == "MovelMensal":
+            
+                dftemp['value'] = dftemp['value'].apply(lambda x: x/100 + 1) # Coloca em formato de índice
+                
+            elif indiceNeed == "BaseFixa":
+                
+                dftemp['value'] = dftemp['value'] / dftemp['value'].shift(1)  # Calcula a variação percentual, equivalente ao indice
+            
+            
 
         #realiza a operação de rolling e apaga as colunas que nao tem rolling
-        dftemp['value'] = dftemp['value'].rolling(12,12).sum()
+        dftemp['value'] = dftemp['value'].rolling(12,12).apply(np.prod, raw=True).apply(lambda x: (x-1)*100)
         dftemp = dftemp.dropna(axis = 0,how='any')
-        
+                
         #define o nome da coluna
         dftemp = dftemp.set_axis(['date',"{}".format(name[0])],axis=1)
         

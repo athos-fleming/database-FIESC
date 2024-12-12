@@ -189,6 +189,7 @@ if __name__ == "__main__":
         ,"trimestertomonth_seasonal"
         ,"rolling"
         ,"transpose_rolling_transpose"
+        ,"latest_transpose"
         ,"latest_transpose_rolling"
         ,"firstdayofmonth_transpose_rolling"
         ]
@@ -200,6 +201,7 @@ if __name__ == "__main__":
         ,"saldo_credito_pf"
         ,"grandes_setores"
         ,"bens"
+        ,"ipca_ipp"
         ]
 
     update_variables(adresses)

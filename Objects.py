@@ -29,13 +29,13 @@ listModels = []
 #IPCA
 #variavel IPCA - geral - taxa de variação  mensa % a.m.
 listVariables.append(Variables('ipca_mensal_taxa_variação',"'PRECOS12_IPCAG12'","ipea",
-                               "01/01/1980",["rolling"],{"especial":"ipca_juros_real","rolling":"-12"},
+                               "01/01/1980",["rolling"],{"especial":"ipca_juros_real","rolling":"-12-MovelMensal"},
                                {"VALDATA": "date","VALVALOR": "ipca_mensal_taxa_variação"}
     ))
 
 #variavel IPCA - núcleo médias aparadas com suavização - taxa de variação % a.m.
 listVariables.append(Variables('ipca_mensal_taxa_núcleo_médias_aparadas_suavização',"'BM12_IPCA2012'","ipea",
-                               "01/01/1992",["rolling"],{"rolling":"-12"},
+                               "01/01/1992",["rolling"],{"rolling":"-12-MovelMensal"},
                                {"VALDATA": "date","VALVALOR": "ipca_mensal_taxa_núcleo_médias_aparadas_suavização"}
     ))
 
@@ -47,7 +47,7 @@ listVariables.append(Variables('ipca_mensal_taxa_núcleo_médias_aparadas_sem_su
 
 #variavel IPCA - núcleo por exclusão - EX1 - taxa de variação % a.m.
 listVariables.append(Variables('ipca_mensal_taxa_núcleo_exclusão',"'BM12_IPCAEXCEX212'","ipea",
-                               "01/01/1992",["rolling"],{"rolling":"-12"},
+                               "01/01/1992",["rolling"],{"rolling":"-12-MovelMensal"},
                                {"VALDATA": "date","VALVALOR": "ipca_mensal_taxa_núcleo_exclusão"}
     ))
 
@@ -59,7 +59,7 @@ listVariables.append(Variables('ipca_mensal_taxa_núcleo_exclusão_domiciliar',"
 
 #variavel IPCA - preços livres - serviços % a.m.
 listVariables.append(Variables('ipca_mensal_taxa_preços_livres_serviços',"'BM12_IPCAPLSER12'","ipea",
-                               "01/01/1992",["rolling"],{"rolling":"-12"},
+                               "01/01/1992",["rolling"],{"rolling":"-12-MovelMensal"},
                                {"VALDATA": "date","VALVALOR": "ipca_mensal_taxa_preços_livres_serviços"}
     ))
 
@@ -72,15 +72,22 @@ listVariables.append(Variables('pib_mensal_reais',"'BM12_PIB12'","ipea",
 
 #variavel IPP industria da transformação indice dez 2018 % a.m.
 listVariables.append(Variables('ipp_transformacao_dez18',"'IPP12_IPPC12'","ipea",
-                               "01/01/2010",[""],{},
+                               "01/01/2010",["rolling"],{"rolling":"-12-BaseFixa"},
                                {"VALDATA": "date","VALVALOR": "ipp_transformacao_dez18"}
     ))
 
 #variavel IPP industria da transformação indice dez 2018 % a.m.
 listVariables.append(Variables('ipp_transformacao_taxa_mensal',"'IPP12_IPPCG12'","ipea",
-                               "01/01/2010",[""],{},
+                               "01/01/2010",["rolling"],{"rolling":"-12-MovelMensal"},
                                {"VALDATA": "date","VALVALOR": "ipp_transformacao_taxa_mensal"}
     ))
+
+#variavel IPP industria da alimentos indice dez 2018 % a.m.
+listVariables.append(Variables('ipp_alimentos_taxa_mensal',"'IPP12_IPPC10ATIV12'","ipea",
+                               "01/01/2010",["rolling"],{"rolling":"-12-BaseFixa"},
+                               {"VALDATA": "date","VALVALOR": "ipp_alimentos_taxa_mensal"}
+    ))
+
 
 #IBC-BR base 2002=100 % a.m.
 listVariables.append(Variables('ibc_br_mensal',"'SGS12_IBCBR12'","ipea",
@@ -221,7 +228,7 @@ listVariables.append(Variables('concessoes_credito_recursos_livres_pj_outros',"2
 #extras
 #variavel IPCA Industrias, subcategoria de serviços % a.m.
 listVariables.append(Variables('ipca_industrial',"27863","bcb",
-                               "01/01/2000",["rolling"],{"rolling":"-12"},
+                               "01/01/2000",["rolling"],{"rolling":"-12-MovelMensal"},
                                {"data": "date","valor": "ipca_industrial"}
     ))
 
@@ -275,15 +282,15 @@ listVariables.append(Variables('inadimplencia_pf_total',"21084","bcb",
 
 #variavel expectativa IPCA
 listVariables.append(Variables('expectativa_ipca_2024',"IPCA-ipca focus","bcb_focus",
-                               "2022-12-31",["transpose_rolling_transpose","latest_transpose_rolling","firstdayofmonth_transpose_rolling"],
-                               {"rolling":"ipca_mensal_taxa_variação-12"},
+                               "2022-12-31",["transpose_rolling_transpose","latest_transpose","latest_transpose_rolling","firstdayofmonth_transpose_rolling"],
+                               {"rolling":"ipca_mensal_taxa_variação-12-MovelMensal"},
                                {""}    
     ))
 
 #variavel expectativa IPCA serviços
 listVariables.append(Variables('expectativa_ipca_servicos_2024',"IPCA%20Servi%C3%A7os-ipca servicos focus","bcb_focus",
-                               "2022-12-31",["transpose_rolling_transpose","latest_transpose_rolling","firstdayofmonth_transpose_rolling"],
-                               {"rolling":"ipca_mensal_taxa_preços_livres_serviços-12"},
+                               "2022-12-31",["transpose_rolling_transpose","latest_transpose","latest_transpose_rolling","firstdayofmonth_transpose_rolling"],
+                               {"rolling":"ipca_mensal_taxa_preços_livres_serviços-12-MovelMensal"},
                                {""}    
     ))
 
@@ -742,7 +749,10 @@ listVariables.append(Variables('pib_consumo_familias_trimestral_dessazonalizado'
 
 #model ipca para o power BI
 listModels.append(Models('ipca_evolucao',"'2000-01-01'", "",
-                         ["ipca_mensal_taxa_variação_rolling",
+                         ["selic_mensal",
+                          "ipca_mensal_taxa_variação",
+                          "ipca_mensal_taxa_preços_livres_serviços",
+                          "ipca_mensal_taxa_variação_rolling",
                           "ipca_mensal_taxa_preços_livres_serviços_rolling",
                           "ipca_mensal_taxa_núcleo_médias_aparadas_suavização_rolling",
                           "ipca_mensal_taxa_núcleo_exclusão_rolling",
@@ -821,5 +831,15 @@ listModels.append(Models('bens',"'2002-01-01'", "",
                          ["pim_pf_bens_categorias_dessazonalizado_getallbases"
                           ],
                          ["dateBase","date"]
+    
+    ))
+
+#model bens para power BI
+listModels.append(Models('ipca_ipp',"'2012-01-01'", "",
+                         ["ipca_mensal_taxa_variação_rolling",
+                          "ipp_transformacao_taxa_mensal_rolling",
+                          "ipp_alimentos_taxa_mensal_rolling"
+                          ],
+                         ["date"]
     
     ))
