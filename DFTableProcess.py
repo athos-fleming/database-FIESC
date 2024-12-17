@@ -156,7 +156,7 @@ def process_sidra(codigo,df):
 def process_bcbFocus(codigo,df):
 
     #reserva o json inicial
-    focusJson = df                
+    focusJson = df             
     
     #declara variaveis
     oldDate = ""
@@ -164,12 +164,18 @@ def process_bcbFocus(codigo,df):
     dfempty = pd.DataFrame(columns=['date'])
     dfReferencia = dfempty
     dfFocus = dfempty
+    codigo = codigo
     
     #processo de modelagem do df final 
     for item in focusJson['value']:
    
         date = item['Data']
-        DataReferencia = item['DataReferencia']
+        
+        if codigo == "selic_focus":
+            DataReferencia = item['Reuniao']
+        else:        
+            DataReferencia = item['DataReferencia']
+            
         mediana = item['Mediana']
         
         if date != oldDate:
@@ -304,6 +310,10 @@ def process_operations(db_connection,codigo,operador):
             case "trimestertomonth":
                 parameters = OperadorParameters["trimestertomonth"]
                 dfTemp = Operations.trimestertomonth(dfTemp,parameters)
+            
+            case "dailytomonth":
+                dfTemp = Operations.dailytomonth(dfTemp)
+            
             
             case "especial":
                 parameters = OperadorParameters["especial"]

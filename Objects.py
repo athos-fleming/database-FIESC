@@ -63,13 +63,7 @@ listVariables.append(Variables('ipca_mensal_taxa_preços_livres_serviços',"'BM1
                                {"VALDATA": "date","VALVALOR": "ipca_mensal_taxa_preços_livres_serviços"}
     ))
 
-#extras
-#variavel PIB - Mensal em Reais % a.m.
-listVariables.append(Variables('pib_mensal_reais',"'BM12_PIB12'","ipea",
-                               "01/01/1990",[""],{},
-                               {"VALDATA": "date","VALVALOR": "pib_mensal_reais"}
-    ))
-
+#IPP
 #variavel IPP industria da transformação indice dez 2018 % a.m.
 listVariables.append(Variables('ipp_transformacao_dez18',"'IPP12_IPPC12'","ipea",
                                "01/01/2010",["rolling"],{"rolling":"-12-BaseFixa"},
@@ -88,7 +82,7 @@ listVariables.append(Variables('ipp_alimentos_taxa_mensal',"'IPP12_IPPC10ATIV12'
                                {"VALDATA": "date","VALVALOR": "ipp_alimentos_taxa_mensal"}
     ))
 
-
+#IBC-BR
 #IBC-BR base 2002=100 % a.m.
 listVariables.append(Variables('ibc_br_mensal',"'SGS12_IBCBR12'","ipea",
                                "01/01/2003",["seasonal_getallbases","variation"],{"variation":"12"},
@@ -101,10 +95,23 @@ listVariables.append(Variables('ibc_br_mensal_dessazonalizado',"'SGS12_IBCBRDESS
                                {"VALDATA": "date","VALVALOR": "ibc_br_mensal_dessazonalizado"}
     ))
 
+#extras
 #PIB consumo final das familias % a.t.
 listVariables.append(Variables('pib_consumo_familias_trimestral_corrente',"'SCN104_CFPPN104'","ipea",
-                               "01/01/2003",["#trimestertomonth"],{"trimestertomonth":False},
+                               "01/01/2003",["trimestertomonth"],{"trimestertomonth":False},
                                {"VALDATA": "date","VALVALOR": "pib_consumo_familias_trimestral_corrente"}
+    ))
+
+#variavel PIB - Mensal em Reais % a.m.
+listVariables.append(Variables('pib_mensal_reais',"'BM12_PIB12'","ipea",
+                               "01/01/1990",[""],{},
+                               {"VALDATA": "date","VALVALOR": "pib_mensal_reais"}
+    ))
+
+#Taxa de juros - Selic - fixada % a.d.
+listVariables.append(Variables('selic_fixada_mensal',"'BM366_TJOVER366'","ipea",
+                               "01/07/1996",["dailytomonth"],{},
+                               {"VALDATA": "date","VALVALOR": "selic_fixada_mensal"}
     ))
 
 
@@ -212,19 +219,6 @@ listVariables.append(Variables('concessoes_credito_recursos_livres_pj_outros',"2
                                {"data": "date","valor": "concessoes_recursos_livres_pj_outros"}
     ))
 
-
-
-#taxa de juros
-
-
-
-#Saldo setorial
-#Saldo ao setor agropecuario - R$ Milhões %a.m.
-listVariables.append(Variables('concessoes_credito_recursos_livres_pj_outros',"20646","bcb",
-                               "01/01/2013",["seasonal"],{},
-                               {"data": "date","valor": "concessoes_recursos_livres_pj_outros"}
-    ))
-
 #extras
 #variavel IPCA Industrias, subcategoria de serviços % a.m.
 listVariables.append(Variables('ipca_industrial',"27863","bcb",
@@ -281,29 +275,46 @@ listVariables.append(Variables('inadimplencia_pf_total',"21084","bcb",
 
 
 #variavel expectativa IPCA
-listVariables.append(Variables('expectativa_ipca_2024',"IPCA-ipca focus","bcb_focus",
-                               "2022-12-31",["transpose_rolling_transpose","latest_transpose","latest_transpose_rolling","firstdayofmonth_transpose_rolling"],
+listVariables.append(Variables('expectativa_ipca_2024',"ipca_focus","bcb_focus",
+                               {"subrecurso": "ExpectativaMercadoMensais",
+                                "filter": "endswith(Indicador%2C'IPCA')%20and%20baseCalculo%20eq%200%20and%20Data%20gt%20'2022-12-31'",
+                                "select": "Data,DataReferencia,Mediana"},
+                               ["transpose_rolling_transpose","latest_transpose","latest_transpose_rolling","firstdayofmonth_transpose_rolling"],
                                {"rolling":"ipca_mensal_taxa_variação-12-MovelMensal"},
                                {""}    
     ))
 
 #variavel expectativa IPCA serviços
-listVariables.append(Variables('expectativa_ipca_servicos_2024',"IPCA%20Servi%C3%A7os-ipca servicos focus","bcb_focus",
-                               "2022-12-31",["transpose_rolling_transpose","latest_transpose","latest_transpose_rolling","firstdayofmonth_transpose_rolling"],
+listVariables.append(Variables('expectativa_ipca_servicos_2024',"ipca_servicos_focus","bcb_focus",
+                               {"subrecurso": "ExpectativaMercadoMensais",
+                                "filter": "endswith(Indicador%2C'IPCA%20Servi%C3%A7os')%20and%20baseCalculo%20eq%200%20and%20Data%20gt%20'2022-12-31'",
+                                "select": "Data,DataReferencia,Mediana"},
+                               ["transpose_rolling_transpose","latest_transpose","latest_transpose_rolling","firstdayofmonth_transpose_rolling"],
                                {"rolling":"ipca_mensal_taxa_preços_livres_serviços-12-MovelMensal"},
                                {""}    
     ))
+
+#variavel expectativa Selic
+listVariables.append(Variables('expectativa_selic',"selic_focus","bcb_focus",
+                               {"subrecurso": "ExpectativasMercadoSelic",
+                                "filter": "Data%20gt%20'2022-12-31'",
+                                "select": "Data,Reuniao,Mediana"},
+                               [""],
+                               {""},
+                               {""} 
+))
 
 
 
 #grupo do sidra, grande volume de dados, pode ser lento
 
 
+
 #PIM PF
 #variavel Produção Física Industrial de SC, por seções e atividades industriais mensal % a.m.
 listVariables.append(Variables('pim_pf_mensal_sc',"8888-12606-sc","sidra",
                                {"periodos":"-500","variaveis":"12606","localidade":"N3[42]","classificacao":"544[all]"},
-                               ["###seasonal","###seasonal_getallbases","###variation"],{"variation":"12"},
+                               ["seasonal","seasonal_getallbases","variation"],{"variation":"12"},
                                {"date":"date",
                                 "1 Indústria geral":"1_Geral_sc",
                                 "2 Indústrias extrativas":"2_Extrativa_sc",
@@ -338,7 +349,7 @@ listVariables.append(Variables('pim_pf_mensal_sc',"8888-12606-sc","sidra",
 #variavel Produção Física Industrial de SC já dessazonalizada, por seções e atividades industriais mensal % a.m.
 listVariables.append(Variables('pim_pf_mensal_sc_dessazonalizado',"8888-12607-sc","sidra",
                                {"periodos":"-500","variaveis":"12607","localidade":"N3[42]","classificacao":"544[129314]"},
-                               ["###getallbases","###variation"],{"variation":"12"},
+                               ["getallbases","variation"],{"variation":"12"},
                                {"date":"date",
                                 "1 Indústria geral":"1_Geral_sc"
                                  }
@@ -750,6 +761,7 @@ listVariables.append(Variables('pib_consumo_familias_trimestral_dessazonalizado'
 #model ipca para o power BI
 listModels.append(Models('ipca_evolucao',"'2000-01-01'", "",
                          ["selic_mensal",
+                          "selic_fixada_mensal_dailytomonth",
                           "ipca_mensal_taxa_variação",
                           "ipca_mensal_taxa_preços_livres_serviços",
                           "ipca_mensal_taxa_variação_rolling",
@@ -834,11 +846,34 @@ listModels.append(Models('bens',"'2002-01-01'", "",
     
     ))
 
-#model bens para power BI
+#model ipca e ipp para power BI
 listModels.append(Models('ipca_ipp',"'2012-01-01'", "",
                          ["ipca_mensal_taxa_variação_rolling",
                           "ipp_transformacao_taxa_mensal_rolling",
                           "ipp_alimentos_taxa_mensal_rolling"
+                          ],
+                         ["date"]
+    
+    ))
+
+#model crédito+concessoes+icc para power BI
+listModels.append(Models('credito_consessoes_icc',"'2008-01-01'", "",
+                         ["selic_mensal",
+                          "saldo_credito_pf_outros_deflacionar",
+                          "saldo_credito_pf_veiculos_deflacionar",
+                          "saldo_credito_pf_total_deflacionar",
+                          "icc_rescursos_livres_pj",
+                          "icc_rescursos_livres_pj_veiculos",
+                          "icc_rescursos_livres_pj_outros",
+                          "icc_rescursos_livres_pf",
+                          "icc_rescursos_livres_pf_veiculos",
+                          "icc_rescursos_livres_pf_outros",
+                          "concessoes_credito_recursos_livres_pf",
+                          "concessoes_credito_recursos_livres_pf_veiculos",
+                          "concessoes_credito_recursos_livres_pf_outros",
+                          "concessoes_credito_recursos_livres_pj",
+                          "concessoes_credito_recursos_livres_pj_veiculos",
+                          "concessoes_credito_recursos_livres_pj_outros"
                           ],
                          ["date"]
     

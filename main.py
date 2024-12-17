@@ -179,19 +179,21 @@ if __name__ == "__main__":
     operadores = ["null"
         ,"seasonal"
         ,"seasonal_deflacionar"
-        ,"deflacionar"
         ,"changebase"
         ,"seasonal_changebase"
         ,"seasonal_getallbases"
         ,"getallbases"
+        ,"trimestertomonth_seasonal"
+        ,"deflacionar"
         ,"variation"
         ,"trimestertomonth"
-        ,"trimestertomonth_seasonal"
         ,"rolling"
         ,"transpose_rolling_transpose"
         ,"latest_transpose"
         ,"latest_transpose_rolling"
+        ,"firstdayofmonth"
         ,"firstdayofmonth_transpose_rolling"
+        ,"dailytomonth"
         ]
     modelos = ["null"
         ,"ipca_evolucao"
@@ -202,6 +204,7 @@ if __name__ == "__main__":
         ,"grandes_setores"
         ,"bens"
         ,"ipca_ipp"
+        ,"credito_consessoes_icc"
         ]
 
     update_variables(adresses)

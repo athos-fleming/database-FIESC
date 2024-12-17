@@ -134,12 +134,9 @@ def firstdayofmonth(df):
     #elimina o mes atual, pois ele nao esta completo
     df.drop(df.tail(1).index,inplace=True)
     
-    #print(df)
     
     #renomeia a date para o padrao de apenas mes
     df['date'] = df['date'].dt.strftime('mes %m')
-    
-    #print(df)
     
     return df
 
@@ -403,7 +400,7 @@ def trimestertomonth(df,parameters):
     dfDate = df[["date"]].copy()
     dfDate = dfDate.assign(date = lambda df: pd.to_datetime(df.date))
     
-    #muda a date para o mes  correspondente do ano, se precisar
+    #muda a date trimestral para o mes correspondente do ano, se precisar
     if ajustdate == True:
         dfDate = dfDate['date'].dt.strftime("%Y-%m-01")
         dfDate = pd.DataFrame(dfDate.str.replace("-04-","-12-").str.replace("-03-","-09-").str.replace("-02-","-06-").str.replace("-01-","-03-"))
@@ -451,6 +448,21 @@ def trimestertomonth(df,parameters):
     df = dfProcessed
     
     return df
+
+def dailytomonth(df):
+    
+    #agrupa em cada um dos meses de cada ano e pega o primeiro dado
+    df = df.groupby(df['date'].dt.strftime('%Y-%m')).first()
+    
+    return df
+
+def COPOMtomonth(df):
+    
+    #agrupa em cada um dos meses de cada ano e pega o primeiro dado
+    df = df.groupby(df['date'].dt.strftime('%Y-%m')).first()
+    
+    return df
+
 
 def especial(db_connection,df,parameters):
     
