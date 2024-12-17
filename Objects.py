@@ -70,7 +70,7 @@ listVariables.append(Variables('ipp_transformacao_dez18',"'IPP12_IPPC12'","ipea"
                                {"VALDATA": "date","VALVALOR": "ipp_transformacao_dez18"}
     ))
 
-#variavel IPP industria da transformação indice dez 2018 % a.m.
+#variavel IPP industria da transformação % a.m.
 listVariables.append(Variables('ipp_transformacao_taxa_mensal',"'IPP12_IPPCG12'","ipea",
                                "01/01/2010",["rolling"],{"rolling":"-12-MovelMensal"},
                                {"VALDATA": "date","VALVALOR": "ipp_transformacao_taxa_mensal"}
@@ -109,9 +109,9 @@ listVariables.append(Variables('pib_mensal_reais',"'BM12_PIB12'","ipea",
     ))
 
 #Taxa de juros - Selic - fixada % a.d.
-listVariables.append(Variables('selic_fixada_mensal',"'BM366_TJOVER366'","ipea",
+listVariables.append(Variables('selic_fixada',"'BM366_TJOVER366'","ipea",
                                "01/07/1996",["dailytomonth"],{},
-                               {"VALDATA": "date","VALVALOR": "selic_fixada_mensal"}
+                               {"VALDATA": "date","VALVALOR": "selic_fixada"}
     ))
 
 
@@ -299,8 +299,8 @@ listVariables.append(Variables('expectativa_selic',"selic_focus","bcb_focus",
                                {"subrecurso": "ExpectativasMercadoSelic",
                                 "filter": "Data%20gt%20'2022-12-31'",
                                 "select": "Data,Reuniao,Mediana"},
-                               [""],
-                               {""},
+                               ["transpose_copomtomonth_transpose","latest_transpose_copomtomonth"],
+                               {"copomtomonth":"selic_fixada"},
                                {""} 
 ))
 
@@ -761,7 +761,7 @@ listVariables.append(Variables('pib_consumo_familias_trimestral_dessazonalizado'
 #model ipca para o power BI
 listModels.append(Models('ipca_evolucao',"'2000-01-01'", "",
                          ["selic_mensal",
-                          "selic_fixada_mensal_dailytomonth",
+                          "selic_fixada_dailytomonth",
                           "ipca_mensal_taxa_variação",
                           "ipca_mensal_taxa_preços_livres_serviços",
                           "ipca_mensal_taxa_variação_rolling",

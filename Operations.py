@@ -456,12 +456,58 @@ def dailytomonth(df):
     
     return df
 
-def COPOMtomonth(df):
+def copomtomonth(db_connection,df,parameters):
     
-    #agrupa em cada um dos meses de cada ano e pega o primeiro dado
-    df = df.groupby(df['date'].dt.strftime('%Y-%m')).first()
+    #remove as duplicatas com _x
+    df = df[~df['date'].str.contains('_x', na=False)]
+    df['date'] = df['date'].str.replace('_y','', regex=False)
+       
+    # Mapping dictionary
+    replace_map = {'R1':"29/01",'R2':"19/03",'R3':"07/05",'R4':"18/06",'R5':"30/07",'R6':"17/09",'R7':"05/11",'R8':"10/12"}
+    
+    #arruma as datas das reuniões baseado no Mapping
+    for key, value in replace_map.items():        
+        df['date'] = df['date'].str.replace(key,value, regex=False)
+    
+    #arruma a data para o formato Y-m-d
+    dfDate = df[["date"]].copy()
+    dfDate = dfDate.assign(date = lambda df: pd.to_datetime(df.date))
+    df["date"] = dfDate
+    
+    #processo pra expandir para daily e completar os dias vazios
+    df.set_index('date', inplace=True)
+    df = df.resample('D').ffill()
+    
+    #puxa os dados da selic fixada 
+    indice = parameters
+    mycursor = db_connection.cursor()
+    SelectSQLIndice = 'SELECT * FROM variables.{}'.format(indice)
+    mycursor.execute(SelectSQLIndice)
+    dfIndice = mycursor.fetchall()
+    dfIndice = pd.DataFrame(dfIndice)
+    
+    #adicionar em cada coluna os dados do selic fixada para completar os meses e ter uma média mensal que considera o acontecido
+    #loop pra separar cada coluna
+    #limpa as rows vazias
+    #relevant_month = df1.index[0].month  # Extract month
+    #filtra selic fixada por aquele mes
+    #concatenate as duas séries
+    #junta tudo
+    
+    #mensalizar com a média em cada mes
+    df = df.resample('M').median()
+    
+    #sobe header ou desindexa a date
+    df.index.name = 'date'
+    df = df.reset_index()
+    df.index.name = ""
+    
     
     return df
+
+
+
+
 
 
 def especial(db_connection,df,parameters):

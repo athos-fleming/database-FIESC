@@ -177,23 +177,25 @@ if __name__ == "__main__":
         ,"bcb_focus"
         ]
     operadores = ["null"
-        ,"seasonal"
-        ,"seasonal_deflacionar"
-        ,"changebase"
-        ,"seasonal_changebase"
-        ,"seasonal_getallbases"
-        ,"getallbases"
-        ,"trimestertomonth_seasonal"
-        ,"deflacionar"
-        ,"variation"
-        ,"trimestertomonth"
-        ,"rolling"
-        ,"transpose_rolling_transpose"
-        ,"latest_transpose"
-        ,"latest_transpose_rolling"
-        ,"firstdayofmonth"
-        ,"firstdayofmonth_transpose_rolling"
-        ,"dailytomonth"
+        #,"seasonal"
+        #,"seasonal_deflacionar"
+        #,"changebase"
+        #,"seasonal_changebase"
+        #,"seasonal_getallbases"
+        #,"getallbases"
+        #,"trimestertomonth_seasonal"
+        #,"deflacionar"
+        #,"variation"
+        #,"trimestertomonth"
+        #,"rolling"
+        ,'transpose_copomtomonth_transpose'
+        ,"latest_transpose_copomtomonth"
+        #,"transpose_rolling_transpose"
+        #,"latest_transpose"
+        #,"latest_transpose_rolling"
+        #,"firstdayofmonth"
+        #,"firstdayofmonth_transpose_rolling"
+        #,"dailytomonth"
         ]
     modelos = ["null"
         ,"ipca_evolucao"
@@ -207,9 +209,9 @@ if __name__ == "__main__":
         ,"credito_consessoes_icc"
         ]
 
-    update_variables(adresses)
+    #update_variables(adresses)
     operate_variables(operadores)
-    update_models(modelos)
+    #update_models(modelos)
     
 
 

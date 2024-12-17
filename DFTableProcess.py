@@ -314,6 +314,9 @@ def process_operations(db_connection,codigo,operador):
             case "dailytomonth":
                 dfTemp = Operations.dailytomonth(dfTemp)
             
+            case "copomtomonth":
+                parameters = OperadorParameters["copomtomonth"]
+                dfTemp = Operations.copomtomonth(db_connection,dfTemp,parameters)
             
             case "especial":
                 parameters = OperadorParameters["especial"]
