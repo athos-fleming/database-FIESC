@@ -64,22 +64,83 @@ listVariables.append(Variables('ipca_mensal_taxa_preços_livres_serviços',"'BM1
     ))
 
 #IPP
-#variavel IPP industria da transformação indice dez 2018 % a.m.
-listVariables.append(Variables('ipp_transformacao_dez18',"'IPP12_IPPC12'","ipea",
-                               "01/01/2010",["rolling"],{"rolling":"-12-BaseFixa"},
-                               {"VALDATA": "date","VALVALOR": "ipp_transformacao_dez18"}
-    ))
 
-#variavel IPP industria da transformação % a.m.
+#variavel IPP industria da transformação em Base movel % a.m.
 listVariables.append(Variables('ipp_transformacao_taxa_mensal',"'IPP12_IPPCG12'","ipea",
                                "01/01/2010",["rolling"],{"rolling":"-12-MovelMensal"},
                                {"VALDATA": "date","VALVALOR": "ipp_transformacao_taxa_mensal"}
     ))
 
-#variavel IPP industria da alimentos indice dez 2018 % a.m.
-listVariables.append(Variables('ipp_alimentos_taxa_mensal',"'IPP12_IPPC10ATIV12'","ipea",
-                               "01/01/2010",["rolling"],{"rolling":"-12-BaseFixa"},
-                               {"VALDATA": "date","VALVALOR": "ipp_alimentos_taxa_mensal"}
+#variavel IPP industria da transformação indice dez 2018 % a.m.
+listVariables.append(Variables('ipp_transformacao_basefixa',"'IPP12_IPPC12'","ipea",
+                               "01/01/2010",["rolling"],{"rolling":"-12-basefixa"},
+                               {"VALDATA": "date","VALVALOR": "ipp_transformacao_basefixa"}
+    ))
+
+#variavel IPP industria de alimentos indice dez 2018 % a.m.
+listVariables.append(Variables('ipp_alimentos_basefixa',"'IPP12_IPPC10ATIV12'","ipea",
+                               "01/01/2010",["rolling","getallbases"],{"rolling":"-12-basefixa"},
+                               {"VALDATA": "date","VALVALOR": "ipp_alimentos_basefixa"}
+    ))
+
+#variavel IPP industria de borracha e plástico indice dez 2018 % a.m.
+listVariables.append(Variables('ipp_borracha_plastico_basefixa',"'IPP12_IPPC22ATIV12'","ipea",
+                               "01/01/2010",["rolling","getallbases"],{"rolling":"-12-basefixa"},
+                               {"VALDATA": "date","VALVALOR": "ipp_borracha_plastico_basefixa"}
+    ))
+
+#variavel IPP industria de madeira indice dez 2018 % a.m.
+listVariables.append(Variables('ipp_madeira_basefixa',"'IPP12_IPPC16ATIV12'","ipea",
+                               "01/01/2010",["rolling","getallbases"],{"rolling":"-12-basefixa"},
+                               {"VALDATA": "date","VALVALOR": "ipp_madeira_basefixa"}
+    ))
+
+#variavel IPP industria de máquinas e equipamentos indice dez 2018 % a.m.
+listVariables.append(Variables('ipp_maquinas_equipamentos_basefixa',"'IPP12_IPPC28ATIV12'","ipea",
+                               "01/01/2010",["rolling","getallbases"],{"rolling":"-12-basefixa"},
+                               {"VALDATA": "date","VALVALOR": "ipp_maquinas_equipamentos_basefixa"}
+    ))
+
+#variavel IPP industria de metalurgia indice dez 2018 % a.m.
+listVariables.append(Variables('ipp_metalurgia_basefixa',"'IPP12_IPPC24ATIV12'","ipea",
+                               "01/01/2010",["rolling","getallbases"],{"rolling":"-12-basefixa"},
+                               {"VALDATA": "date","VALVALOR": "ipp_metalurgia_basefixa"}
+    ))
+
+#variavel IPP industria de minerais não-metálicos indice dez 2018 % a.m.
+listVariables.append(Variables('ipp_minerais_não_metalicos_basefixa',"'IPP12_IPPC23ATIV12'","ipea",
+                               "01/01/2010",["rolling","getallbases"],{"rolling":"-12-basefixa"},
+                               {"VALDATA": "date","VALVALOR": "ipp_minerais_não_metalicos_basefixa"}
+    ))
+
+#variavel IPP industria de outros produtos químicos indice dez 2018 % a.m.
+listVariables.append(Variables('ipp_outros_quimicos_basefixa',"'IPP12_IPPC20CATIV12'","ipea",
+                               "01/01/2010",["rolling","getallbases"],{"rolling":"-12-basefixa"},
+                               {"VALDATA": "date","VALVALOR": "ipp_outros_quimicos_basefixa"}
+    ))
+
+#variavel IPP industria de papel e celulose indice dez 2018 % a.m.
+listVariables.append(Variables('ipp_papel_celulose_basefixa',"'IPP12_IPPC17ATIV12'","ipea",
+                               "01/01/2010",["rolling","getallbases"],{"rolling":"-12-basefixa"},
+                               {"VALDATA": "date","VALVALOR": "ipp_papel_celulose_basefixa"}
+    ))
+
+#variavel IPP industria de petroleo indice dez 2018 % a.m.
+listVariables.append(Variables('ipp_petroleo_basefixa',"'IPP12_IPPC19ATIV12'","ipea",
+                               "01/01/2010",["rolling","getallbases"],{"rolling":"-12-basefixa"},
+                               {"VALDATA": "date","VALVALOR": "ipp_petroleo_basefixa"}
+    ))
+
+#variavel IPP industria de metal indice dez 2018 % a.m.
+listVariables.append(Variables('ipp_metal_basefixa',"'IPP12_IPPC25ATIV12'","ipea",
+                               "01/01/2010",["rolling","getallbases"],{"rolling":"-12-basefixa"},
+                               {"VALDATA": "date","VALVALOR": "ipp_metal_basefixa"}
+    ))
+
+#variavel IPP industria de veiculos indice dez 2018 % a.m.
+listVariables.append(Variables('ipp_veiculos_basefixa',"'IPP12_IPPC29ATIV12'","ipea",
+                               "01/01/2010",["rolling","getallbases"],{"rolling":"-12-basefixa"},
+                               {"VALDATA": "date","VALVALOR": "ipp_veiculos_basefixa"}
     ))
 
 #IBC-BR
@@ -145,7 +206,7 @@ listVariables.append(Variables('saldo_credito_pf_bens_total',"20583","bcb",
                                {"data": "date","valor": "saldo_credito_pf_bens_total"}
     ))
 
-#ICC
+#ICCf
 #variavel Indicador de Custo do Crédito - ICC - Recursos/Crédito livre - Pessoas jurídicas % a.m.
 listVariables.append(Variables('icc_rescursos_livres_pj',"25355","bcb",
                                "01/01/2013",["seasonal"],{},
@@ -227,9 +288,15 @@ listVariables.append(Variables('ipca_industrial',"27863","bcb",
     ))
 
 #variavel Endividamento das familias em relação a renda acumulada dos 12 meses % a.m.
-listVariables.append(Variables('endividamento_familias_relacao_renda_acumulada',"29037","bcb",
+listVariables.append(Variables('endividamento_familias_total',"29037","bcb",
                                "01/01/2005",[""],{""},
-                               {"data": "date","valor": "endividamento_familias_relacao_renda_acumulada"}
+                               {"data": "date","valor": "endividamento_familias_total"}
+    ))
+
+#variavel Endividamento das familias em relação a renda acumulada dos 12 meses % a.m.
+listVariables.append(Variables('endividamento_familias_exceto_hab',"29038","bcb",
+                               "01/01/2005",[""],{""},
+                               {"data": "date","valor": "endividamento_familias_exceto_hab"}
     ))
 
 #variavel IBCR-SC Indice de Atividade Economica de Santa Catarina % a.m.
@@ -260,6 +327,11 @@ listVariables.append(Variables('divida_mensal_publica__bruta_pib',"13762","bcb",
 listVariables.append(Variables('selic_mensal',"4189","bcb",
                                "01/01/2000",[""],{},
                                {"data": "date","valor": "selic_mensal"}
+    ))
+
+listVariables.append(Variables('selic_diaria',"11","bcb",
+                               "01/01/2000",[""],{},
+                               {"data": "date","valor": "selic_diaria"}
     ))
 
 #variavel Inadimplência da carteira de crédito - Pessoas físicas - Total % a.m.
@@ -761,16 +833,16 @@ listVariables.append(Variables('pib_consumo_familias_trimestral_dessazonalizado'
 #model ipca para o power BI
 listModels.append(Models('ipca_evolucao',"'2000-01-01'", "",
                          ["selic_mensal",
-                          "selic_fixada_dailytomonth",
                           "ipca_mensal_taxa_variação",
                           "ipca_mensal_taxa_preços_livres_serviços",
                           "ipca_mensal_taxa_variação_rolling",
                           "ipca_mensal_taxa_preços_livres_serviços_rolling",
                           "ipca_mensal_taxa_núcleo_médias_aparadas_suavização_rolling",
                           "ipca_mensal_taxa_núcleo_exclusão_rolling",
+                          "meta_inflacao",
                           "expectativa_ipca_2024_latest_transpose_rolling",
                           "expectativa_ipca_servicos_2024_latest_transpose_rolling",
-                          "meta_inflacao",
+                          "expectativa_selic_latest_transpose_copomtomonth",
                           "expectativa_ipca_2024_firstdayofmonth_transpose_rolling",
                           "expectativa_ipca_servicos_2024_firstdayofmonth_transpose_rolling"
                           ],
@@ -846,16 +918,6 @@ listModels.append(Models('bens',"'2002-01-01'", "",
     
     ))
 
-#model ipca e ipp para power BI
-listModels.append(Models('ipca_ipp',"'2012-01-01'", "",
-                         ["ipca_mensal_taxa_variação_rolling",
-                          "ipp_transformacao_taxa_mensal_rolling",
-                          "ipp_alimentos_taxa_mensal_rolling"
-                          ],
-                         ["date"]
-    
-    ))
-
 #model crédito+concessoes+icc para power BI
 listModels.append(Models('credito_consessoes_icc',"'2008-01-01'", "",
                          ["selic_mensal",
@@ -878,3 +940,29 @@ listModels.append(Models('credito_consessoes_icc',"'2008-01-01'", "",
                          ["date"]
     
     ))
+
+#model Endividamento das familias
+listModels.append(Models('endividamento',"'2000-01-01'", "",
+                         ["selic_mensal",
+                          "endividamento_familias_total",
+                          "endividamento_familias_exceto_hab"
+                          ],
+                         ["date"]
+    
+    ))
+
+
+#model evolução grandes setores para power BI
+listModels.append(Models('ipp_setores',"'2011-01-01'", "",
+                         ["",
+                          "",
+                          "",
+                          "",
+                          "",
+                          ""
+                          ],
+                         ["dateBase","date"]
+    ))
+
+
+

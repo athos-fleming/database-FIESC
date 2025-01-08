@@ -464,6 +464,7 @@ def copomtomonth(db_connection,df,parameters):
        
     # Mapping dictionary
     replace_map = {'R1':"29/01",'R2':"19/03",'R3':"07/05",'R4':"18/06",'R5':"30/07",'R6':"17/09",'R7':"05/11",'R8':"10/12"}
+
     
     #arruma as datas das reuniões baseado no Mapping
     for key, value in replace_map.items():        
@@ -471,7 +472,7 @@ def copomtomonth(db_connection,df,parameters):
     
     #arruma a data para o formato Y-m-d
     dfDate = df[["date"]].copy()
-    dfDate = dfDate.assign(date = lambda df: pd.to_datetime(df.date))
+    dfDate = dfDate.assign(date = lambda df: pd.to_datetime(df.date, dayfirst=True))
     df["date"] = dfDate
     
     #processo pra expandir para daily e completar os dias vazios
@@ -485,29 +486,96 @@ def copomtomonth(db_connection,df,parameters):
     mycursor.execute(SelectSQLIndice)
     dfIndice = mycursor.fetchall()
     dfIndice = pd.DataFrame(dfIndice)
-    
+    dfIndice = dfIndice.set_axis(["date","value"],axis=1)
+        
     #adicionar em cada coluna os dados do selic fixada para completar os meses e ter uma média mensal que considera o acontecido
-    #loop pra separar cada coluna
-    #limpa as rows vazias
-    #relevant_month = df1.index[0].month  # Extract month
-    #filtra selic fixada por aquele mes
-    #concatenate as duas séries
-    #junta tudo
+    dfProcessed = pd.DataFrame(dfDate)  
+    
+    #looping para operacionalizar o rolling de cada coluna
+    for name, column in df.items():
+        
+        #setup do df para poder realizar a operação
+        dftemp = pd.DataFrame(column)
+        
+        #sobe desindexa a date
+        dftemp.index.name = 'date'
+        dftemp = dftemp.reset_index()
+        dftemp.index.name = ""
+        
+        #limpa as rows vazias e arruma os nomes
+        dftemp = dftemp.dropna(axis = 0,how='any')
+        dftemp = dftemp.set_axis(["date","value"],axis=1)
+    
+        #extrai as datas relevantes
+        firstDateDftemp = dftemp['date'].iloc[0]
+        lastDateIndice = dfIndice['date'].iloc[-1]
+        relevant_month = firstDateDftemp.month
+        relevant_year = firstDateDftemp.year
+        previous_month = (relevant_month - 1) if relevant_month > 1 else 12
+        previous_year = relevant_year if relevant_month > 1 else (relevant_year - 1)
+
+        
+        #criando a df com os dados relevantes
+        if firstDateDftemp <= lastDateIndice:
+            
+            #filtra os dados do índice (selic fixada) por aquele mes e o anterior
+            dfRelevantMonth = dfIndice[(dfIndice['date'].dt.month == previous_month) &
+                                       (dfIndice['date'].dt.year == previous_year) &
+                                       (dfIndice['date'] < firstDateDftemp)]
+        
+        elif firstDateDftemp > lastDateIndice:
+                        
+            #pega os valores do mes anterior
+            dfPreviousMonth = dfIndice[(dfIndice['date'].dt.month == previous_month) & (dfIndice['date'].dt.year == previous_year)]
+            lastDatePreviousMonth = dfPreviousMonth['date'].iloc[-1]
+                        
+            #cria uma df dos dias que faltam
+            relevant_month_dates  = pd.date_range(start=lastDatePreviousMonth + pd.Timedelta(days=1), 
+                                                  end=firstDateDftemp - pd.Timedelta(days=1), freq='D')
+            lastValueIndice = dfIndice['value'].iloc[-1]
+            dfRelevantMonth = pd.DataFrame({'date': relevant_month_dates, 'value': lastValueIndice})
+            
+            #mistura as duas
+            dfRelevantMonth = pd.concat([dfPreviousMonth, dfRelevantMonth]).sort_values(by='date').reset_index(drop=True)
+            
+            
+        
+        #concatenate as duas séries
+        df_combined = pd.concat([dfRelevantMonth, dftemp]).sort_values(by='date').reset_index(drop=True)
+
+        #define o nome da coluna
+        df_combined = df_combined.set_axis(['date',"{}".format(name)],axis=1)
+        
+        
+        #merge todas as colunas operacionalizadas numa unica df
+        dfProcessed = pd.merge(dfProcessed, df_combined, on='date',how='outer')
+        dfProcessed = dfProcessed.replace({np.nan: None})
+        
+    df = dfProcessed  
     
     #mensalizar com a média em cada mes
-    df = df.resample('M').median()
+    df.set_index('date', inplace=True)
+    df = df.resample('M').mean()
+    
+    #exclui linhas que só tem Nan
+    df = df.dropna(how='all')
     
     #sobe header ou desindexa a date
     df.index.name = 'date'
     df = df.reset_index()
     df.index.name = ""
     
+    #arruma o formato de data para y-m-01
+    def dataChange(date):
+        x = pd.to_datetime(date).strftime("%Y-%m-01")
+        return x
+    
+    dataColumn = df.loc[:,'date']
+    dataColumn = dataColumn.apply(dataChange)
+    df.loc[:,'date'] = dataColumn
+    
     
     return df
-
-
-
-
 
 
 def especial(db_connection,df,parameters):

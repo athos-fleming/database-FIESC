@@ -145,6 +145,11 @@ def process_sidra(codigo,df):
         dfDate = dfDate.assign(date = lambda df: pd.to_datetime(df.date))
         df["date"] = dfDate
         
+        #teste para garantir que não vai ter a ultima linha vazia com ...
+        if (df.iloc[-1] == "...").any():
+            df = df.iloc[:-1]
+        
+        
     except ValueError as e:
         print(f"❌ [Table Process CALL ERROR]: '{e}'")
                 
