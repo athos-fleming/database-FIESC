@@ -338,7 +338,7 @@ def getallbases(df):
 
 def variation(df,parameters):
     
-    variation = parameters
+    variation = pd.to_numeric(parameters)
     
     
     #garante que a date vai estar no padrao utilizado
@@ -367,10 +367,13 @@ def variation(df,parameters):
         dftemp = dftemp.set_axis(["date","value"],axis=1)
         dftemp = dftemp.assign(date = lambda df: pd.to_datetime(df.date))
         
-        #operação de diferença por n meses
-        dfTempDifference = pd.to_numeric(dftemp.value).diff(variation)
+        #operação de diferença  que calcula a variação acumulada nos ultimos n meses (n ultimos com n anteriores)
+        dfMediaAtual = pd.to_numeric(dftemp.value)
+        dfMediaAtual = dfMediaAtual.rolling(window=variation).mean()
+        dfMediaAnterior = dfMediaAtual.shift(variation)
+        dfTempDifference = (dfMediaAtual/dfMediaAnterior - 1)*100
         dftemp['value'] = dfTempDifference
-
+        
         #define o nome da coluna
         dftemp = dftemp.set_axis(['date',"{}".format(name[0])],axis=1)
         
@@ -489,8 +492,8 @@ def copomtomonth(db_connection,df,parameters):
     dfIndice = dfIndice.set_axis(["date","value"],axis=1)
         
     #adicionar em cada coluna os dados do selic fixada para completar os meses e ter uma média mensal que considera o acontecido
-    dfProcessed = pd.DataFrame(dfDate)  
-    
+    dfProcessed = pd.DataFrame(dfDate)
+        
     #looping para operacionalizar o rolling de cada coluna
     for name, column in df.items():
         

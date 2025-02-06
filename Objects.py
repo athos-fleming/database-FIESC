@@ -182,31 +182,173 @@ listVariables.append(Variables('selic_fixada',"'BM366_TJOVER366'","ipea",
 
 
 #Saldo de crédito
-#variavel 	Saldo da carteira de crédito com recursos livres - Pessoas físicas - Total % a.m.
+#variavel Saldo da carteira de crédito com recursos livres - Pessoas físicas - Total % a.m.
 listVariables.append(Variables('saldo_credito_pf_total',"20570","bcb",
                                "01/03/2011",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_credito_pf_total"}
     ))
 
-#variavel 	Saldo da carteira de crédito com recursos livres - Pessoas físicas - Aquisição de veículos % a.m.
+#variavel Saldo da carteira de crédito com recursos livres - Pessoas físicas - Aquisição de veículos % a.m.
 listVariables.append(Variables('saldo_credito_pf_veiculos',"20581","bcb",
                                "01/03/2011",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_credito_pf_veiculos"}
     ))
 
-#variavel 	Saldo da carteira de crédito com recursos livres - Pessoas físicas - Aquisição de outros bens % a.m.
+#variavel Saldo da carteira de crédito com recursos livres - Pessoas físicas - Aquisição de outros bens % a.m.
 listVariables.append(Variables('saldo_credito_pf_outros',"20582","bcb",
                                "01/03/2011",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_credito_pf_outros"}
     ))
 
-#variavel 	Saldo da carteira de crédito com recursos livres - Pessoas físicas - Aquisição de outros bens % a.m.
+#variavel Saldo da carteira de crédito com recursos livres - Pessoas físicas - Aquisição de outros bens % a.m.
 listVariables.append(Variables('saldo_credito_pf_bens_total',"20583","bcb",
                                "01/03/2011",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_credito_pf_bens_total"}
     ))
 
-#ICCf
+#Saldo de crédito com Recursos Direcionados
+#variavel Saldo - Pessoas jurídicas - Financiamento imobiliário- Taxas de Mercado % a.m.
+listVariables.append(Variables('saldo_imobiliário_pj_mercado',"20598","bcb",
+                               "01/03/2007",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_imobiliário_pj_mercado"}
+    ))
+
+#variavel Saldo - Pessoas jurídicas - Financiamento imobiliário - Taxas Reguladas % a.m.
+listVariables.append(Variables('saldo_imobiliário_pj_reguladas',"20599","bcb",
+                               "01/03/2007",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_imobiliário_pj_reguladas"}
+    ))
+
+#variavel Saldo - Pessoas jurídicas - Financiamento imobiliário- Total % a.m.
+listVariables.append(Variables('saldo_imobiliário_pj_total',"20600","bcb",
+                               "01/03/2007",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_imobiliário_pj_total"}
+    ))
+
+#variavel Saldo - Pessoas Física - Financiamento imobiliário- Taxas de Mercado % a.m.
+listVariables.append(Variables('saldo_imobiliário_pf_mercado',"20610","bcb",
+                               "01/03/2007",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_imobiliário_pf_mercado"}
+    ))
+
+#variavel Saldo - Pessoas Física - Financiamento imobiliário - Taxas Reguladas % a.m.
+listVariables.append(Variables('saldo_imobiliário_pf_reguladas',"20611","bcb",
+                               "01/03/2007",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_imobiliário_pf_reguladas"}
+    ))
+
+#variavel Saldo - Pessoas Física - Financiamento imobiliário- Total % a.m.
+listVariables.append(Variables('saldo_imobiliário_pf_total',"20612","bcb",
+                               "01/03/2007",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_imobiliário_pf_total"}
+    ))
+
+#Saldo de crédito por atividade economica
+#variavel Saldo ao setor industrial - Total % a.m
+listVariables.append(Variables('saldo_industrial_total',"22043","bcb",
+                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_industrial_total"}
+    ))
+
+#variavel Saldo ao setor industrial - Serviços industriais de utilidade pública % a.m
+listVariables.append(Variables('saldo_industrial_siup',"22034","bcb",
+                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_industrial_siup"}
+    ))
+
+#variavel Saldo ao setor industrial - Construção % a.m
+listVariables.append(Variables('saldo_industrial_construção',"22030","bcb",
+                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_industrial_construção"}
+    ))
+
+#variavel Saldo ao setor industrial - Alimentos % a.m
+listVariables.append(Variables('saldo_industrial_alimentos',"27743","bcb",
+                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_industrial_alimentos"}
+    ))
+
+#variavel Saldo ao setor industrial - Açúcar % a.m
+listVariables.append(Variables('saldo_industrial_açúcar',"27744","bcb",
+                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_industrial_açúcar"}
+    ))
+
+#variavel Saldo ao setor industrial - Têxtil, vestuário, couro e calçados % a.m
+listVariables.append(Variables('saldo_industrial_textil_vestuário_couro',"27745","bcb",
+                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_industrial_textil_vestuário_couro"}
+    ))
+
+#variavel Saldo ao setor industrial - Papel e celulose % a.m
+listVariables.append(Variables('saldo_industrial_papel_celulose',"27746","bcb",
+                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_industrial_papel_celulose"}
+    ))
+
+#variavel Saldo ao setor industrial - Petróleo, gás e álcool % a.m
+listVariables.append(Variables('saldo_industrial_petroleo',"27747","bcb",
+                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_industrial_petroleo"}
+    ))
+
+#variavel Saldo ao setor industrial - Total % a.m
+listVariables.append(Variables('saldo_industrial_metalurgia_siderurgia',"27748","bcb",
+                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_industrial_metalurgia_siderurgia"}
+    ))
+
+#variavel Saldo ao setor industrial - Química e farmacêutica % a.m
+listVariables.append(Variables('saldo_industrial_química',"27722","bcb",
+                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_industrial_química"}
+    ))
+
+#variavel Saldo ao setor industrial - Bens de capital % a.m
+listVariables.append(Variables('saldo_industrial_bens',"27723","bcb",
+                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_industrial_bens"}
+    ))
+
+#variavel Saldo ao setor industrial - Automobilística % a.m
+listVariables.append(Variables('saldo_industrial_automobilística',"27724","bcb",
+                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_industrial_automobilística"}
+    ))
+
+#variavel Saldo ao setor industrial - Mineração % a.m
+listVariables.append(Variables('saldo_industrial_mineração',"27749","bcb",
+                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_industrial_mineração"}
+    ))
+
+#variavel Saldo ao setor industrial - Obras de infraestrutura % a.m
+listVariables.append(Variables('saldo_industrial_obras',"27725","bcb",
+                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_industrial_obras"}
+    ))
+
+#variavel Saldo ao setor industrial - Outros bens de consumo duráveis % a.m
+listVariables.append(Variables('saldo_industrial_outros_bens',"27726","bcb",
+                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_industrial_outros_bens"}
+    ))
+
+#variavel Saldo ao setor industrial - Embalagens % a.m
+listVariables.append(Variables('saldo_industrial_embalagens',"27727","bcb",
+                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_industrial_embalagens"}
+    ))
+
+#variavel Saldo ao setor industrial - Bens de consumo não duráveis % a.m
+listVariables.append(Variables('saldo_industrial_bens_não_duráveis',"27728","bcb",
+                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"data": "date","valor": "saldo_industrial_bens_não_duráveis"}
+    ))
+
+
+
+#ICC
 #variavel Indicador de Custo do Crédito - ICC - Recursos/Crédito livre - Pessoas jurídicas % a.m.
 listVariables.append(Variables('icc_rescursos_livres_pj',"25355","bcb",
                                "01/01/2013",["seasonal"],{},
@@ -293,7 +435,7 @@ listVariables.append(Variables('endividamento_familias_total',"29037","bcb",
                                {"data": "date","valor": "endividamento_familias_total"}
     ))
 
-#variavel Endividamento das familias em relação a renda acumulada dos 12 meses % a.m.
+#variavel Endividamento das familias em relação a renda acumulada dos 12 meses exceto credito habitacional % a.m.
 listVariables.append(Variables('endividamento_familias_exceto_hab',"29038","bcb",
                                "01/01/2005",[""],{""},
                                {"data": "date","valor": "endividamento_familias_exceto_hab"}
@@ -386,7 +528,7 @@ listVariables.append(Variables('expectativa_selic',"selic_focus","bcb_focus",
 #variavel Produção Física Industrial de SC, por seções e atividades industriais mensal % a.m.
 listVariables.append(Variables('pim_pf_mensal_sc',"8888-12606-sc","sidra",
                                {"periodos":"-500","variaveis":"12606","localidade":"N3[42]","classificacao":"544[all]"},
-                               ["seasonal","seasonal_getallbases","variation"],{"variation":"12"},
+                               ["seasonal","seasonal_getallbases","variation","getallbases"],{"variation":"12"},
                                {"date":"date",
                                 "1 Indústria geral":"1_Geral_sc",
                                 "2 Indústrias extrativas":"2_Extrativa_sc",
@@ -826,6 +968,21 @@ listVariables.append(Variables('pib_consumo_familias_trimestral_dessazonalizado'
                                 }
     ))
 
+#variavel PIB construção civil preços correntes (milhoes R$) % a.t.
+listVariables.append(Variables('pib_construcao_trimestral_corrente',"1846-585","sidra",
+                               {"periodos":"-500", "variaveis":"585","localidade":"N1[all]","classificacao":"11255[90694]"},["trimestertomonth"],{"trimestertomonth":True},
+                               {"date":"date",
+                                "Construção": "pib_construcao_milhoes",
+                                }
+    ))
+
+#variavel PIB construção civil preços correntes (milhoes R$) % a.t.
+listVariables.append(Variables('pib_construcao_trimestral_volume',"1620-583","sidra",
+                               {"periodos":"-500", "variaveis":"583","localidade":"N1[all]","classificacao":"11255[90694]"},["trimestertomonth"],{"trimestertomonth":True},
+                               {"date":"date",
+                                "Construção": "pib_construcao_volume",
+                                }
+    ))
 
 #models estabelecidos
 
@@ -945,7 +1102,8 @@ listModels.append(Models('credito_consessoes_icc',"'2008-01-01'", "",
 listModels.append(Models('endividamento',"'2000-01-01'", "",
                          ["selic_mensal",
                           "endividamento_familias_total",
-                          "endividamento_familias_exceto_hab"
+                          "endividamento_familias_exceto_hab",
+                          "rendimento_massa_mensal_real"
                           ],
                          ["date"]
     
@@ -953,16 +1111,32 @@ listModels.append(Models('endividamento',"'2000-01-01'", "",
 
 
 #model evolução grandes setores para power BI
-listModels.append(Models('ipp_setores',"'2011-01-01'", "",
-                         ["",
-                          "",
-                          "",
-                          "",
-                          "",
-                          ""
+listModels.append(Models('ipp_setores',"'2010-01-01'", "",
+                         ["ipp_transformacao_basefixa",
+                          "ipp_alimentos_basefixa",
+                          "ipp_borracha_plastico_basefixa",
+                          "ipp_madeira_basefixa",
+                          "ipp_maquinas_equipamentos_basefixa",
+                          "ipp_metalurgia_basefixa",
+                          "ipp_minerais_não_metalicos_basefixa",
+                          "ipp_outros_quimicos_basefixa",
+                          "ipp_papel_celulose_basefixa",
+                          "ipp_petroleo_basefixa",
+                          "ipp_metal_basefixa",
+                          "ipp_veiculos_basefixa"
                           ],
-                         ["dateBase","date"]
+                         ["date"]
     ))
 
-
-
+#model evolução grandes setores para power BI
+listModels.append(Models('modelo_confecao',"'2000-01-01'", "",
+                         ["pim_pf_mensal_sc_seasonal",
+                          "ipca_mensal_taxa_variação_rolling",
+                          "rendimento_medio_trimestral_sc_trimestertomonth_seasonal",
+                          "selic_mensal",
+                          "saldo_credito_pf_outros",
+                          "endividamento_familias_exceto_hab",
+                          "ibcr_sc_mensal_dessazonalizado"
+                          ],
+                         ["date"]
+    ))
