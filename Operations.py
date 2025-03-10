@@ -33,7 +33,7 @@ def seasonal(df):
         dftemp = dftemp.set_index("date")
         
         #condicional de que os dados tem ao menos 3 anos de data
-        if len(dftemp)>35:
+        if len(dftemp)>=38:
             
             #operações de seasonal       
             ajusted = x13.x13_arima_analysis(endog = dftemp.value, freq = "M",outlier=True, trading=False)

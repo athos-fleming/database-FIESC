@@ -47,7 +47,7 @@ def get_bcb(codigo,parameters):
 
     
     try:
-        url = 'http://api.bcb.gov.br/dados/serie/bcdata.sgs.{}/dados?formato=json&parameters={}'.format(codigo,dataInicial)
+        url = 'https://api.bcb.gov.br/dados/serie/bcdata.sgs.{}/dados?formato=json&parameters={}'.format(codigo,dataInicial)
         serie_bcb = pd.read_json(url)
         return serie_bcb
         

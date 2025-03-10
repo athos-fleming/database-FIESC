@@ -477,7 +477,7 @@ listVariables.append(Variables('selic_diaria',"11","bcb",
     ))
 
 #variavel Inadimplência da carteira de crédito - Pessoas físicas - Total % a.m.
-listVariables.append(Variables('inadimplencia_pf_total',"21084","bcb",
+listVariables.append(Variables('inadimplencia_pf_total',"21084","#bcb",
                                "01/03/2011",["seasonal"],{},
                                {"data": "date","valor": "inadimplencia_pf_total"}
     ))
@@ -647,6 +647,88 @@ listVariables.append(Variables('pim_pf_mensal_br_dessazonalizado_single',"8888-1
                                 "1 Indústria geral":"1_Geral_br"
                                  }
     ))
+
+#variavel Produção Física Industrial BR, por indicadores especiais mensal % a.m.
+listVariables.append(Variables('pim_pf_mensal_br_especiais',"8889-12606","sidra",
+                               {"periodos":"-500","variaveis":"12606","localidade":"N1[all]","classificacao":"25[all]"},
+                               ["seasonal","seasonal_getallbases","variation","getallbases"],{"variation":"12"},
+                               {"date":"date",
+                                "1.1 Bens de Capital para fins industriais": "1.1_CapInd_sc",
+                                "1.1.1 Bens de Capital para fins industriais seriados": "1.1.1_CapInd_Ser_sc",
+                                "1.1.2 Bens de Capital para fins industriais não seriados": "1.1.2_CapInd_NSer_sc",
+                                "1.2 Bens de Capital agrícolas": "1.2_CapAgro_sc",
+                                "1.3 Bens de Capital peças agrícolas": "1.3_CapPeçasAgro_sc",
+                                "1.4 Bens de Capital para construção": "1.4_CapConstr_sc",
+                                "1.5 Bens de Capital para o setor de energia elétrica": "1.5_CapEnergia_sc",
+                                "1.6 Bens de Capital para equipamentos de transporte": "1.6_CapTransp_sc",
+                                "1.7 Bens de Capital de uso misto": "1.7_CapMisto_sc",
+                                "2 Insumos Típicos da Construção Civil": "2_InsumosConstr_sc",
+                                "3 Total de Embalagens": "3_EmbTotal_sc",
+                                "3.1 Embalagens de vidro": "3.1_EmbVidro_sc",
+                                "3.2 Embalagens de metal": "3.2_EmbMetal_sc",
+                                "3.3 Embalagens de madeira": "3.3_EmbMadeira_sc",
+                                "3.4 Embalagens de papel e papelão": "3.4_EmbPapel_sc",
+                                "3.5 Embalagens de material plástico": "3.5_EmbPlast_sc",
+                                "4 Eletrodomésticos": "4_Eletro_sc",
+                                "5.1.1 Bens de capital por atividade - Equipamentos de informática, produtos eletrônicos e ópticos": "5.1.1_CapInfoEletr_sc",
+                                "5.1.2 Bens de capital por atividade - Máquinas, aparelhos e materiais elétricos": "5.1.2_CapEletr_sc",
+                                "5.1.3 Bens de capital por atividade - Máquinas e equipamentos": "5.1.3_CapMaqEquip_sc",
+                                "5.1.4 Bens de capital por atividade - Veículos automotores, reboques e carrocerias": "5.1.4_CapVeic_sc",
+                                "5.1.5 Bens de capital por atividade - Outros equipamentos de transporte": "5.1.5_CapOutTransp_sc",
+                                "5.1.6 Bens de capital por atividade - Demais atividades*": "5.1.6_CapOutros_sc",
+                                "5.2.1 Bens intermediários por atividade - Indústrias extrativas": "5.2.1_IntExtr_sc",
+                                "5.2.2 Bens intermediários por atividade - Produtos alimentícios": "5.2.2_IntAlim_sc",
+                                "5.2.3 Bens intermediários por atividade - Produtos têxteis": "5.2.3_IntTex_sc",
+                                "5.2.4 Bens intermediários por atividade - Celulose, papel e produtos de papel": "5.2.4_IntCelPapel_sc",
+                                "5.2.5 Bens intermediários por atividade - Coque, produtos derivados do petróleo e biocombustíveis": "5.2.5_IntComb_sc",
+                                "5.2.6 Bens intermediários por atividade - Produtos químicos": "5.2.6_IntQuim_sc",
+                                "5.2.7 Bens intermediários por atividade - Produtos de borracha e de material plástico": "5.2.7_IntBorracha_sc",
+                                "5.2.8 Bens intermediários por atividade - Produtos de minerais não metálicos": "5.2.8_IntMiner_sc",
+                                "5.2.9 Bens intermediários por atividade - Metalurgia": "5.2.9_IntMet_sc",
+                                "5.2.10 Bens intermediários por atividade - Produtos de metal - exceto máquinas e equipamentos": "5.2.10_IntProdMet_sc",
+                                "5.2.11 Bens intermediários por atividade - Máquinas e equipamentos": "5.2.11_IntMaqEquip_sc",
+                                "5.2.12 Bens intermediários por atividade - Veículos automotores, reboques e carrocerias": "5.2.12_IntVeic_sc",
+                                "5.2.13 Bens intermediários por atividade - Demais atividades*": "5.2.13_IntOutros_sc",
+                                "5.3.1 Bens de consumo duráveis por atividade - Equipamentos de informática, produtos eletrônicos e ópticos": "5.3.1_DurInfoEletr_sc",
+                                "5.3.2 Bens de consumo duráveis por atividade - Máquinas, aparelhos e materiais elétricos": "5.3.2_DurEletr_sc",
+                                "5.3.3 Bens de consumo duráveis por atividade - Veículos automotores, reboques e carrocerias": "5.3.3_DurVeic_sc",
+                                "5.3.4 Bens de consumo duráveis por atividade - Outros equipamentos de transporte": "5.3.4_DurOutTransp_sc",
+                                "5.3.5 Bens de consumo duráveis por atividade - Móveis": "5.3.5_DurMoveis_sc",
+                                "5.3.6 Bens de consumo duráveis por atividade - Demais atividades*": "5.3.6_DurOutros_sc",
+                                "5.4.1 Bens de consumo semi e não duráveis por atividade - Produtos alimentícios": "5.4.1_SemiAlim_sc",
+                                "5.4.2 Bens de consumo semi e não duráveis por atividade - Bebidas": "5.4.2_SemiBeb_sc",
+                                "5.4.3 Bens de consumo semi e não duráveis por atividade - Produtos têxteis": "5.4.3_SemiTex_sc",
+                                "5.4.4 Bens de consumo semi e não duráveis por atividade - Confecção de artigos do vestuário e acessórios": "5.4.4_SemiVest_sc",
+                                "5.4.5 Bens de consumo semi e não duráveis por atividade - Preparação de couros e fabricação de artefatos de couro, artigos para viagem e calçados": "5.4.5_SemiCouro_sc",
+                                "5.4.6 Bens de consumo semi e não duráveis por atividade - Impressão e reprodução de gravações": "5.4.6_SemiImp_sc",
+                                "5.4.7 Bens de consumo semi e não duráveis por atividade - Coque, produtos derivados do petróleo e biocombustíveis": "5.4.7_SemiComb_sc",
+                                "5.4.8 Bens de consumo semi e não duráveis por atividade - Produtos químicos": "5.4.8_SemiQuim_sc",
+                                "5.4.9 Bens de consumo semi e não duráveis por atividade - Produtos Farmoquímicos e farmacêuticos": "5.4.9_SemiFarm_sc",
+                                "5.4.10 Bens de consumo semi e não duráveis por atividade - Demais atividades*": "5.4.10_SemiOutros_sc",
+                                "6.1 Alta Intensidade do Gasto com Energia Elétrica - Total": "6.1_AltaEnergia_sc",
+                                "6.1.1 Bens intermediários - Alta intensidade": "6.1.1_Interm_Alta_sc",
+                                "6.1.2 Bens de consumo - Alta intensidade": "6.1.2_Consumo_Alta_sc",
+                                "6.1.2.1 Bens de consumo semi e não duráveis - Alta intensidade": "6.1.2.1_SemiDur_Alta_sc",
+                                "6.2 Média Intensidade do Gasto com Energia Elétrica - Total": "6.2_MediaEnergia_sc",
+                                "6.2.1 Bens de capital - Média intensidade": "6.2.1_Capital_Media_sc",
+                                "6.2.2 Bens intermediários - Média intensidade": "6.2.2_Interm_Media_sc",
+                                "6.2.3 Bens de consumo - Média intensidade": "6.2.3_Consumo_Media_sc",
+                                "6.2.3.1 Bens de consumo duráveis - Média intensidade": "6.2.3.1_Duravel_Media_sc",
+                                "6.2.3.2 Bens de consumo semi e não duráveis - Média intensidade": "6.2.3.2_SemiDur_Media_sc",
+                                "6.3 Baixa Intensidade do Gasto com Energia Elétrica - Total": "6.3_BaixaEnergia_sc",
+                                "6.3.1 Bens de capital - Baixa intensidade": "6.3.1_Capital_Baixa_sc",
+                                "6.3.2 Bens intermediários - Baixa intensidade": "6.3.2_Interm_Baixa_sc",
+                                "6.3.3 Bens de consumo - Baixa intensidade": "6.3.3_Consumo_Baixa_sc",
+                                "6.3.3.1 Bens de consumo duráveis - Baixa intensidade": "6.3.3.1_Duravel_Baixa_sc",
+                                "6.3.3.2 Bens de consumo semi e não duráveis - Baixa intensidade": "6.3.3.2_SemiDur_Baixa_sc",
+                                "6.3.4 Sem categoria econômica - Baixa intensidade": "6.3.4_SemCat_Baixa_sc"
+                                 }
+    ))
+
+
+
+
+
 
 #PMS
 #pesquisa nacional de serviços volume por atividades e subdivisões mensal % a.m.

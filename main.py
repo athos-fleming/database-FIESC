@@ -211,7 +211,7 @@ if __name__ == "__main__":
         "modelo_confecao"
         ]
 
-    #update_variables(adresses)
+    update_variables(adresses)
     operate_variables(operadores)
     update_models(modelos)
     
