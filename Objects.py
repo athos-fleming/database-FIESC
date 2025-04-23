@@ -63,8 +63,20 @@ listVariables.append(Variables('ipca_mensal_taxa_preços_livres_serviços',"'BM1
                                {"VALDATA": "date","VALVALOR": "ipca_mensal_taxa_preços_livres_serviços"}
     ))
 
-#IPP
+#variavel IPCA - vestuário: taxa de variação % a.m.
+listVariables.append(Variables('ipca_mensal_vestuario',"'PRECOS12_IPCAVE12'","ipea",
+                               "01/01/1992",["rolling"],{"rolling":"-12-MovelMensal"},
+                               {"VALDATA": "date","VALVALOR": "ipca_mensal_vestuario"}
+    ))
 
+#variavel IPCA - Alimentos e bebidas: taxa de variação % a.m.
+listVariables.append(Variables('ipca_mensal_alimentos_bebidas',"'PRECOS12_IPCAAB12'","ipea",
+                               "01/01/1992",["rolling"],{"rolling":"-12-MovelMensal"},
+                               {"VALDATA": "date","VALVALOR": "ipca_mensal_alimentos_bebidas"}
+    ))
+
+
+#IPP
 #variavel IPP industria da transformação em Base movel % a.m.
 listVariables.append(Variables('ipp_transformacao_taxa_mensal',"'IPP12_IPPCG12'","ipea",
                                "01/01/2010",["rolling"],{"rolling":"-12-MovelMensal"},
@@ -175,6 +187,42 @@ listVariables.append(Variables('selic_fixada',"'BM366_TJOVER366'","ipea",
                                {"VALDATA": "date","VALVALOR": "selic_fixada"}
     ))
 
+#Vendas reais - varejo - tecidos, vestuário e calçados - índice (média 2022 = 100) % a.m.
+listVariables.append(Variables('venda_varejo_textil_confeccoes',"'PMC12_VRVESTN12'","ipea",
+                               "01/01/2000",[""],{},
+                               {"VALDATA": "date","VALVALOR": "venda_varejo_textil_confeccoes"}
+    ))
+
+#Vendas reais - varejo - tecidos, vestuário e calçados - índice dessazonalizado (média 2022 = 100) % a.m.
+listVariables.append(Variables('venda_varejo_textil_confeccoes_dessazonalizado',"'PMC12_VRVESTNSA12'","ipea",
+                               "01/01/2000",[""],{},
+                               {"VALDATA": "date","VALVALOR": "venda_varejo_textil_confeccoes"}
+    ))
+
+#Taxa de câmbio - efetiva real - fabricação de produtos alimentícios (média 2010 = 100) % a.m.
+listVariables.append(Variables('cambio_alimentos',"'GAC12_TCERXTS1012'","ipea",
+                               "01/01/2000",[""],{},
+                               {"VALDATA": "date","VALVALOR": "cambio_alimentos"}
+    ))
+
+#Taxa de câmbio - efetiva real - fabricação de artigos do vestuário e acessórios (média 2010 = 100) % a.m.
+listVariables.append(Variables('cambio_confeccao',"'GAC12_TCERXTS1412'","ipea",
+                               "01/01/2000",[""],{},
+                               {"VALDATA": "date","VALVALOR": "cambio_confeccao"}
+    ))
+
+#	Taxa de câmbio - R$ / US$ - comercial - venda - média % a.m.
+listVariables.append(Variables('cambio_media',"'BM12_ERC12'","ipea",
+                               "01/01/2000",[""],{},
+                               {"VALDATA": "date","VALVALOR": "cambio_media"}
+    ))
+
+#Importações - confecção de artigos do vestuário e acessórios (FOB) % a.m.
+listVariables.append(Variables('importacoes_confeccao',"'FUNCEX12_MVVEST2N12'","ipea",
+                               "01/01/2000",["seasonal"],{},
+                               {"VALDATA": "date","VALVALOR": "importacoes_confeccao"}
+    ))
+
 
 
 #grupo do bcb, as vezes da erro de api call
@@ -200,7 +248,7 @@ listVariables.append(Variables('saldo_credito_pf_outros',"20582","bcb",
                                {"data": "date","valor": "saldo_credito_pf_outros"}
     ))
 
-#variavel Saldo da carteira de crédito com recursos livres - Pessoas físicas - Aquisição de outros bens % a.m.
+#variavel Saldo da carteira de crédito com recursos livres - Pessoas físicas - Aquisição de bens total % a.m.
 listVariables.append(Variables('saldo_credito_pf_bens_total',"20583","bcb",
                                "01/03/2011",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_credito_pf_bens_total"}
@@ -471,13 +519,13 @@ listVariables.append(Variables('selic_mensal',"4189","bcb",
                                {"data": "date","valor": "selic_mensal"}
     ))
 
-listVariables.append(Variables('selic_diaria',"11","bcb",
+listVariables.append(Variables('selic_diaria',"11","#bcb",
                                "01/01/2000",[""],{},
                                {"data": "date","valor": "selic_diaria"}
     ))
 
 #variavel Inadimplência da carteira de crédito - Pessoas físicas - Total % a.m.
-listVariables.append(Variables('inadimplencia_pf_total',"21084","#bcb",
+listVariables.append(Variables('inadimplencia_pf_total',"21084","bcb",
                                "01/03/2011",["seasonal"],{},
                                {"data": "date","valor": "inadimplencia_pf_total"}
     ))
@@ -505,6 +553,26 @@ listVariables.append(Variables('expectativa_ipca_servicos_2024',"ipca_servicos_f
                                 "select": "Data,DataReferencia,Mediana"},
                                ["transpose_rolling_transpose","latest_transpose","latest_transpose_rolling","firstdayofmonth_transpose_rolling"],
                                {"rolling":"ipca_mensal_taxa_preços_livres_serviços-12-MovelMensal"},
+                               {""}    
+    ))
+
+#variavel expectativa taxa de desocupação
+listVariables.append(Variables('expectativa_desocupacao_2024',"taxa_desocupacao_focus","bcb_focus",
+                               {"subrecurso": "ExpectativaMercadoMensais",
+                                "filter": "endswith(Indicador%2C'desocupa%C3%A7%C3%A3o')%20and%20baseCalculo%20eq%200%20and%20Data%20gt%20'2022-12-31'",
+                                "select": "Data,DataReferencia,Mediana"},
+                               ["latest_transpose"],
+                               {""},
+                               {""}    
+    ))
+
+#variavel expectativa Câmbio
+listVariables.append(Variables('expectativa_cambio_2024',"cambio_focus","bcb_focus",
+                               {"subrecurso": "ExpectativaMercadoMensais",
+                                "filter": "endswith(Indicador%2C'C%C3%A2mbio')%20and%20baseCalculo%20eq%200%20and%20Data%20gt%20'2022-12-31'",
+                                "select": "Data,DataReferencia,Mediana"},
+                               ["latest_transpose"],
+                               {""},
                                {""}    
     ))
 
@@ -651,7 +719,7 @@ listVariables.append(Variables('pim_pf_mensal_br_dessazonalizado_single',"8888-1
 #variavel Produção Física Industrial BR, por indicadores especiais mensal % a.m.
 listVariables.append(Variables('pim_pf_mensal_br_especiais',"8889-12606","sidra",
                                {"periodos":"-500","variaveis":"12606","localidade":"N1[all]","classificacao":"25[all]"},
-                               ["seasonal","seasonal_getallbases","variation","getallbases"],{"variation":"12"},
+                               ["#seasonal","#seasonal_getallbases","variation","getallbases"],{"variation":"12"},
                                {"date":"date",
                                 "1.1 Bens de Capital para fins industriais": "1.1_CapInd_sc",
                                 "1.1.1 Bens de Capital para fins industriais seriados": "1.1.1_CapInd_Ser_sc",
@@ -724,11 +792,6 @@ listVariables.append(Variables('pim_pf_mensal_br_especiais',"8889-12606","sidra"
                                 "6.3.4 Sem categoria econômica - Baixa intensidade": "6.3.4_SemCat_Baixa_sc"
                                  }
     ))
-
-
-
-
-
 
 #PMS
 #pesquisa nacional de serviços volume por atividades e subdivisões mensal % a.m.
@@ -937,7 +1000,7 @@ listVariables.append(Variables('pim_pf_bens_categorias_dessazonalizado',"8887-12
 #descoupação
 #variavel Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade (%) Total, Trimestre Móvel % a.m.
 listVariables.append(Variables('taxa_desocupacao_mensal_trimestre_movel',"6381-4099-br","sidra",
-                               {"periodos":"-500","variaveis":"4099","localidade":"N1[all]","classificacao":""},[""],{},
+                               {"periodos":"-500","variaveis":"4099","localidade":"N1[all]","classificacao":""},["trimestertomonth"],{"trimestertomonth":True},
                                {"date":"date",
                                 "Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade":"taxa_desocupacao_mensal_trimestre_movel"
                                 }
@@ -969,8 +1032,8 @@ listVariables.append(Variables('rendimento_medio_mensal_hab',"6390-5933-br","sid
     ))
 
 #variavel Rendimento médio trimestral real, efetivamente recebido em todos os trabalhos - SC % a.t.
-listVariables.append(Variables('rendimento_medio_trimestral_sc',"6469-5935-br","sidra",
-                               {"periodos":"-500", "variaveis":"5935","localidade":"N3[42]","classificacao":""},["trimestertomonth_seasonal"],{"trimestertomonth":True},
+listVariables.append(Variables('rendimento_medio_tri_sc',"6469-5935-br","sidra",
+                               {"periodos":"-500", "variaveis":"5935","localidade":"N3[42]","classificacao":""},["trimestertomonth","trimestertomonth_seasonal"],{"trimestertomonth":True},
                                {"date":"date",
                                 "Rendimento médio mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, efetivamente recebido em todos os trabalhos":"rendimento_medio_trimestral_sc"
                                 }
@@ -1018,7 +1081,7 @@ listVariables.append(Variables('rendimento_massa_tri_real_hab',"5606-6293-br","s
 
 #variavel Massa de Rendimento trimestral real, efetivamente recebido em todos os trabalhos - SC % a.m.
 listVariables.append(Variables('rendimento_massa_tri_real_sc',"5606-6295-sc","sidra",
-                               {"periodos":"-500","variaveis":"6295","localidade":"N3[42]","classificacao":""},["trimestertomonth_seasonal"],{"trimestertomonth":True},
+                               {"periodos":"-500","variaveis":"6295","localidade":"N3[42]","classificacao":""},["trimestertomonth","trimestertomonth_seasonal"],{"trimestertomonth":True},
                                {"date":"date",
                                 "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, efetivamente recebido em todos os trabalhos":"rendimento_massa_trimestral_real_sc"
                                 }
@@ -1031,6 +1094,40 @@ listVariables.append(Variables('rendimento_massa_tri_real_sc_hab',"5606-6293-sc"
                                 "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_tri_real_sc_hab"
                                 }
     ))
+
+#variavel Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade (%) Total, Trimestre Móvel % a.m.
+listVariables.append(Variables('rendimento_medio_tri_educacao_br',"5438-5932-br","sidra",
+                               {"periodos":"-500","variaveis":"5932","localidade":"N1[all]","classificacao":"1568[120704,120706,11779,11628,11629,11630,11631,11632]"},
+                               ["trimestertomonth"],{"trimestertomonth":True},
+                               {"date":"date",
+                                "Total":"Total",
+                                "Sem instrução e menos de 1 ano de estudo":"sem estudo",
+                                "Ensino fundamental incompleto ou equivalente":"fundamental incompleto",
+                                "Ensino fundamental completo ou equivalente":"fundamental completo",
+                                "Ensino médio incompleto ou equivalente":"medio incompleto",
+                                "Ensino médio completo ou equivalente":"medio completo",
+                                "Ensino superior incompleto ou equivalente":"superior incompleto",
+                                "Ensino superior completo ou equivalente":"superior completo",
+                                "Não determinado":"não determinado"
+                                }
+    ))
+
+#variavel Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade (%) Total, Trimestre Móvel % a.m.
+listVariables.append(Variables('rendimento_medio_tri_educacao_sc',"5438-5932-sc","sidra",
+                               {"periodos":"-500","variaveis":"5932","localidade":"N3[42]","classificacao":"1568[120704,120706,11779,11628,11629,11630,11631,11632]"},
+                               ["trimestertomonth"],{"trimestertomonth":True},
+                               {"date":"date",
+                                "Total":"Total",
+                                "Sem instrução e menos de 1 ano de estudo":"sem estudo",
+                                "Ensino fundamental incompleto ou equivalente":"fundamental incompleto",
+                                "Ensino fundamental completo ou equivalente":"fundamental completo",
+                                "Ensino médio incompleto ou equivalente":"medio incompleto",
+                                "Ensino médio completo ou equivalente":"medio completo",
+                                "Ensino superior incompleto ou equivalente":"superior incompleto",
+                                "Ensino superior completo ou equivalente":"superior completo"
+                                }
+    ))
+
 
 #extras
 #despesa de consumo das familias
@@ -1065,6 +1162,9 @@ listVariables.append(Variables('pib_construcao_trimestral_volume',"1620-583","si
                                 "Construção": "pib_construcao_volume",
                                 }
     ))
+
+
+
 
 #models estabelecidos
 
@@ -1116,8 +1216,8 @@ listModels.append(Models('rendimentos',"'2012-01-01'", "",
                           "ibcr_sc_mensal_dessazonalizado",
                           "rendimento_massa_mensal_real",
                           "rendimento_medio_mensal",
-                          "rendimento_massa_trimestral_real_sc_trimestertomonth",
-                          "rendimento_medio_trimestral_sc_trimestertomonth",
+                          "rendimento_massa_tri_real_sc_trimestertomonth",
+                          "rendimento_medio_tri_sc_trimestertomonth",
                           "taxa_desocupacao_mensal_trimestre_movel",
                           "taxa_desocupacao_mensal_trimestre_movel_sc_trimestertomonth"
                           ],
@@ -1191,8 +1291,7 @@ listModels.append(Models('endividamento',"'2000-01-01'", "",
     
     ))
 
-
-#model evolução grandes setores para power BI
+#model evolução setores industria para power BI
 listModels.append(Models('ipp_setores',"'2010-01-01'", "",
                          ["ipp_transformacao_basefixa",
                           "ipp_alimentos_basefixa",
@@ -1210,15 +1309,18 @@ listModels.append(Models('ipp_setores',"'2010-01-01'", "",
                          ["date"]
     ))
 
-#model evolução grandes setores para power BI
-listModels.append(Models('modelo_confecao',"'2000-01-01'", "",
-                         ["pim_pf_mensal_sc_seasonal",
-                          "ipca_mensal_taxa_variação_rolling",
-                          "rendimento_medio_trimestral_sc_trimestertomonth_seasonal",
-                          "selic_mensal",
-                          "saldo_credito_pf_outros",
-                          "endividamento_familias_exceto_hab",
-                          "ibcr_sc_mensal_dessazonalizado"
+#model evolução confecção para analise exploratória
+listModels.append(Models('modelo_confecao',"'2002-01-01'", "",
+                          ["pim_pf_mensal_sc_seasonal",
+                          "rendimento_massa_mensal_real_seasonal",
+                          "rendimento_massa_tri_real_sc_trimestertomonth_seasonal",
+                          "saldo_credito_pf_outros_deflacionar",
+                          "concessoes_credito_recursos_livres_pf_outros_seasonal",
+                          "saldo_industrial_textil_vestuário_couro_deflacionar",
+                          "importacoes_confeccao_seasonal",
+                          "cambio_media",
+                          "cambio_confeccao",
+                          "expectativa_cambio_2024_latest_transpose"
                           ],
                          ["date"]
     ))

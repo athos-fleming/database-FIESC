@@ -33,7 +33,7 @@ def seasonal(df):
         dftemp = dftemp.set_index("date")
         
         #condicional de que os dados tem ao menos 3 anos de data
-        if len(dftemp)>=38:
+        if len(dftemp)>38:
             
             #operações de seasonal       
             ajusted = x13.x13_arima_analysis(endog = dftemp.value, freq = "M",outlier=True, trading=False)
@@ -425,18 +425,16 @@ def trimestertomonth(df,parameters):
         dftemp = dftemp.assign(date = lambda df: pd.to_datetime(df.date))
         dftemp = dftemp.assign(value = lambda df: pd.to_numeric(df.value))
         
-        
-        
         #operação para expandir para mensal e interpolar os valores vazios:        
         dfajuste = dftemp
         dfajuste.set_index('date',inplace=True)
         
         #expande para mensal
         dfajuste = dfajuste.resample('M').mean()
-        
+                
         #interpola
         dfajuste = dfajuste.resample('M').interpolate(method='linear')
-        
+                
         #ajusta a data novamente
         dftemp = dfajuste.reset_index()
         dftemp['date'] = dftemp['date'].dt.strftime("%Y-%m-01")
@@ -444,10 +442,10 @@ def trimestertomonth(df,parameters):
         
         #define o nome da coluna
         dftemp = dftemp.set_axis(['date',"{}".format(name[0])],axis=1)
-        
+                
         #merge todas as colunas operacionalizadas numa unica df
         dfProcessed = pd.merge(dfProcessed, dftemp, on='date',how='outer')
-    
+        
     df = dfProcessed
     
     return df
@@ -460,6 +458,7 @@ def dailytomonth(df):
     return df
 
 def copomtomonth(db_connection,df,parameters):
+    
     
     #remove as duplicatas com _x
     df = df[~df['date'].str.contains('_x', na=False)]
@@ -482,6 +481,7 @@ def copomtomonth(db_connection,df,parameters):
     df.set_index('date', inplace=True)
     df = df.resample('D').ffill()
     
+    
     #puxa os dados da selic fixada 
     indice = parameters
     mycursor = db_connection.cursor()
@@ -500,6 +500,7 @@ def copomtomonth(db_connection,df,parameters):
         #setup do df para poder realizar a operação
         dftemp = pd.DataFrame(column)
         
+        
         #sobe desindexa a date
         dftemp.index.name = 'date'
         dftemp = dftemp.reset_index()
@@ -509,16 +510,20 @@ def copomtomonth(db_connection,df,parameters):
         dftemp = dftemp.dropna(axis = 0,how='any')
         dftemp = dftemp.set_axis(["date","value"],axis=1)
     
+        #print(dftemp)
+    
         #extrai as datas relevantes
         firstDateDftemp = dftemp['date'].iloc[0]
         lastDateIndice = dfIndice['date'].iloc[-1]
         relevant_month = firstDateDftemp.month
         relevant_year = firstDateDftemp.year
+        lastIndice_month = lastDateIndice.month
+        lastIndice_year = lastDateIndice.year
         previous_month = (relevant_month - 1) if relevant_month > 1 else 12
         previous_year = relevant_year if relevant_month > 1 else (relevant_year - 1)
-
         
-        #criando a df com os dados relevantes
+        
+        #criando a df com os dados relevantes, acertando o mês de interseção
         if firstDateDftemp <= lastDateIndice:
             
             #filtra os dados do índice (selic fixada) por aquele mes e o anterior
@@ -528,18 +533,18 @@ def copomtomonth(db_connection,df,parameters):
         
         elif firstDateDftemp > lastDateIndice:
                         
-            #pega os valores do mes anterior
-            dfPreviousMonth = dfIndice[(dfIndice['date'].dt.month == previous_month) & (dfIndice['date'].dt.year == previous_year)]
-            lastDatePreviousMonth = dfPreviousMonth['date'].iloc[-1]
+            #pega os valores do ultimo mes do indice
+            dfLastIndiceMonth = dfIndice[(dfIndice['date'].dt.month == lastIndice_month) & (dfIndice['date'].dt.year == lastIndice_year)]
+            lastDateInidiceMonth = dfLastIndiceMonth['date'].iloc[-1]
                         
             #cria uma df dos dias que faltam
-            relevant_month_dates  = pd.date_range(start=lastDatePreviousMonth + pd.Timedelta(days=1), 
+            relevant_month_dates  = pd.date_range(start=lastDateInidiceMonth + pd.Timedelta(days=1), 
                                                   end=firstDateDftemp - pd.Timedelta(days=1), freq='D')
             lastValueIndice = dfIndice['value'].iloc[-1]
             dfRelevantMonth = pd.DataFrame({'date': relevant_month_dates, 'value': lastValueIndice})
             
             #mistura as duas
-            dfRelevantMonth = pd.concat([dfPreviousMonth, dfRelevantMonth]).sort_values(by='date').reset_index(drop=True)
+            dfRelevantMonth = pd.concat([dfLastIndiceMonth, dfRelevantMonth]).sort_values(by='date').reset_index(drop=True)
             
             
         
@@ -558,6 +563,7 @@ def copomtomonth(db_connection,df,parameters):
     
     #mensalizar com a média em cada mes
     df.set_index('date', inplace=True)
+    df = df.apply(pd.to_numeric, errors='coerce')  # ignora strings ou erros
     df = df.resample('M').mean()
     
     #exclui linhas que só tem Nan

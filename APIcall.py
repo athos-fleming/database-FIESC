@@ -75,9 +75,9 @@ def get_ipea(codigo,parameters):
 
     
 #operação de get no sidra do IBGE, informando parametros
-def get_sidra(codigo,parameters):
+def get_sidra(codigoFull,parameters):
     
-    codigo_variavel = codigo.split('-')
+    codigo_variavel = codigoFull.split('-')
     codigo = codigo_variavel[0]
     variavel = codigo_variavel[1]
         
@@ -88,22 +88,41 @@ def get_sidra(codigo,parameters):
     
     try:
         if classificacao == "":
-            url = 'https://servicodados.ibge.gov.br/api/v3/agregados/{}/periodos/{}/variaveis/{}?localidades={}'.format(
-            codigo,periodos,variavel,localidade)
+            url = f'https://servicodados.ibge.gov.br/api/v3/agregados/{codigo}/periodos/{periodos}/variaveis/{variavel}?localidades={localidade}'
         else:
-            url = 'https://servicodados.ibge.gov.br/api/v3/agregados/{}/periodos/{}/variaveis/{}?localidades={}&classificacao={}'.format(
-            codigo,periodos,variavel,localidade,classificacao)
+            url = f'https://servicodados.ibge.gov.br/api/v3/agregados/{codigo}/periodos/{periodos}/variaveis/{variavel}?localidades={localidade}&classificacao={classificacao}'
+
         
         request = requests.get(url)
-        serie_sidra = request.json()
-                
+        
+         # Verificação de status da resposta
+        if request.status_code != 200:
+            print(f"❌ [API CALL ERROR] - {codigoFull}: HTTP {request.status_code} - {request.reason}")
+            return pd.DataFrame()
+        
+        # Tentativa de converter para JSON
+        try:
+            serie_sidra = request.json()
+        except ValueError:
+            print("❌ [API CALL ERROR] - {codigoFull}: Falha ao converter a resposta para JSON.")
+            return pd.DataFrame()
+        
+        # Verificação se a resposta contém um erro
+        if isinstance(serie_sidra, dict) and "statusCode" in serie_sidra and "message" in serie_sidra:
+            print(f"❌ [API CALL ERROR] - {codigoFull}: {serie_sidra['statusCode']} - {serie_sidra['message']}")
+            return pd.DataFrame()
+        
+        # Verificação se a resposta está vazia ou não contém dados esperados
+        if not isinstance(serie_sidra, list) or len(serie_sidra) == 0:
+            print("⚠️ [API CALL WARNING] - {codigoFull}: A resposta está vazia ou não contém dados válidos.")
+            return pd.DataFrame()
+        
         return serie_sidra
 
         
-    except ValueError as e:
-        print(f"❌ [API CALL ERROR]: '{e}'")
-        df = pd.DataFrame()
-        return df
+    except Exception as e:
+        print(f"❌ [API CALL ERROR]: Ocorreu um erro inesperado - {e}")
+        return pd.DataFrame()
   
   
 #operação de get no bcb Focus, informando parametros

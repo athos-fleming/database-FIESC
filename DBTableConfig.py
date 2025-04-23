@@ -13,19 +13,16 @@ import sqlalchemy
 def sqlcol(dfparam):    
         
     dtypedict = {}
-    for i,j in zip(dfparam.columns, dfparam.dtypes):
-        if "object" in str(j):
-            dtypedict.update({i: sqlalchemy.types.NVARCHAR(length=255)})
-                                 
-        if "datetime" in str(j):
-            dtypedict.update({i: sqlalchemy.types.DateTime()})
-
-        if "float" in str(j):
-            dtypedict.update({i: sqlalchemy.types.Float(precision=3, asdecimal=True)})
-
-        if "int" in str(j):
-            dtypedict.update({i: sqlalchemy.types.INT()})
-            
+    for col, dtype in zip(dfparam.columns, dfparam.dtypes):
+        if "object" in str(dtype):
+            dtypedict[col] = sqlalchemy.types.NVARCHAR(length=255)
+        elif "datetime" in str(dtype):
+            dtypedict[col] = sqlalchemy.types.DateTime()
+        elif "float" in str(dtype):
+            # Define um DECIMAL com precisão alta para garantir os valores
+            dtypedict[col] = sqlalchemy.types.DECIMAL(40, 5)
+        elif "int" in str(dtype):
+            dtypedict[col] = sqlalchemy.types.INTEGER()
     return dtypedict
 
 #coloca o df no MySQL
@@ -49,6 +46,7 @@ def dftoSQL(df,database_connection, **kwargs):
     
     
     outputdict = sqlcol(df)
+    
     try:
         df.to_sql(con=database_connection,name=name, if_exists='replace', index=False, dtype = outputdict)
     except ValueError as e:

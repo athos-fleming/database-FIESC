@@ -53,12 +53,12 @@ def update_variables(adresses):
                     
                     #busca o df via API
                     df = APIcall.getAPI(codigo)
-                    if pd.DataFrame(df).empty == False:
-                        
+                    
+                    
+                    if pd.DataFrame(df).empty == False:                        
                         
                         #função de processamento de dados par ao df
                         df = DFTableProcess.ProcessTable(codigo,df)
-                        
 
                         #cria e insere a df como uma Table no DB
                         DBTableConfig.dftoSQL(df,database_connection,codigo = codigo)
@@ -111,8 +111,7 @@ def operate_variables(Operadores):
                     #cria e processa o df vindo do sidra
                     
                     df = DFTableProcess.process_operations(db_connection,codigo,operador)
-                    
-                    
+                                        
                     #cria e insere a df como uma Table no DB
                     DBTableConfig.dftoSQL(df,database_connection,codigo = codigo, operador = operador)
                 
@@ -211,9 +210,14 @@ if __name__ == "__main__":
         "modelo_confecao"
         ]
 
+    teste = [
+            "trimestertomonth"
+            ]
+
     update_variables(adresses)
-    operate_variables(operadores)
+    operate_variables(operadores)    
     update_models(modelos)
     
-
+    #operate_variables(teste)
+    
 
