@@ -37,6 +37,10 @@ def ProcessTable(codigo, df):
             df = process_bcbFocus(codigo,df)
             return df
         
+        case "externas":
+            df = process_externas(codigo,df)
+            return df
+        
         case default:
             print(f"❌ [AdressType não encontrado]")
 
@@ -46,6 +50,10 @@ def process_bcb(codigo,df):
     df = pd.DataFrame(df)
     ColumnNames = finders.findColumnNames(codigo)
     
+    #muda o dtype do valor para float   
+    df['valor'] = df['valor'].astype(float)
+    
+    #muda o dtype da data para date
     try:  
         def dataChange(date):
             x = datetime.strptime(date,'%d/%m/%Y')
@@ -64,8 +72,7 @@ def process_bcb(codigo,df):
         
     except ValueError as e:
         print(f"❌ [Table Process CALL ERROR]: '{e}'")
-                
-    
+        
     return df
 
 #processo de tratamento de df vindo do ipea
@@ -97,11 +104,12 @@ def process_ipea(codigo,df):
     
     return df
 
-#processo de tratamento de df vindo do ipea
+#processo de tratamento de df vindo do sidra
 def process_sidra(codigo,df):
     
     sidraJson = df
     df = pd.DataFrame(columns=['date'])
+    
     
     #pra nao dar merda quando uns tem classificação e outros nao
     parameters = finders.findAPIparameters(codigo)
@@ -148,12 +156,16 @@ def process_sidra(codigo,df):
         #teste para garantir que não vai ter a ultima linha vazia com ...
         if (df.iloc[-1] == "...").any():
             df = df.iloc[:-1]
+            
+        # Converte todas as colunas (menos a data) para float
+        for col in df.columns:
+            if col != 'date':
+                df[col] = pd.to_numeric(df[col], errors='coerce').astype(float)
         
         
     except ValueError as e:
         print(f"❌ [Table Process CALL ERROR]: '{e}'")
                 
-    
     
     return df
 
@@ -211,6 +223,26 @@ def process_bcbFocus(codigo,df):
     
     return df
 
+#processo de tratamento de df vindo de pastas externas do excel
+def process_externas(codigo,df):
+    
+    df = pd.DataFrame(df)
+    df = df[['date', 'valor']]
+    
+    try:
+        
+        #muda o dtype do date para date
+        df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d', errors='coerce')
+        
+        #muda o dtype do valor para float   
+        df['valor'] = pd.to_numeric(df['valor'], errors='coerce')
+                
+    except ValueError as e:
+        print(f"❌ [Table Process CALL ERROR]: '{e}'")
+            
+    
+    return df
+
 #processamento dos modelos gerados por agregação de dados
 def process_models(db_connection,model):
   
@@ -224,14 +256,22 @@ def process_models(db_connection,model):
     
     #roda o looping para todos os objetos na lista mensal
     for name in ListVariables:
-        
-        #info necessaria de cada objeto
+                
+        #Detectar colchetes, caso queira apenas um item especifico da tabel
+        if "[" in name and "]" in name:
+            tabela = name.split("[")[0]
+            coluna = name.split("[")[1].split("]")[0]
+            colunas_sql = ", ".join([f"`{col}`" for col in mergeParameters + [coluna]])
+        else:
+            tabela = name
+            colunas_sql = "*"  # todas as colunas
         
         #puxa cada uma das tables e seus valores
-        if(mergeParameters[0] == "dateBase"):
-            selectSQL = 'SELECT * FROM variables.{} where date >= {} AND dateBase >= {}'.format(name,cutDate,cutDate)
-        else:   
-            selectSQL = 'SELECT * FROM variables.{} where date >= {}'.format(name,cutDate)
+        if mergeParameters[0] == "dateBase":
+            selectSQL = f'SELECT {colunas_sql} FROM variables.{tabela} WHERE date >= "{cutDate}" AND dateBase >= "{cutDate}"'
+        else:
+            selectSQL = f'SELECT {colunas_sql} FROM variables.{tabela} WHERE date >= "{cutDate}"'
+                
         mycursor.execute(selectSQL)
         dfTemp = mycursor.fetchall()
         dfTemp = pd.DataFrame(dfTemp)
@@ -284,9 +324,9 @@ def process_operations(db_connection,codigo,operador):
             case "seasonal":
                 dfTemp = Operations.seasonal(dfTemp)
                 
-            case "deflacionar":
-                parameters = OperadorParameters["deflacionar"]
-                dfTemp = Operations.deflacionar(db_connection,dfTemp,parameters)
+            case "defl":
+                parameters = OperadorParameters["defl"]
+                dfTemp = Operations.defl(db_connection,dfTemp,parameters)
                             
             case "transpose":
                 dfTemp = Operations.transpose(dfTemp)
@@ -312,9 +352,9 @@ def process_operations(db_connection,codigo,operador):
                 parameters = OperadorParameters["variation"]
                 dfTemp = Operations.variation(dfTemp,parameters)
             
-            case "trimestertomonth":
-                parameters = OperadorParameters["trimestertomonth"]
-                dfTemp = Operations.trimestertomonth(dfTemp,parameters)
+            case "trimonth":
+                parameters = OperadorParameters["trimonth"]
+                dfTemp = Operations.trimonth(dfTemp,parameters)
             
             case "dailytomonth":
                 dfTemp = Operations.dailytomonth(dfTemp)

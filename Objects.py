@@ -29,7 +29,7 @@ listModels = []
 #IPCA
 #variavel IPCA - geral - taxa de variação  mensa % a.m.
 listVariables.append(Variables('ipca_mensal_taxa_variação',"'PRECOS12_IPCAG12'","ipea",
-                               "01/01/1980",["rolling"],{"especial":"ipca_juros_real","rolling":"-12-MovelMensal"},
+                               "01/01/1980",["rolling"],{"rolling":"-12-MovelMensal"},
                                {"VALDATA": "date","VALVALOR": "ipca_mensal_taxa_variação"}
     ))
 
@@ -168,10 +168,36 @@ listVariables.append(Variables('ibc_br_mensal_dessazonalizado',"'SGS12_IBCBRDESS
                                {"VALDATA": "date","VALVALOR": "ibc_br_mensal_dessazonalizado"}
     ))
 
+#cambio
+#Taxa de câmbio - efetiva real - fabricação de produtos alimentícios (média 2010 = 100) % a.m.
+listVariables.append(Variables('cambio_alimentos',"'GAC12_TCERXTS1012'","ipea",
+                               "01/01/2000",[""],{},
+                               {"VALDATA": "date","VALVALOR": "cambio_alimentos"}
+    ))
+
+#Taxa de câmbio - efetiva real - fabricação de artigos do vestuário e acessórios (média 2010 = 100) % a.m.
+listVariables.append(Variables('cambio_confeccao',"'GAC12_TCERXTS1412'","ipea",
+                               "01/01/2000",[""],{},
+                               {"VALDATA": "date","VALVALOR": "cambio_confeccao"}
+    ))
+
+#Taxa de câmbio - efetiva real - fabricação de produtos de minerais não-metálicos (média 2010 = 100) % a.m.
+listVariables.append(Variables('cambio_minerais_nao_metalicos',"'GAC12_TCERXTS2312'","ipea",
+                               "01/01/2000",[""],{},
+                               {"VALDATA": "date","VALVALOR": "cambio_minerais_nao_metalicos"}
+    ))
+
+
+#	Taxa de câmbio - R$ / US$ - comercial - venda - média % a.m.
+listVariables.append(Variables('cambio_media',"'BM12_ERC12'","ipea",
+                               "01/01/2000",[""],{},
+                               {"VALDATA": "date","VALVALOR": "cambio_media"}
+    ))
+
 #extras
 #PIB consumo final das familias % a.t.
 listVariables.append(Variables('pib_consumo_familias_trimestral_corrente',"'SCN104_CFPPN104'","ipea",
-                               "01/01/2003",["trimestertomonth"],{"trimestertomonth":False},
+                               "01/01/2003",["trimonth"],{"trimonth":False},
                                {"VALDATA": "date","VALVALOR": "pib_consumo_familias_trimestral_corrente"}
     ))
 
@@ -199,24 +225,6 @@ listVariables.append(Variables('venda_varejo_textil_confeccoes_dessazonalizado',
                                {"VALDATA": "date","VALVALOR": "venda_varejo_textil_confeccoes"}
     ))
 
-#Taxa de câmbio - efetiva real - fabricação de produtos alimentícios (média 2010 = 100) % a.m.
-listVariables.append(Variables('cambio_alimentos',"'GAC12_TCERXTS1012'","ipea",
-                               "01/01/2000",[""],{},
-                               {"VALDATA": "date","VALVALOR": "cambio_alimentos"}
-    ))
-
-#Taxa de câmbio - efetiva real - fabricação de artigos do vestuário e acessórios (média 2010 = 100) % a.m.
-listVariables.append(Variables('cambio_confeccao',"'GAC12_TCERXTS1412'","ipea",
-                               "01/01/2000",[""],{},
-                               {"VALDATA": "date","VALVALOR": "cambio_confeccao"}
-    ))
-
-#	Taxa de câmbio - R$ / US$ - comercial - venda - média % a.m.
-listVariables.append(Variables('cambio_media',"'BM12_ERC12'","ipea",
-                               "01/01/2000",[""],{},
-                               {"VALDATA": "date","VALVALOR": "cambio_media"}
-    ))
-
 #Importações - confecção de artigos do vestuário e acessórios (FOB) % a.m.
 listVariables.append(Variables('importacoes_confeccao',"'FUNCEX12_MVVEST2N12'","ipea",
                                "01/01/2000",["seasonal"],{},
@@ -232,165 +240,165 @@ listVariables.append(Variables('importacoes_confeccao',"'FUNCEX12_MVVEST2N12'","
 #Saldo de crédito
 #variavel Saldo da carteira de crédito com recursos livres - Pessoas físicas - Total % a.m.
 listVariables.append(Variables('saldo_credito_pf_total',"20570","bcb",
-                               "01/03/2011",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/03/2011",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_credito_pf_total"}
     ))
 
 #variavel Saldo da carteira de crédito com recursos livres - Pessoas físicas - Aquisição de veículos % a.m.
 listVariables.append(Variables('saldo_credito_pf_veiculos',"20581","bcb",
-                               "01/03/2011",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/03/2011",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_credito_pf_veiculos"}
     ))
 
 #variavel Saldo da carteira de crédito com recursos livres - Pessoas físicas - Aquisição de outros bens % a.m.
 listVariables.append(Variables('saldo_credito_pf_outros',"20582","bcb",
-                               "01/03/2011",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/03/2011",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_credito_pf_outros"}
     ))
 
 #variavel Saldo da carteira de crédito com recursos livres - Pessoas físicas - Aquisição de bens total % a.m.
 listVariables.append(Variables('saldo_credito_pf_bens_total',"20583","bcb",
-                               "01/03/2011",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/03/2011",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_credito_pf_bens_total"}
     ))
 
 #Saldo de crédito com Recursos Direcionados
 #variavel Saldo - Pessoas jurídicas - Financiamento imobiliário- Taxas de Mercado % a.m.
 listVariables.append(Variables('saldo_imobiliário_pj_mercado',"20598","bcb",
-                               "01/03/2007",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/03/2007",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_imobiliário_pj_mercado"}
     ))
 
 #variavel Saldo - Pessoas jurídicas - Financiamento imobiliário - Taxas Reguladas % a.m.
 listVariables.append(Variables('saldo_imobiliário_pj_reguladas',"20599","bcb",
-                               "01/03/2007",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/03/2007",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_imobiliário_pj_reguladas"}
     ))
 
 #variavel Saldo - Pessoas jurídicas - Financiamento imobiliário- Total % a.m.
 listVariables.append(Variables('saldo_imobiliário_pj_total',"20600","bcb",
-                               "01/03/2007",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/03/2007",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_imobiliário_pj_total"}
     ))
 
 #variavel Saldo - Pessoas Física - Financiamento imobiliário- Taxas de Mercado % a.m.
 listVariables.append(Variables('saldo_imobiliário_pf_mercado',"20610","bcb",
-                               "01/03/2007",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/03/2007",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_imobiliário_pf_mercado"}
     ))
 
 #variavel Saldo - Pessoas Física - Financiamento imobiliário - Taxas Reguladas % a.m.
 listVariables.append(Variables('saldo_imobiliário_pf_reguladas',"20611","bcb",
-                               "01/03/2007",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/03/2007",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_imobiliário_pf_reguladas"}
     ))
 
 #variavel Saldo - Pessoas Física - Financiamento imobiliário- Total % a.m.
 listVariables.append(Variables('saldo_imobiliário_pf_total',"20612","bcb",
-                               "01/03/2007",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/03/2007",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_imobiliário_pf_total"}
     ))
 
 #Saldo de crédito por atividade economica
 #variavel Saldo ao setor industrial - Total % a.m
 listVariables.append(Variables('saldo_industrial_total',"22043","bcb",
-                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/01/2012",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_industrial_total"}
     ))
 
 #variavel Saldo ao setor industrial - Serviços industriais de utilidade pública % a.m
 listVariables.append(Variables('saldo_industrial_siup',"22034","bcb",
-                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/01/2012",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_industrial_siup"}
     ))
 
 #variavel Saldo ao setor industrial - Construção % a.m
 listVariables.append(Variables('saldo_industrial_construção',"22030","bcb",
-                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/01/2012",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_industrial_construção"}
     ))
 
 #variavel Saldo ao setor industrial - Alimentos % a.m
 listVariables.append(Variables('saldo_industrial_alimentos',"27743","bcb",
-                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/01/2012",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_industrial_alimentos"}
     ))
 
 #variavel Saldo ao setor industrial - Açúcar % a.m
 listVariables.append(Variables('saldo_industrial_açúcar',"27744","bcb",
-                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/01/2012",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_industrial_açúcar"}
     ))
 
 #variavel Saldo ao setor industrial - Têxtil, vestuário, couro e calçados % a.m
 listVariables.append(Variables('saldo_industrial_textil_vestuário_couro',"27745","bcb",
-                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/01/2012",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_industrial_textil_vestuário_couro"}
     ))
 
 #variavel Saldo ao setor industrial - Papel e celulose % a.m
 listVariables.append(Variables('saldo_industrial_papel_celulose',"27746","bcb",
-                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/01/2012",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_industrial_papel_celulose"}
     ))
 
 #variavel Saldo ao setor industrial - Petróleo, gás e álcool % a.m
 listVariables.append(Variables('saldo_industrial_petroleo',"27747","bcb",
-                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/01/2012",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_industrial_petroleo"}
     ))
 
 #variavel Saldo ao setor industrial - Total % a.m
 listVariables.append(Variables('saldo_industrial_metalurgia_siderurgia',"27748","bcb",
-                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/01/2012",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_industrial_metalurgia_siderurgia"}
     ))
 
 #variavel Saldo ao setor industrial - Química e farmacêutica % a.m
 listVariables.append(Variables('saldo_industrial_química',"27722","bcb",
-                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/01/2012",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_industrial_química"}
     ))
 
 #variavel Saldo ao setor industrial - Bens de capital % a.m
 listVariables.append(Variables('saldo_industrial_bens',"27723","bcb",
-                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/01/2012",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_industrial_bens"}
     ))
 
 #variavel Saldo ao setor industrial - Automobilística % a.m
 listVariables.append(Variables('saldo_industrial_automobilística',"27724","bcb",
-                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/01/2012",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_industrial_automobilística"}
     ))
 
 #variavel Saldo ao setor industrial - Mineração % a.m
 listVariables.append(Variables('saldo_industrial_mineração',"27749","bcb",
-                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/01/2012",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_industrial_mineração"}
     ))
 
 #variavel Saldo ao setor industrial - Obras de infraestrutura % a.m
 listVariables.append(Variables('saldo_industrial_obras',"27725","bcb",
-                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/01/2012",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_industrial_obras"}
     ))
 
 #variavel Saldo ao setor industrial - Outros bens de consumo duráveis % a.m
 listVariables.append(Variables('saldo_industrial_outros_bens',"27726","bcb",
-                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/01/2012",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_industrial_outros_bens"}
     ))
 
 #variavel Saldo ao setor industrial - Embalagens % a.m
 listVariables.append(Variables('saldo_industrial_embalagens',"27727","bcb",
-                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/01/2012",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_industrial_embalagens"}
     ))
 
 #variavel Saldo ao setor industrial - Bens de consumo não duráveis % a.m
 listVariables.append(Variables('saldo_industrial_bens_não_duráveis',"27728","bcb",
-                               "01/01/2012",["deflacionar"],{"deflacionar":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/01/2012",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_industrial_bens_não_duráveis"}
     ))
 
@@ -586,6 +594,16 @@ listVariables.append(Variables('expectativa_selic',"selic_focus","bcb_focus",
                                {""} 
 ))
 
+#variavel expectativa PIB total Trimestral
+listVariables.append(Variables('expectativa_pib_tri',"pib_total_focus","bcb_focus",
+                               {"subrecurso": "ExpectativasMercadoTrimestrais",
+                                "filter": "endswith(Indicador%2C'PIB%20Total')%20and%20baseCalculo%20eq%200%20and%20Data%20gt%20'2024-12-31'",
+                                "select": "Data,DataReferencia,Mediana"},
+                               ["latest_transpose","latest_transpose_trimonth"],
+                               {"trimonth":True},
+                               {""} 
+))
+
 
 
 #grupo do sidra, grande volume de dados, pode ser lento
@@ -719,7 +737,7 @@ listVariables.append(Variables('pim_pf_mensal_br_dessazonalizado_single',"8888-1
 #variavel Produção Física Industrial BR, por indicadores especiais mensal % a.m.
 listVariables.append(Variables('pim_pf_mensal_br_especiais',"8889-12606","sidra",
                                {"periodos":"-500","variaveis":"12606","localidade":"N1[all]","classificacao":"25[all]"},
-                               ["#seasonal","#seasonal_getallbases","variation","getallbases"],{"variation":"12"},
+                               ["seasonal","#seasonal_getallbases","variation","getallbases"],{"variation":"12"},
                                {"date":"date",
                                 "1.1 Bens de Capital para fins industriais": "1.1_CapInd_sc",
                                 "1.1.1 Bens de Capital para fins industriais seriados": "1.1.1_CapInd_Ser_sc",
@@ -1000,7 +1018,7 @@ listVariables.append(Variables('pim_pf_bens_categorias_dessazonalizado',"8887-12
 #descoupação
 #variavel Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade (%) Total, Trimestre Móvel % a.m.
 listVariables.append(Variables('taxa_desocupacao_mensal_trimestre_movel',"6381-4099-br","sidra",
-                               {"periodos":"-500","variaveis":"4099","localidade":"N1[all]","classificacao":""},["trimestertomonth"],{"trimestertomonth":True},
+                               {"periodos":"-500","variaveis":"4099","localidade":"N1[all]","classificacao":""},["trimonth"],{"trimonth":True},
                                {"date":"date",
                                 "Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade":"taxa_desocupacao_mensal_trimestre_movel"
                                 }
@@ -1008,7 +1026,7 @@ listVariables.append(Variables('taxa_desocupacao_mensal_trimestre_movel',"6381-4
 
 #variavel Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade (%) Total de SC, Trimestre Móvel % a.m.
 listVariables.append(Variables('taxa_desocupacao_mensal_trimestre_movel_sc',"6468-4099-sc","sidra",
-                               {"periodos":"-500","variaveis":"4099","localidade":"N3[42]","classificacao":""},["trimestertomonth"],{"trimestertomonth":True},
+                               {"periodos":"-500","variaveis":"4099","localidade":"N3[42]","classificacao":""},["trimonth"],{"trimonth":True},
                                {"date":"date",
                                 "Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade":"taxa_desocupacao_mensal_trimestre_movel_sc"
                                 }
@@ -1033,7 +1051,7 @@ listVariables.append(Variables('rendimento_medio_mensal_hab',"6390-5933-br","sid
 
 #variavel Rendimento médio trimestral real, efetivamente recebido em todos os trabalhos - SC % a.t.
 listVariables.append(Variables('rendimento_medio_tri_sc',"6469-5935-br","sidra",
-                               {"periodos":"-500", "variaveis":"5935","localidade":"N3[42]","classificacao":""},["trimestertomonth","trimestertomonth_seasonal"],{"trimestertomonth":True},
+                               {"periodos":"-500", "variaveis":"5935","localidade":"N3[42]","classificacao":""},["trimonth","trimonth_seasonal"],{"trimonth":True},
                                {"date":"date",
                                 "Rendimento médio mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, efetivamente recebido em todos os trabalhos":"rendimento_medio_trimestral_sc"
                                 }
@@ -1041,7 +1059,7 @@ listVariables.append(Variables('rendimento_medio_tri_sc',"6469-5935-br","sidra",
 
 #variavel Rendimento médio trimestral real, habitualmente recebido em todos os trabalhos - SC % a.t.
 listVariables.append(Variables('rendimento_medio_tri_sc_hab',"6472-5933-br","sidra",
-                               {"periodos":"-500", "variaveis":"5933","localidade":"N3[42]","classificacao":""},["trimestertomonth_seasonal"],{"trimestertomonth":True},
+                               {"periodos":"-500", "variaveis":"5933","localidade":"N3[42]","classificacao":""},["trimonth_seasonal"],{"trimonth":True},
                                {"date":"date",
                                 "Rendimento médio mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_medio_tri_sc_hab"
                                 }
@@ -1049,7 +1067,7 @@ listVariables.append(Variables('rendimento_medio_tri_sc_hab',"6472-5933-br","sid
 
 #variavel Massa de Rendimento mensal real, efetivamente recebido em todos os trabalhos - BR % a.m.
 listVariables.append(Variables('rendimento_massa_mensal_real',"6393-6295-br","sidra",
-                               {"periodos":"-500", "variaveis":"6295","localidade":"N1[all]","classificacao":""},["seasonal"],{},
+                               {"periodos":"-500", "variaveis":"6295","localidade":"N1[all]","classificacao":""},["seasonal","defl_seasonal"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"date":"date",
                                 "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, efetivamente recebido em todos os trabalhos":"rendimento_massa_mensal_real"
                                 }
@@ -1065,7 +1083,7 @@ listVariables.append(Variables('rendimento_massa_mensal_real_hab',"6392-6293-br"
 
 #variavel Massa de Rendimento trimestral real, efetivamente recebido em todos os trabalhos - BR % a.m.
 listVariables.append(Variables('rendimento_massa_trimestral_real',"5606-6295-br","sidra",
-                               {"periodos":"-500","variaveis":"6295","localidade":"N1[all]","classificacao":""},["trimestertomonth_seasonal"],{"trimestertomonth":True},
+                               {"periodos":"-500","variaveis":"6295","localidade":"N1[all]","classificacao":""},["trimonth_seasonal"],{"trimonth":True},
                                {"date":"date",
                                 "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, efetivamente recebido em todos os trabalhos":"rendimento_massa_trimestral_real"
                                 }
@@ -1073,7 +1091,7 @@ listVariables.append(Variables('rendimento_massa_trimestral_real',"5606-6295-br"
 
 #variavel Massa de Rendimento trimestral real, habitualmente recebido em todos os trabalhos - BR % a.m.
 listVariables.append(Variables('rendimento_massa_tri_real_hab',"5606-6293-br","sidra",
-                               {"periodos":"-500","variaveis":"6293","localidade":"N1[all]","classificacao":""},["trimestertomonth_seasonal"],{"trimestertomonth":True},
+                               {"periodos":"-500","variaveis":"6293","localidade":"N1[all]","classificacao":""},["trimonth_seasonal"],{"trimonth":True},
                                {"date":"date",
                                 "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_tri_real_hab"
                                 }
@@ -1081,7 +1099,7 @@ listVariables.append(Variables('rendimento_massa_tri_real_hab',"5606-6293-br","s
 
 #variavel Massa de Rendimento trimestral real, efetivamente recebido em todos os trabalhos - SC % a.m.
 listVariables.append(Variables('rendimento_massa_tri_real_sc',"5606-6295-sc","sidra",
-                               {"periodos":"-500","variaveis":"6295","localidade":"N3[42]","classificacao":""},["trimestertomonth","trimestertomonth_seasonal"],{"trimestertomonth":True},
+                               {"periodos":"-500","variaveis":"6295","localidade":"N3[42]","classificacao":""},["trimonth","trimonth_seasonal","trimonth_defl_seasonal"],{"trimonth":True,"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"date":"date",
                                 "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, efetivamente recebido em todos os trabalhos":"rendimento_massa_trimestral_real_sc"
                                 }
@@ -1089,7 +1107,7 @@ listVariables.append(Variables('rendimento_massa_tri_real_sc',"5606-6295-sc","si
 
 #variavel Massa de Rendimento trimestral real, habitualmente recebido em todos os trabalhos - SC % a.m.
 listVariables.append(Variables('rendimento_massa_tri_real_sc_hab',"5606-6293-sc","sidra",
-                               {"periodos":"-500","variaveis":"6293","localidade":"N3[42]","classificacao":""},["trimestertomonth_seasonal"],{"trimestertomonth":True},
+                               {"periodos":"-500","variaveis":"6293","localidade":"N3[42]","classificacao":""},["trimonth_seasonal"],{"trimonth":True},
                                {"date":"date",
                                 "Massa de rendimento mensal real das pessoas de 14 anos ou mais de idade ocupadas na semana de referência com rendimento de trabalho, habitualmente recebido em todos os trabalhos":"rendimento_massa_tri_real_sc_hab"
                                 }
@@ -1098,7 +1116,7 @@ listVariables.append(Variables('rendimento_massa_tri_real_sc_hab',"5606-6293-sc"
 #variavel Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade (%) Total, Trimestre Móvel % a.m.
 listVariables.append(Variables('rendimento_medio_tri_educacao_br',"5438-5932-br","sidra",
                                {"periodos":"-500","variaveis":"5932","localidade":"N1[all]","classificacao":"1568[120704,120706,11779,11628,11629,11630,11631,11632]"},
-                               ["trimestertomonth"],{"trimestertomonth":True},
+                               ["trimonth"],{"trimonth":True},
                                {"date":"date",
                                 "Total":"Total",
                                 "Sem instrução e menos de 1 ano de estudo":"sem estudo",
@@ -1115,7 +1133,7 @@ listVariables.append(Variables('rendimento_medio_tri_educacao_br',"5438-5932-br"
 #variavel Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade (%) Total, Trimestre Móvel % a.m.
 listVariables.append(Variables('rendimento_medio_tri_educacao_sc',"5438-5932-sc","sidra",
                                {"periodos":"-500","variaveis":"5932","localidade":"N3[42]","classificacao":"1568[120704,120706,11779,11628,11629,11630,11631,11632]"},
-                               ["trimestertomonth"],{"trimestertomonth":True},
+                               ["trimonth"],{"trimonth":True},
                                {"date":"date",
                                 "Total":"Total",
                                 "Sem instrução e menos de 1 ano de estudo":"sem estudo",
@@ -1133,7 +1151,7 @@ listVariables.append(Variables('rendimento_medio_tri_educacao_sc',"5438-5932-sc"
 #despesa de consumo das familias
 #variavel PIB despesa de consumo das familias Valores encadeados a preços de 1995 % a.t.
 listVariables.append(Variables('pib_consumo_familias_trimestral',"6612-9318-br","sidra",
-                               {"periodos":"-500", "variaveis":"9318","localidade":"N1[all]","classificacao":"11255[93404]"},["trimestertomonth"],{"trimestertomonth":True},
+                               {"periodos":"-500", "variaveis":"9318","localidade":"N1[all]","classificacao":"11255[93404]"},["trimonth"],{"trimonth":True},
                                {"date":"date",
                                 "Despesa de consumo das famílias": "pib_consumo_familias_trimestral_base_fixa",
                                 }
@@ -1141,7 +1159,7 @@ listVariables.append(Variables('pib_consumo_familias_trimestral',"6612-9318-br",
 
 #variavel PIB despesa de consumo das familias Valores encadeados a preços de 1995 % a.t.
 listVariables.append(Variables('pib_consumo_familias_trimestral_dessazonalizado',"6613-9319-br","sidra",
-                               {"periodos":"-500", "variaveis":"9319","localidade":"N1[all]","classificacao":"11255[93404]"},["trimestertomonth"],{"trimestertomonth":True},
+                               {"periodos":"-500", "variaveis":"9319","localidade":"N1[all]","classificacao":"11255[93404]"},["trimonth"],{"trimonth":True},
                                {"date":"date",
                                 "Despesa de consumo das famílias": "pib_consumo_familias_trimestral_base_fixa_dessazonalizado",
                                 }
@@ -1149,7 +1167,7 @@ listVariables.append(Variables('pib_consumo_familias_trimestral_dessazonalizado'
 
 #variavel PIB construção civil preços correntes (milhoes R$) % a.t.
 listVariables.append(Variables('pib_construcao_trimestral_corrente',"1846-585","sidra",
-                               {"periodos":"-500", "variaveis":"585","localidade":"N1[all]","classificacao":"11255[90694]"},["trimestertomonth"],{"trimestertomonth":True},
+                               {"periodos":"-500", "variaveis":"585","localidade":"N1[all]","classificacao":"11255[90694]"},["trimonth"],{"trimonth":True},
                                {"date":"date",
                                 "Construção": "pib_construcao_milhoes",
                                 }
@@ -1157,10 +1175,28 @@ listVariables.append(Variables('pib_construcao_trimestral_corrente',"1846-585","
 
 #variavel PIB construção civil preços correntes (milhoes R$) % a.t.
 listVariables.append(Variables('pib_construcao_trimestral_volume',"1620-583","sidra",
-                               {"periodos":"-500", "variaveis":"583","localidade":"N1[all]","classificacao":"11255[90694]"},["trimestertomonth"],{"trimestertomonth":True},
+                               {"periodos":"-500", "variaveis":"583","localidade":"N1[all]","classificacao":"11255[90694]"},["trimonth"],{"trimonth":True},
                                {"date":"date",
                                 "Construção": "pib_construcao_volume",
                                 }
+    ))
+
+
+
+#grupo externo, dados que não tem por API então tenho que pegar por excel
+
+
+
+#variavel IPCA - geral - taxa de variação  mensal % a.m.
+listVariables.append(Variables('trccrb_daily',"TRCCRB","externas",
+                               "01/01/1980",["dailytomonth"],{},
+                               {"date": "date","valor": "trccrb_daily"}
+    ))
+
+#Meta de Inflação do Brasil % a.m.
+listVariables.append(Variables('meta_inflacao',"meta_inflacao","externas",
+                               "01/01/1980",[],{},
+                               {"date": "date","valor": "meta_inflacao"}
     ))
 
 
@@ -1170,7 +1206,7 @@ listVariables.append(Variables('pib_construcao_trimestral_volume',"1620-583","si
 
 
 #model ipca para o power BI
-listModels.append(Models('ipca_evolucao',"'2000-01-01'", "",
+listModels.append(Models('ipca_evolucao',"2002-01-01", "",
                          ["selic_mensal",
                           "ipca_mensal_taxa_variação",
                           "ipca_mensal_taxa_preços_livres_serviços",
@@ -1190,7 +1226,7 @@ listModels.append(Models('ipca_evolucao',"'2000-01-01'", "",
     ))
 
 #model produção setorial para power BI
-listModels.append(Models('producao_setorial',"'2003-01-01'", "",
+listModels.append(Models('producao_setorial',"2003-01-01", "",
                          ["ibc_br_mensal_dessazonalizado_getallbases",
                           "ibcr_sc_mensal_dessazonalizado_getallbases",
                           "pim_pf_mensal_br_dessazonalizado_getallbases",
@@ -1202,7 +1238,7 @@ listModels.append(Models('producao_setorial',"'2003-01-01'", "",
     ))
 
 #model serviços setorial para power BI
-listModels.append(Models('servicos_setorial',"'2011-01-01'", "",
+listModels.append(Models('servicos_setorial',"2011-01-01", "",
                          ["ibc_br_mensal_dessazonalizado_getallbases",
                           "pms_volume_mensal_br_dessazonalizado_getallbases"
                           ],
@@ -1211,33 +1247,33 @@ listModels.append(Models('servicos_setorial',"'2011-01-01'", "",
     ))
 
 #model rendimentos para power BI
-listModels.append(Models('rendimentos',"'2012-01-01'", "",
+listModels.append(Models('rendimentos',"2012-01-01", "",
                          ["ibc_br_mensal_dessazonalizado",
                           "ibcr_sc_mensal_dessazonalizado",
                           "rendimento_massa_mensal_real",
                           "rendimento_medio_mensal",
-                          "rendimento_massa_tri_real_sc_trimestertomonth",
-                          "rendimento_medio_tri_sc_trimestertomonth",
+                          "rendimento_massa_tri_real_sc_trimonth",
+                          "rendimento_medio_tri_sc_trimonth",
                           "taxa_desocupacao_mensal_trimestre_movel",
-                          "taxa_desocupacao_mensal_trimestre_movel_sc_trimestertomonth"
+                          "taxa_desocupacao_mensal_trimestre_movel_sc_trimonth"
                           ],
                          ["date"]
     
     ))
 
 #model Saldo de crédito PF para power BI
-listModels.append(Models('saldo_credito_pf',"'2008-01-01'", "",
+listModels.append(Models('saldo_credito_pf',"2008-01-01", "",
                          ["selic_mensal",
-                          "saldo_credito_pf_outros_deflacionar",
-                          "saldo_credito_pf_veiculos_deflacionar",
-                          "saldo_credito_pf_total_deflacionar"
+                          "saldo_credito_pf_outros_defl",
+                          "saldo_credito_pf_veiculos_defl",
+                          "saldo_credito_pf_total_defl"
                           ],
                          ["date"]
     
     ))
 
 #model evolução grandes setores para power BI
-listModels.append(Models('grandes_setores',"'2011-01-01'", "",
+listModels.append(Models('grandes_setores',"2011-01-01", "",
                          ["pim_pf_mensal_br_dessazonalizado_single_getallbases",
                           "pms_volume_serviços_br_dessazonalizado_getallbases",
                           "pmc_volume_varejista_br_dessazonalizado_getallbases",
@@ -1250,7 +1286,7 @@ listModels.append(Models('grandes_setores',"'2011-01-01'", "",
     ))
 
 #model bens para power BI
-listModels.append(Models('bens',"'2002-01-01'", "",
+listModels.append(Models('bens',"2002-01-01", "",
                          ["pim_pf_bens_categorias_dessazonalizado_getallbases"
                           ],
                          ["dateBase","date"]
@@ -1258,11 +1294,11 @@ listModels.append(Models('bens',"'2002-01-01'", "",
     ))
 
 #model crédito+concessoes+icc para power BI
-listModels.append(Models('credito_consessoes_icc',"'2008-01-01'", "",
+listModels.append(Models('credito_consessoes_icc',"2008-01-01", "",
                          ["selic_mensal",
-                          "saldo_credito_pf_outros_deflacionar",
-                          "saldo_credito_pf_veiculos_deflacionar",
-                          "saldo_credito_pf_total_deflacionar",
+                          "saldo_credito_pf_outros_defl",
+                          "saldo_credito_pf_veiculos_defl",
+                          "saldo_credito_pf_total_defl",
                           "icc_rescursos_livres_pj",
                           "icc_rescursos_livres_pj_veiculos",
                           "icc_rescursos_livres_pj_outros",
@@ -1281,7 +1317,7 @@ listModels.append(Models('credito_consessoes_icc',"'2008-01-01'", "",
     ))
 
 #model Endividamento das familias
-listModels.append(Models('endividamento',"'2000-01-01'", "",
+listModels.append(Models('endividamento',"2002-01-01", "",
                          ["selic_mensal",
                           "endividamento_familias_total",
                           "endividamento_familias_exceto_hab",
@@ -1292,7 +1328,7 @@ listModels.append(Models('endividamento',"'2000-01-01'", "",
     ))
 
 #model evolução setores industria para power BI
-listModels.append(Models('ipp_setores',"'2010-01-01'", "",
+listModels.append(Models('ipp_setores',"2010-01-01", "",
                          ["ipp_transformacao_basefixa",
                           "ipp_alimentos_basefixa",
                           "ipp_borracha_plastico_basefixa",
@@ -1309,14 +1345,50 @@ listModels.append(Models('ipp_setores',"'2010-01-01'", "",
                          ["date"]
     ))
 
-#model evolução confecção para analise exploratória
-listModels.append(Models('modelo_confecao',"'2002-01-01'", "",
-                          ["pim_pf_mensal_sc_seasonal",
-                          "rendimento_massa_mensal_real_seasonal",
-                          "rendimento_massa_tri_real_sc_trimestertomonth_seasonal",
-                          "saldo_credito_pf_outros_deflacionar",
+
+
+#Modelos para analise de previsão dos setores de SC
+
+#model evolução Industria Tranformação
+listModels.append(Models('modelo_transformacao',"2002-01-01", "",
+                          ["pim_pf_mensal_sc_dessazonalizado",
+                           "pim_pf_mensal_br_dessazonalizado[1_Geral_br]",
+                           "ibc_br_mensal_dessazonalizado",
+                           "ibcr_sc_mensal_dessazonalizado",
+                           "expectativa_pib_tri_latest_transpose_trimonth",
+                           "selic_mensal",                           
+                           "expectativa_selic_latest_transpose_copomtomonth",
+                           "ipca_mensal_taxa_variação_rolling",
+                           "expectativa_ipca_2024_latest_transpose_rolling",
+                           "ipp_transformacao_basefixa_rolling",
+                           "cambio_media",
+                           "expectativa_cambio_2024_latest_transpose",
+                           "trccrb_daily_dailytomonth"
+                          ],
+                         ["date"]
+    ))
+
+#model evolução alimentação
+listModels.append(Models('modelo_alimentacao',"2002-01-01", "",
+                          ["pim_pf_mensal_sc_seasonal[3.10_Alimentícios_sc_seas]",
+                           #adicionar preço de frango e porco nacional e internacional
+                           "ipca_mensal_alimentos_bebidas_rolling",
+                           "ipca_mensal_taxa_variação_rolling",
+                           "rendimento_massa_mensal_real_defl_seasonal",
+                           "rendimento_massa_tri_real_sc_trimonth_defl_seasonal"
+                          ],
+                         ["date"]
+    ))
+
+#model evolução textil
+listModels.append(Models('modelo_textil',"2002-01-01", "",
+                          ["pim_pf_mensal_sc_seasonal[3.13_Têxteis_sc_seas]",
+                          "pim_pf_mensal_sc_seasonal[3.14_confecções_sc_seas]",
+                          "rendimento_massa_mensal_real_defl_seasonal",
+                          "rendimento_massa_tri_real_sc_trimonth_defl_seasonal",
+                          "saldo_credito_pf_outros_defl",
                           "concessoes_credito_recursos_livres_pf_outros_seasonal",
-                          "saldo_industrial_textil_vestuário_couro_deflacionar",
+                          "saldo_industrial_textil_vestuário_couro_defl",
                           "importacoes_confeccao_seasonal",
                           "cambio_media",
                           "cambio_confeccao",
@@ -1324,3 +1396,59 @@ listModels.append(Models('modelo_confecao',"'2002-01-01'", "",
                           ],
                          ["date"]
     ))
+
+#model evolução confecção
+listModels.append(Models('modelo_confecao',"2002-01-01", "",
+                          ["pim_pf_mensal_sc_seasonal[3.14_confecções_sc_seas]",
+                          "rendimento_massa_mensal_real_defl_seasonal",
+                          "rendimento_massa_tri_real_sc_trimonth_defl_seasonal",
+                          "saldo_credito_pf_outros_defl",
+                          "concessoes_credito_recursos_livres_pf_outros_seasonal",
+                          "saldo_industrial_textil_vestuário_couro_defl",
+                          "importacoes_confeccao_seasonal",
+                          "cambio_media",
+                          "cambio_confeccao",
+                          "expectativa_cambio_2024_latest_transpose"
+                          ],
+                         ["date"]
+    ))
+
+#model evolução madeira
+listModels.append(Models('modelo_madeira',"2002-01-01", "",
+                          ["pim_pf_mensal_sc_seasonal[3.16_Madeira_sc_seas]"
+                           #adicionar saldo imobiliario total, juros Reais BR e 30 year mortgage
+                          ],
+                         ["date"]
+    ))
+
+#model evolução Borracha e Plástico
+listModels.append(Models('modelo_borracha_plastico',"2002-01-01", "",
+                          ["pim_pf_mensal_sc_seasonal[3.22_Borracha_Plástico_sc_seas]"
+                           #adicionar icc rl pj, inscc (?) e IBCBR
+                          ],
+                         ["date"]
+    ))
+
+#model evolução Minerais não Metálicos
+listModels.append(Models('modelo_minerais_nao_metalicos',"2002-01-01", "",
+                          ["pim_pf_mensal_sc_seasonal[3.23_Minerais_nâo_metálicos_sc_seas]",
+                           "pim_pf_mensal_br_especiais_seasonal[2_InsumosConstr_sc_seas]",
+                           #incc
+                           #Custo da construção por metro quadrado em SC
+                           #Investimentos em Infra Estrutura Federal em SC 
+                           #Investimentos do Governo do Estado de SC em Transporte
+                           "rendimento_massa_mensal_real_defl_seasonal",
+                           "rendimento_massa_tri_real_sc_trimonth_defl_seasonal",
+                           #Saldo de Crédito Financiamento Imobiliário PJ (BACN - )
+                           #Saldo de Crédito Financiamento Imobiliário PF
+                           "saldo_industrial_construção",
+                           "saldo_industrial_obras",
+                           "selic_mensal",                           
+                           "expectativa_selic_latest_transpose_copomtomonth",
+                           "ipca_mensal_taxa_variação_rolling",
+                           "expectativa_ipca_2024_latest_transpose_rolling",
+                           "cambio_minerais_nao_metalicos"
+                          ],
+                         ["date"]
+    ))
+

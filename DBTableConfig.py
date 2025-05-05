@@ -20,7 +20,7 @@ def sqlcol(dfparam):
             dtypedict[col] = sqlalchemy.types.DateTime()
         elif "float" in str(dtype):
             # Define um DECIMAL com precisão alta para garantir os valores
-            dtypedict[col] = sqlalchemy.types.DECIMAL(40, 5)
+            dtypedict[col] = sqlalchemy.types.Float
         elif "int" in str(dtype):
             dtypedict[col] = sqlalchemy.types.INTEGER()
     return dtypedict

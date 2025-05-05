@@ -84,6 +84,7 @@ def findColumnNames(codigo):
         if str(obj.codigo) == str(codigo):
             return obj.ColumnNames
 
+
 #funcao de finder para os models
 
 #funcao que acha a data de corte do modelo
@@ -98,7 +99,7 @@ def findRegressor(model):
         if str(obj.name) == str(model):
             return obj.regressor
 
-#funcao que acha as variaveis que vao compor o df, incluindo o regressor
+#funcao que acha as variaveis que vao compor o df
 def findVariables(model):
     for obj in listModels:
         if str(obj.name) == str(model):

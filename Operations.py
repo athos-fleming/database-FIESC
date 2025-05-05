@@ -47,12 +47,16 @@ def seasonal(df):
 
     
     #muda os nan para espaços vazios
-    dfProcessed = dfProcessed.replace({np.nan: None})
+    df = dfProcessed.replace({np.nan: None})
     
+    # Converte todas as colunas (menos a data) para float
+    for col in df.columns:
+        if col != 'date':
+            df[col] = pd.to_numeric(df[col], errors='coerce').astype(float)
  
-    return dfProcessed
+    return df
 
-def deflacionar(db_connection,df,parameters):
+def defl(db_connection,df,parameters):
     
     parametersList = parameters.split(',')
     indice = parametersList[0]
@@ -65,17 +69,23 @@ def deflacionar(db_connection,df,parameters):
     mycursor.execute(SelectSQLIndice)
     dfIndice = mycursor.fetchall()
     dfIndice = pd.DataFrame(dfIndice)
+    
+        
     #renomeia pra nao dar problema
     dfIndice = dfIndice.set_axis(("date","indice"), axis=1)
-    df = df.set_axis(("date","value"), axis=1)     
-    dfTemp = pd.merge(dfIndice,df, on='date', how="inner")   
+    df = df.set_axis(("date","value"), axis=1)         
     
+    #garante float para evitar erros decimais e faz o merge
+    dfTemp = pd.merge(dfIndice,df, on='date', how="inner")
+    dfTemp['indice'] = pd.to_numeric(dfTemp['indice'], errors='coerce').astype(float)
+    dfTemp['value'] = pd.to_numeric(dfTemp['value'], errors='coerce').astype(float)
     
+    #calculo do deflator
     dfTemp['indice'] = dfTemp['indice'].apply(lambda indice: indice/100 + 1)    
     dfTemp['indice'] = dfTemp['indice'].cumprod()
     indiceBase = dfTemp.loc[dfTemp['date']==date_base,'indice'].values[0]
-    dfTemp['indice'] = dfTemp['indice'].apply(lambda indice: indice/indiceBase)
-    dfTemp['value'] = dfTemp.apply(lambda row: (float(row['value']/row['indice'])),axis=1)
+    dfTemp['indice'] = dfTemp['indice'] / indiceBase
+    dfTemp['value'] = dfTemp['value'] / dfTemp['indice']
     
     df['value'] = dfTemp['value']
     
@@ -83,6 +93,10 @@ def deflacionar(db_connection,df,parameters):
     #rename para o original
     df = df.set_axis(names, axis=1) 
     
+    # Converte todas as colunas (menos a data) para float
+    for col in df.columns:
+        if col != 'date':
+            df[col] = pd.to_numeric(df[col], errors='coerce').astype(float)
     
     return df
 
@@ -108,17 +122,28 @@ def transpose(df):
     df[cols[1:]] = df[cols[1:]].apply(pd.to_numeric, errors='ignore')
     df[cols[0]] = df[cols[0]].apply(pd.to_datetime, errors='ignore')
     
+    #ordena as datas
+    df = df.sort_values(by='date', ascending=True)    
+    
+    # Converte todas as colunas (menos a data) para float
+    for col in df.columns:
+        if col != 'date':
+            df[col] = pd.to_numeric(df[col], errors='coerce').astype(float)
     
     return df
 
 def latest(df,name):
+    
+    #ordena as datas
+    df = df.sort_values(by='date', ascending=True)
     
     #chama a ultima row da df
     df = df.tail(1)
         
     #muda o nome para ser reconhecivel
     df.iloc[0,0] = "latest_{}".format(name)
-        
+    
+      
     return df
 
 def firstdayofmonth(df):
@@ -217,6 +242,10 @@ def rolling(db_connection,df,parameters):
         
     df = dfProcessed  
     
+    # Converte todas as colunas (menos a data) para float
+    for col in df.columns:
+        if col != 'date':
+            df[col] = pd.to_numeric(df[col], errors='coerce').astype(float)
     
     return df
 
@@ -284,6 +313,11 @@ def changebase(df,parameters,*args, **kwargs):
     dfProcessed = dfProcessed.replace({np.nan: None})
     df = dfProcessed
     
+    # Converte todas as colunas (menos a data) para float
+    for col in df.columns:
+        if col != 'date':
+            df[col] = pd.to_numeric(df[col], errors='coerce').astype(float)
+    
     return df
 
 def getallbases(df):
@@ -332,7 +366,10 @@ def getallbases(df):
     #muda os nan para espaços vazios
     df = dfProcessed.replace({np.nan: None})
     
-    
+    # Converte todas as colunas (menos a data) para float
+    for col in df.columns:
+        if col not in ['date', 'dateBase']:
+            df[col] = pd.to_numeric(df[col], errors='coerce').astype(float)
     
     return df
 
@@ -384,11 +421,19 @@ def variation(df,parameters):
     dfProcessed = dfProcessed.replace({np.nan: None})
     df = dfProcessed
     
+    # Converte todas as colunas (menos a data) para float
+    for col in df.columns:
+        if col != 'date':
+            df[col] = pd.to_numeric(df[col], errors='coerce').astype(float)
+    
     return df
 
-def trimestertomonth(df,parameters):
+def trimonth(df,parameters):
     
     ajustdate = parameters
+    
+    #ordena as datas
+    df = df.sort_values(by='date', ascending=True)
     
     #garante que a date vai estar no padrao utilizado
     def dataChange(date):
@@ -448,12 +493,24 @@ def trimestertomonth(df,parameters):
         
     df = dfProcessed
     
+    # Converte todas as colunas (menos a data) para float
+    for col in df.columns:
+        if col != 'date':
+            df[col] = pd.to_numeric(df[col], errors='coerce').astype(float)
+    
     return df
 
 def dailytomonth(df):
     
-    #agrupa em cada um dos meses de cada ano e pega o primeiro dado
-    df = df.groupby(df['date'].dt.strftime('%Y-%m')).first()
+    #agrupa em cada um dos meses de cada ano e pega a media
+    df.set_index('date', inplace=True)
+    df = df.resample('M').mean()
+
+    df.index = df.index.to_period('M').to_timestamp()
+
+    df.index.name = 'date'
+    df = df.reset_index()
+    df.index.name = ""
     
     return df
 

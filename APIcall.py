@@ -36,6 +36,10 @@ def getAPI(codigo):
             df = get_bcbFocus(codigo,parameters)
             return df
         
+        case "externas":
+            df = get_externas(codigo,parameters)
+            return df
+        
         case default:
             print(f"❌ [AdressType não encontrado]")
 
@@ -48,14 +52,27 @@ def get_bcb(codigo,parameters):
     
     try:
         url = 'https://api.bcb.gov.br/dados/serie/bcdata.sgs.{}/dados?formato=json&parameters={}'.format(codigo,dataInicial)
-        serie_bcb = pd.read_json(url)
+        
+        request = requests.get(url)
+        
+         # Verificação de status da resposta
+        if request.status_code != 200:
+            print(f"❌ [API CALL ERROR] - {codigo}: HTTP {request.status_code} - {request.reason}")
+            return pd.DataFrame()
+        
+        # Tentativa de converter para JSON
+        try:
+            serie_bcb = request.json()
+        except ValueError:
+            print("❌ [API CALL ERROR] - {codigo}: Falha ao converter a resposta para JSON.")
+            return pd.DataFrame()
+                
         return serie_bcb
         
                 
-    except ValueError as e:
-        print(f"❌ [API CALL ERROR] in {0}: '{e}'".format(codigo))
-        df = pd.DataFrame()
-        return df
+    except Exception as e:
+        print(f"❌ [API CALL ERROR]: Ocorreu um erro inesperado - {e}")
+        return pd.DataFrame()
 
     
 #operação de get no ipea, informando parametros
@@ -139,6 +156,21 @@ def get_bcbFocus(codigo,parameters):
         url = "https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/{}?$top=10000&$filter={}&$format=json&$select={}".format(subrecurso,filter,select)
         serie_bcb = pd.read_json(url)
         return serie_bcb
+        
+                
+    except ValueError as e:
+        print(f"❌ [API CALL ERROR] in {0}: '{e}'".format(codigo))
+        df = pd.DataFrame()
+        return df
+    
+    
+    
+#operação de get no bcb Focus, informando parametros
+def get_externas(codigo,parameters):
+        
+    try:
+        df = pd.read_excel(f"C:/Users/athos.fleming/OneDrive - SERVICO NACIONAL DE APRENDIZAGEM INDUSTRIAL/Documentos/database FIESC/Variáveis Externas/{codigo}.xlsx")
+        return df
         
                 
     except ValueError as e:

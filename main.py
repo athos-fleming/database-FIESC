@@ -174,27 +174,30 @@ if __name__ == "__main__":
         ,"bcb"
         ,"sidra"
         ,"bcb_focus"
+        ,"externas"
         ]
     operadores = ["null"
         ,"changebase"
-        ,"deflacionar"
+        ,"defl"
         ,"variation"
-        ,"trimestertomonth"
+        ,"trimonth"
         ,"rolling"
         ,'transpose_copomtomonth_transpose'
         ,"latest_transpose_copomtomonth"
         ,"transpose_rolling_transpose"
         ,"latest_transpose"
         ,"latest_transpose_rolling"
+        ,"latest_transpose_trimonth"
         ,"firstdayofmonth"
         ,"firstdayofmonth_transpose_rolling"
         ,"dailytomonth"
         ,"getallbases" #getallbases tbm demora
         ,"seasonal" #os seasonal que demoram pra crl
-        ,"seasonal_deflacionar"
         ,"seasonal_changebase"
         ,"seasonal_getallbases"
-        ,"trimestertomonth_seasonal"
+        ,"defl_seasonal"
+        ,"trimonth_seasonal"
+        ,"trimonth_defl_seasonal"
         ]
     modelos = ["null"
         ,"ipca_evolucao"
@@ -206,16 +209,22 @@ if __name__ == "__main__":
         ,"bens"
         ,"credito_consessoes_icc"
         ,"endividamento"
-        ,"ipp_setores",
-        "modelo_confecao"
+        ,"ipp_setores"
+        ,"modelo_transformacao"
+        ,"modelo_alimentacao"
+        ,"modelo_textil"
+        ,"modelo_confecao"
+        ,"modelo_madeira"
+        ,"modelo_borracha_plastico"
+        ,"modelo_minerais_nao_metalicos"
         ]
 
     teste = [
-            "trimestertomonth"
+            "seasonal"
             ]
 
-    update_variables(adresses)
-    operate_variables(operadores)    
+    #update_variables(adresses)
+    #operate_variables(operadores)    
     update_models(modelos)
     
     #operate_variables(teste)
