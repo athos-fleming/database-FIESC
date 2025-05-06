@@ -227,6 +227,7 @@ def process_bcbFocus(codigo,df):
 def process_externas(codigo,df):
     
     df = pd.DataFrame(df)
+    ColumnNames = finders.findColumnNames(codigo)
     df = df[['date', 'valor']]
     
     try:
@@ -237,6 +238,8 @@ def process_externas(codigo,df):
         #muda o dtype do valor para float   
         df['valor'] = pd.to_numeric(df['valor'], errors='coerce')
                 
+        df = df.rename(columns=ColumnNames)
+        
     except ValueError as e:
         print(f"❌ [Table Process CALL ERROR]: '{e}'")
             
@@ -283,10 +286,16 @@ def process_models(db_connection,model):
         
         #junta todas elas poelos MergeParameters
         df = pd.merge(df, dfTemp, on=mergeParameters,how='outer')
-        
+    
     
     #muda os nan para espaços vazios
     df = df.replace({np.nan: None})
+    
+    # Converte todas as colunas (menos as datas) para float
+    for col in df.columns:
+        if col not in mergeParameters:
+            df[col] = pd.to_numeric(df[col], errors='coerce').astype(float)    
+    
     
     print("{} model df made".format(model))
     

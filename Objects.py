@@ -155,6 +155,7 @@ listVariables.append(Variables('ipp_veiculos_basefixa',"'IPP12_IPPC29ATIV12'","i
                                {"VALDATA": "date","VALVALOR": "ipp_veiculos_basefixa"}
     ))
 
+
 #IBC-BR
 #IBC-BR base 2002=100 % a.m.
 listVariables.append(Variables('ibc_br_mensal',"'SGS12_IBCBR12'","ipea",
@@ -167,6 +168,7 @@ listVariables.append(Variables('ibc_br_mensal_dessazonalizado',"'SGS12_IBCBRDESS
                                "01/01/2003",["getallbases","variation"],{"variation":"12"},
                                {"VALDATA": "date","VALVALOR": "ibc_br_mensal_dessazonalizado"}
     ))
+
 
 #cambio
 #Taxa de câmbio - efetiva real - fabricação de produtos alimentícios (média 2010 = 100) % a.m.
@@ -187,12 +189,12 @@ listVariables.append(Variables('cambio_minerais_nao_metalicos',"'GAC12_TCERXTS23
                                {"VALDATA": "date","VALVALOR": "cambio_minerais_nao_metalicos"}
     ))
 
-
 #	Taxa de câmbio - R$ / US$ - comercial - venda - média % a.m.
 listVariables.append(Variables('cambio_media',"'BM12_ERC12'","ipea",
                                "01/01/2000",[""],{},
                                {"VALDATA": "date","VALVALOR": "cambio_media"}
     ))
+
 
 #extras
 #PIB consumo final das familias % a.t.
@@ -230,6 +232,13 @@ listVariables.append(Variables('importacoes_confeccao',"'FUNCEX12_MVVEST2N12'","
                                "01/01/2000",["seasonal"],{},
                                {"VALDATA": "date","VALVALOR": "importacoes_confeccao"}
     ))
+
+#Índice nacional de custo da construção do mercado (INCC-M) % a.m.
+listVariables.append(Variables('incc_m',"'IGP12_INCCMG12'","ipea",
+                               "01/01/2000",["rolling"],{"rolling":"-12-MovelMensal"},
+                               {"VALDATA": "date","VALVALOR": "incc_m"}
+    ))
+
 
 
 
@@ -277,7 +286,7 @@ listVariables.append(Variables('saldo_imobiliário_pj_reguladas',"20599","bcb",
 
 #variavel Saldo - Pessoas jurídicas - Financiamento imobiliário- Total % a.m.
 listVariables.append(Variables('saldo_imobiliário_pj_total',"20600","bcb",
-                               "01/03/2007",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/03/2007",["defl","defl_seasonal"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_imobiliário_pj_total"}
     ))
 
@@ -295,7 +304,7 @@ listVariables.append(Variables('saldo_imobiliário_pf_reguladas',"20611","bcb",
 
 #variavel Saldo - Pessoas Física - Financiamento imobiliário- Total % a.m.
 listVariables.append(Variables('saldo_imobiliário_pf_total',"20612","bcb",
-                               "01/03/2007",["defl"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
+                               "01/03/2007",["defl","defl_seasonal"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
                                {"data": "date","valor": "saldo_imobiliário_pf_total"}
     ))
 
@@ -950,6 +959,7 @@ listVariables.append(Variables('pmc_volume_varejista_sc_dessazonalizado',"8880-7
                                 }
     ))
 
+
 #PIM PF Grandes Categorias
 #variavel produção fisica industrial por grandes categorias economicas (bens de capital/intermediarios/duraveis e tals) % a.m.
 listVariables.append(Variables('pim_pf_bens_categorias',"8887-12606","sidra",
@@ -1031,6 +1041,7 @@ listVariables.append(Variables('taxa_desocupacao_mensal_trimestre_movel_sc',"646
                                 "Taxa de desocupação, na semana de referência, das pessoas de 14 anos ou mais de idade":"taxa_desocupacao_mensal_trimestre_movel_sc"
                                 }
     ))
+
 
 #rendimento
 #variavel Rendimento médio mensal real, efetivamente recebido em todos os trabalhos % a.m.
@@ -1181,6 +1192,15 @@ listVariables.append(Variables('pib_construcao_trimestral_volume',"1620-583","si
                                 }
     ))
 
+#variavel PIB construção civil preços correntes (milhoes R$) % a.t.
+listVariables.append(Variables('construcao_medio_m_2_sc',"2296-48","sidra",
+                               {"periodos":"-500", "variaveis":"48","localidade":"N3[42]","classificacao":""},
+                               ["defl","defl_seasonal"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"date":"date",
+                                "Custo médio m² - moeda corrente": "construcao_m_2_sc",
+                                }
+    ))
+
 
 
 #grupo externo, dados que não tem por API então tenho que pegar por excel
@@ -1199,6 +1219,18 @@ listVariables.append(Variables('meta_inflacao',"meta_inflacao","externas",
                                {"date": "date","valor": "meta_inflacao"}
     ))
 
+#Valor Liquidado pelo Governo do Estado na área de transporte (rodovias, ferrovias, portos e outros) e urbanismo. % a.m.
+listVariables.append(Variables('invest_liq_sc_transporte',"invest_liq_sc_transporte","externas",
+                               "01/01/2011",["defl","defl_seasonal"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"date": "date","valor": "invest_liq_sc_transporte"}
+    ))
+
+
+#Valor Liquidado pelo Governo do Estado na área de transporte (rodovias, ferrovias, portos e outros) e urbanismo. % a.m.
+listVariables.append(Variables('invest_infra_sc',"invest_infra_sc","externas",
+                               "01/01/2011",["defl","defl_seasonal"],{"defl":"ipca_mensal_taxa_variação,2018/12/01"},
+                               {"date": "date","valor": "invest_infra_sc"}
+    ))
 
 
 
@@ -1433,14 +1465,14 @@ listModels.append(Models('modelo_borracha_plastico',"2002-01-01", "",
 listModels.append(Models('modelo_minerais_nao_metalicos',"2002-01-01", "",
                           ["pim_pf_mensal_sc_seasonal[3.23_Minerais_nâo_metálicos_sc_seas]",
                            "pim_pf_mensal_br_especiais_seasonal[2_InsumosConstr_sc_seas]",
-                           #incc
-                           #Custo da construção por metro quadrado em SC
-                           #Investimentos em Infra Estrutura Federal em SC 
-                           #Investimentos do Governo do Estado de SC em Transporte
+                           "incc_m_rolling",
+                           "construcao_medio_m_2_sc_defl_seasonal",
+                           "invest_infra_sc_defl_seasonal",
+                           "invest_liq_sc_transporte_defl_seasonal",
                            "rendimento_massa_mensal_real_defl_seasonal",
                            "rendimento_massa_tri_real_sc_trimonth_defl_seasonal",
-                           #Saldo de Crédito Financiamento Imobiliário PJ (BACN - )
-                           #Saldo de Crédito Financiamento Imobiliário PF
+                           "saldo_imobiliário_pj_total_defl_seasonal",
+                           "saldo_imobiliário_pf_total_defl_seasonal",
                            "saldo_industrial_construção",
                            "saldo_industrial_obras",
                            "selic_mensal",                           

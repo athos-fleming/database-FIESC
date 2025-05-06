@@ -220,13 +220,13 @@ if __name__ == "__main__":
         ]
 
     teste = [
-            "seasonal"
+            "externas"
             ]
 
-    #update_variables(adresses)
-    #operate_variables(operadores)    
+    update_variables(adresses)
+    operate_variables(operadores)    
     update_models(modelos)
     
-    #operate_variables(teste)
+    #update_variables(teste)
     
 
